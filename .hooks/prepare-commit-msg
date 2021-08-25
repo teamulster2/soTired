@@ -41,6 +41,10 @@ SHA1=$3
 #   /usr/bin/perl -i.bak -pe 'print "\n" if !$first_line++' "$COMMIT_MSG_FILE"
 # fi
 
+if [ "${COMMIT_SOURCE}" = merge ];then
+    exit 0
+fi
+
 cat > $COMMIT_MSG_FILE << EOF
 [issue/<issue number>] Commit heading
 
