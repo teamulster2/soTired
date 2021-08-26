@@ -8,6 +8,7 @@ echo "If the code is not working, the commit is aborted, so that you can fix it 
 read -p "Press Enter to continue" </dev/tty
 
 # Lint and build flutter app
-cd "${SCRIPT_DIR}"/../app/ || exit 1
-flutter analyze
-flutter build apk
+if [ -f "$(which flutter)" ]; then
+  cd "${SCRIPT_DIR}"/../app/ || exit 1;
+  flutter analyze;
+fi
