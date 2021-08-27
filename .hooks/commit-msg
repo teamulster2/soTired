@@ -1,15 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
 MSG="$1"
 
 if ! grep -qE "^\[Issue\/[0-9]+\]" "$MSG";then
     cat "$MSG"
-    tput setaf 1; echo "Your commit message must specify the issue number at the beginning of the commit message!"
+    tput setaf 1; \
+    echo "Your commit message must specify the issue number at the beginning of the commit message!"
     exit 1
 fi
 
 if ! grep -qE "^\s+-\s[A-Z,a-z,0-9]+" "$MSG";then
     cat "$MSG"
-    tput setaf 1; echo "Your commit message must contain bullet points for further explanations!"
-    exit 1
+    tput setaf 3; \
+    echo "Your commit message does not contain bullet points. You should use some for further
+    explanations!"
+    exit 0
 fi
