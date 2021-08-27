@@ -2,7 +2,7 @@
 
 MSG="$1"
 
-if ! grep -qE "^\[Issue\/[0-9]+\]|^Merge\s\S" "$MSG";then
+if ! grep -qE "^\[issue\/[0-9]+\]|^Merge\s\S" "$MSG";then
     # cat "$MSG"
     tput setaf 1; \
     echo "Your commit message must specify the issue number at the beginning of the commit message!"
