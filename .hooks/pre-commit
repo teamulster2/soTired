@@ -1,6 +1,15 @@
-#!/bin/sh
+#!/bin/bash
 
-echo "This is a pre commit hook."
-echo "Before each commit this is executed and as soon as we have code, a test should be run to see is the code of this commit is working."
-echo "If the code is not working, the commit is aborted, so that you can fix it first."
-read -p "Press Enter to continue" </dev/tty
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+#echo "This is a pre commit hook."
+#echo "Before each commit this is executed and as soon as we have code, a test should be run to see is the code of this commit is working."
+#echo "If the code is not working, the commit is aborted, so that you can fix it first."
+#read -p "Press Enter to continue" </dev/tty
+
+# Lint and build flutter app
+echo "Lint soTired app!"
+if [ -f "$(which flutter)" ]; then
+  cd "${SCRIPT_DIR}"/../app/ || exit 1;
+  flutter analyze;
+fi

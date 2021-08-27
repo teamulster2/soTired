@@ -1,0 +1,20 @@
+#!/bin/bash
+
+MSG="$1"
+
+if ! grep -qE "^\[issue\/[0-9]+\]\s-\s\S|^Merge\s\S" "$MSG";then
+    # cat "$MSG"
+    tput setaf 1; \
+    echo "Your commit message must follow the template \"[issue/<issue number>] - <commit heading>\"."
+    echo "Generated Merge commit message, e.g. \"Merge branch ... into ...\" are tolerated but not recommended."
+    tput setaf 7; \
+    exit 1
+fi
+
+if ! grep -qE "^\s+-\s[A-Z,a-z,0-9]+" "$MSG";then
+    # cat "$MSG"
+    tput setaf 3; \
+    echo "Your commit message does not contain bullet points. You should use some for further explanations!"
+    tput setaf 7; \
+    exit 0
+fi
