@@ -2,18 +2,18 @@
 
 MSG="$1"
 
-if ! grep -qE "^\[Issue\/[0-9]+\]" "$MSG";then
-    cat "$MSG"
+if ! grep -qE "^\[Issue\/[0-9]+\]|^Merge\s\S" "$MSG";then
+    # cat "$MSG"
     tput setaf 1; \
     echo "Your commit message must specify the issue number at the beginning of the commit message!"
+    tput setaf 7; \
     exit 1
 fi
 
 if ! grep -qE "^\s+-\s[A-Z,a-z,0-9]+" "$MSG";then
-    cat "$MSG"
+    # cat "$MSG"
     tput setaf 3; \
-    echo "Your commit message does not contain bullet points. You should use some for further
-    explanations!"
-    tput setaf 0; \
+    echo "Your commit message does not contain bullet points. You should use some for further explanations!"
+    tput setaf 7; \
     exit 0
 fi
