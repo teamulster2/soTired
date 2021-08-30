@@ -10,7 +10,7 @@ on: [push, pull_request]
 #      - '**'
 
 jobs:
-  client - lint and test:
+  Lint and test client:
     name: Lint and test soTired app
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +37,7 @@ jobs:
           flutter analyze
           flutter test
 
-  client - build:
+  Build client:
     name: Build soTired app and save as artifact
     runs-on: ubuntu-latest
     steps:
