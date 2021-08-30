@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Enable caching
-        uses: actions/cache@v2
+#      - name: Enable caching
+#        uses: actions/cache@v2
       - name: Set up java
         uses: actions/setup-java@v2
         with:
@@ -43,8 +43,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Enable caching
-        uses: actions/cache@v2
+#      - name: Enable caching
+#        uses: actions/cache@v2
       - name: Set up java
         uses: actions/setup-java@v2
         with:
