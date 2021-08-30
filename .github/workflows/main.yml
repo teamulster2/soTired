@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - '**'
 
 jobs:
   client - lint and test:
@@ -24,10 +27,12 @@ jobs:
           flutter-version: '2.12.0'
       - name: Check environment and install dependencies
         run: |
+          cd app
           flutter doctor -v
           flutter pub get
       - name: Lint and run tests
         run: |
+          cd app
           flutter analyze
           flutter test
 
@@ -49,6 +54,7 @@ jobs:
           flutter-version: '2.12.0'
       - name: Build Android / iOS app
         run: |
+          cd app
           flutter build apk --release
 #          flutter build ios
       - name: Archive Android app release
