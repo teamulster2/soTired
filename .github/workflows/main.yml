@@ -1,0 +1,62 @@
+name: soTired client/server validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  client - lint and test:
+    name: Lint and test soTired app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Enable caching
+        uses: actions/cache@v2
+      - name: Set up java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16.0.x'
+      - name: Set up flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.12.0'
+      - name: Check environment and install dependencies
+        run: |
+          flutter doctor -v
+          flutter pub get
+      - name: Lint and run tests
+        run: |
+          flutter analyze
+          flutter test
+
+  client - build:
+    name: Build soTired app and save as artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Enable caching
+        uses: actions/cache@v2
+      - name: Set up java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '16.0.x'
+      - name: Set up flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.12.0'
+      - name: Build Android / iOS app
+        run: |
+          flutter build apk --release
+#          flutter build ios
+      - name: Archive Android app release
+        uses: actions/upload-artifact@v2
+        with:
+          name: soTired Android app
+          path: app/build/app/outputs/apk/release/app-release.apk
+#      - name: Archive iOS app release
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: soTired iOS app
