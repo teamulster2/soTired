@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  Lint-and-test-client:
+  lint-and-test-client:
     name: Lint and test soTired app
     runs-on: ubuntu-latest
     steps:
@@ -35,9 +35,10 @@ jobs:
           flutter analyze
           flutter test
 
-  Build-client:
+  build-client:
     name: Build soTired app and save as artifact
     runs-on: ubuntu-latest
+    needs: lint-and-test-client
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -60,7 +61,7 @@ jobs:
       - name: Build Android / iOS app
         run: |
           cd app
-          flutter build apk --release
+          flutter build apk --release --scan
 #          flutter build ios
       - name: Archive Android app release
         uses: actions/upload-artifact@v2
