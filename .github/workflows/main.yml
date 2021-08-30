@@ -61,8 +61,8 @@ jobs:
       - name: Build Android / iOS app
         run: |
           cd app
-          flutter build apk --release
-#          flutter build ios
+          flutter build apk
+          flutter build ios --release
       - name: Archive Android app release
         uses: actions/upload-artifact@v2
         with:
@@ -72,3 +72,4 @@ jobs:
 #        uses: actions/upload-artifact@v2
 #        with:
 #          name: soTired iOS app
+#          path: 
