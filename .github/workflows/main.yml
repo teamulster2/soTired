@@ -58,10 +58,13 @@ jobs:
           cd app
           flutter doctor -v
           flutter pub get
-      - name: Build Android / iOS app
+      - name: Build Android app
         run: |
           cd app
           flutter build apk
+#      - name: Build iOS app
+#        run: |
+#          cd app
 #          flutter build ios --release
       - name: Archive Android app release
         uses: actions/upload-artifact@v2
