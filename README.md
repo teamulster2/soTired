@@ -15,7 +15,7 @@ soTired is a rewrite of the application presented in the [Validation of a Smartp
 For communication through the code, please use one of the following tags:
 ```
 FIXME - for a bug which can't be fixed now
-TODO - for a feature or are a design change to be done later
+TODO - for a feature or are a design change that has to be done later on
 NOTE - for an important information
 ```
 
