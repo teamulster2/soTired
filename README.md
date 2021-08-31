@@ -12,22 +12,20 @@ soTired is a rewrite of the application presented in the [Validation of a Smartp
 
 ## Contributions
 
-For all files within the repository one of the following tags might only be used:
+For communication throw the code, please use one of the following tags:
 ```
 FIXME - for a bug which can't be fixed now
 TODO - for a feature or are a design change to be done later
 NOTE - for an important information
 ```
 
-all of these have to be completely upper case.
-
-The git workflow for this repo is rebase-merge so that a history of this form is created:
+The git workflow for this repo is rebase-merge, which results in a history of this form:
 
                              F--G
                             /    \
-     feature-1 ->   B--C   E------H    <- feature-2
+   feature-1 ->     B--C   E------H    <- feature-2
                    /    \ /        \
                 --A------D----------I  <-main
 
-So that the main branch only contains merge commits from other branches,
+In conclusion, the main branch only contains merge commits from other branches,
 which are rebased onto the most recent commit.
