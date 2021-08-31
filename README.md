@@ -8,5 +8,5 @@ The project is structured as client side (stand-alone app) implemented in Dart/F
 Dart/Flutter provides the ability to simply add an iOS, desktop and / or web application besides Android.
 
 
-soTired is a remake of the application presented in the [Validation of a Smartphone-Based Approach to In Situ Cognitive Fatigue Assessment](https://mhealth.jmir.org/2017/8/e125) paper by Edward Price, George Moore, Leo Galway and Mark Linden.
+soTired is a rewrite of the application presented in the [Validation of a Smartphone-Based Approach to In Situ Cognitive Fatigue Assessment](https://mhealth.jmir.org/2017/8/e125) paper by Edward Price, George Moore, Leo Galway and Mark Linden.
 
