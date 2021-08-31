@@ -1,6 +1,5 @@
 name: soTired client/server validation
 
-#on: [push, pull_request]
 on:
   pull_request:
     branches:
@@ -80,7 +79,7 @@ jobs:
           name: soTired Android app
           path: app/build/app/outputs/apk/release/app-release.apk
 
-# NOTE: iOS build is disable because it cn only be built on macOS devices
+# NOTE: iOS build is disable because it can only be built on macOS devices
 #      - name: Build iOS app
 #        run: |
 #          cd app
