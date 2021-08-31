@@ -11,7 +11,7 @@ if ! grep -qE "^\[issue\/[0-9]+\]\s-\s\S|^Merge\s\S" "$MSG";then
     exit 1
 fi
 
-if ! grep -qE "^$^\s+-\s[A-Z,a-z,0-9]+" "$MSG";then
+if ! grep -qE "^\s+-\s[A-Z,a-z,0-9]+" "$MSG";then
     # cat "$MSG"
     tput setaf 3; \
     echo "Your commit message does not contain bullet points. You should use some for further explanations!"
