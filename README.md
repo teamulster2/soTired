@@ -4,7 +4,7 @@
 
 soTired is an application for cognitive fatigue assessment.
 It includes a stand-alone Android-App for fatigue detection and an additional part for data management and further analysis.
-The project is structured in a client side (stand-alone App) implemented in Dart/Flutter and a server side (data management) in Golang.
+The project is structured as client side (stand-alone app) implemented in Dart/Flutter and a server side (data management) written in Golang.
 Dart/Flutter provides the ability to simply add an iOS, desktop and / or web application besides Android.
 
 
