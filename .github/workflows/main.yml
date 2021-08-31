@@ -13,8 +13,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-#      - name: Enable caching
-#        uses: actions/cache@v2
+      - name: Enable caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            app/.dart_tool
+            app/android/.gradle
+            ~/.pub-cache
+          key: ${{ runner.os }}-flutter_cache-${{ hashFiles('app/pubspec.lock') }}
       - name: Set up java
         uses: actions/setup-java@v2
         with:
@@ -42,8 +48,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-#      - name: Enable caching
-#        uses: actions/cache@v2
+      - name: Enable caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            app/.dart_tool
+            app/android/.gradle
+            ~/.pub-cache
+          key: ${{ runner.os }}-flutter_cache-${{ hashFiles('app/pubspec.lock') }}
       - name: Set up java
         uses: actions/setup-java@v2
         with:
@@ -62,15 +74,17 @@ jobs:
         run: |
           cd app
           flutter build apk
-#      - name: Build iOS app
-#        run: |
-#          cd app
-#          flutter build ios --release
       - name: Archive Android app release
         uses: actions/upload-artifact@v2
         with:
           name: soTired Android app
           path: app/build/app/outputs/apk/release/app-release.apk
+
+# NOTE: iOS build is disable because it cn only be built on macOS devices
+#      - name: Build iOS app
+#        run: |
+#          cd app
+#          flutter build ios --release
 #      - name: Archive iOS app release
 #        uses: actions/upload-artifact@v2
 #        with:
