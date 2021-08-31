@@ -3,7 +3,7 @@
 MSG="$1"
 
 if ! grep -qE "^\[issue\/[0-9]+\]\s-\s\S|^Merge\s\S" "$MSG";then
-    # cat "$MSG"
+    cat "$MSG"
     tput setaf 1; \
     echo "Your commit message must follow the template \"[issue/<issue number>] - <commit heading>\"."
     echo "Generated Merge commit message, e.g. \"Merge branch ... into ...\" are tolerated but not recommended."
