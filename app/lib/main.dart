@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'core/home/Home.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
             headline3: TextStyle(
                 fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Roboto'),
             bodyText1: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.normal,
                 color: Colors.white, fontFamily: 'Roboto'),
             bodyText2: TextStyle(

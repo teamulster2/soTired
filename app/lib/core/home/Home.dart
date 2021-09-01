@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_tired/core/home/widgets/HomeButton.dart';
 import 'package:so_tired/core/home/widgets/HomeImage.dart';
 import 'package:so_tired/core/navigation/Navigation.dart';
+import 'package:so_tired/modules/questionnaire/Questionnaire.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,7 +39,11 @@ class _HomeState extends State<Home> {
                         icon: 983247,
                         text: 'questionnaire',
                         onTap: () {
-                          // TODO: navigation to new page: reaction tests
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Questionnaire()));
                         },
                       ),
                       HomeButton(
