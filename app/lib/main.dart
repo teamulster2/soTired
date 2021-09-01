@@ -18,19 +18,19 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Roboto',
           textTheme: TextTheme(
             headline1: TextStyle(
-                fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Roboto'),
             headline2: TextStyle(
-                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Roboto'),
             headline3: TextStyle(
-                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Roboto'),
             bodyText1: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.normal,
-                color: Colors.white),
+                color: Colors.white, fontFamily: 'Roboto'),
             bodyText2: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
-                color: Colors.white),
+                color: Colors.white, fontFamily: 'Roboto'),
           )
 
           //566A9F
