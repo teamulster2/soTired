@@ -11,23 +11,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
       title: 'soTired',
       theme: ThemeData(
-          backgroundColor: Color(0xff071129),
+          backgroundColor: Color(0xff0B1C46),
+          shadowColor: Color(0xff071129),
           primaryColor: Color(0xff97E8D9),
           accentColor: Color(0xffD7AC94),
           fontFamily: 'Roboto',
           textTheme: TextTheme(
             headline1: TextStyle(
-                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
             headline2: TextStyle(
-                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
             headline3: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
             bodyText1: TextStyle(
-                fontSize: 12,
+                fontSize: 20,
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
             bodyText2: TextStyle(
-                fontSize: 8,
+                fontSize: 16,
                 fontWeight: FontWeight.normal,
                 color: Colors.white),
           )
