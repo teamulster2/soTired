@@ -19,7 +19,7 @@ TODO - for a feature or are a design change that has to be done later on
 NOTE - for an important information
 ```
 
-The git workflow for this repo is rebase-merge, which results in a history of this form:
+The git workflow for this repo is **rebase-merge**, which results in a history of this form:
 
                              F--G
                             /    \
