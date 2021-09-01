@@ -1,33 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:so_tired/config/config_manager.dart';
-
-final ConfigManager configManager = ConfigManager();
+import 'core/home/Home.dart';
 
 void main() {
-  runApp(const MyApp());
-
-  configManager.loadDefaultConfig();
-  // TODO: Use this to initialize config
-  // ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
-  //   if (!ConfigUtils.doesFileExist(value)) {
-  //     // TODO: invoke _fetchConfigFromServer()
-  //     // or
-  //     configManager.loadDefaultConfig();
-  //     configManager.writeConfigToFile(_clientConfig);
-  //   } else {
-  //     configManager.loadConfigFromJson();
-  //   }
-  // });
+  runApp(MyApp());
 }
 
-// TODO: Replace Demo App with real frontend and integrate config
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'soTired',
-        theme: ThemeData(
+      title: 'soTired',
+      theme: ThemeData(
+          backgroundColor: Color(0xff071129),
+          primaryColor: Color(0xff97E8D9),
+          accentColor: Color(0xffD7AC94),
+          fontFamily: 'Roboto',
+          textTheme: TextTheme(
+            headline1: TextStyle(
+                fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+            headline2: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+            headline3: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            bodyText1: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
+            bodyText2: TextStyle(
+                fontSize: 8,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
+          )
+
+          //566A9F
           // This is the theme of your application.
           //
           // Try running your application with "flutter run". You'll see the
@@ -37,73 +42,7 @@ class MyApp extends StatelessWidget {
           // or simply save your changes to "hot reload" in a Flutter IDE).
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(title: 'soTired Demo Home Page'),
-      );
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({required this.title, Key? key}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'ClientConfig Test output - studyName: '
-              '${configManager.clientConfig.studyName}',
-            ),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headline4,
-            // ),
-          ],
-        ),
-      ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+      home: Home(),
     );
 }
