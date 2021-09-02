@@ -13,3 +13,8 @@ if [ -f "$(which flutter)" ]; then
   cd "${SCRIPT_DIR}"/../app/ || exit 1;
   flutter analyze;
 fi
+if [ -f "$(which go)" ]; then
+  cd "${SCRIPT_DIR}"/../ || exit 1;
+  make gocheck;
+fi
+
