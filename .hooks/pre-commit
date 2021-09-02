@@ -7,11 +7,12 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 #echo "If the code is not working, the commit is aborted, so that you can fix it first."
 #read -p "Press Enter to continue" </dev/tty
 
-# Lint and build flutter app
-echo "Lint soTired app!"
+# Lint and format client side if flutter is installed
+echo "Lint and format soTired app!"
 if [ -f "$(which flutter)" ]; then
   cd "${SCRIPT_DIR}"/../app/ || exit 1;
-  flutter analyze;
+  flutter analyze --no-pub;
+  flutter format lib/
 fi
 if [ -f "$(which go)" ]; then
   cd "${SCRIPT_DIR}"/../ || exit 1;
