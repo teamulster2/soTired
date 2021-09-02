@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_tired/config/config_manager.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,18 +46,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final ConfigManager _configManager = ConfigManager();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -86,19 +76,20 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
-                'You have pushed the button this many times:',
+                'ClientConfig Test output - studyName: '
+                '${_configManager.clientConfig.studyName}',
               ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
+              // Text(
+              //   '$_counter',
+              //   style: Theme.of(context).textTheme.headline4,
+              // ),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: _incrementCounter,
+        //   tooltip: 'Increment',
+        //   child: const Icon(Icons.add),
         ), // This trailing comma makes auto-formatting nicer for build methods.
       );
 }
