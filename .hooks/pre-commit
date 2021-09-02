@@ -8,11 +8,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 #read -p "Press Enter to continue" </dev/tty
 
 # Lint and format client side if flutter is installed
-echo "Lint and format soTired app!"
 if [ -f "$(which flutter)" ]; then
+  echo "Lint and format soTired app!"
   cd "${SCRIPT_DIR}"/../app/ || exit 1;
   flutter analyze --no-pub;
-  flutter format lib/
 fi
 if [ -f "$(which go)" ]; then
   cd "${SCRIPT_DIR}"/../ || exit 1;
