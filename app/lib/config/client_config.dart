@@ -4,6 +4,7 @@ import 'package:so_tired/config/config.dart';
 
 import 'config_utils.dart';
 
+/// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig implements Config {
   late final String _serverUrl;
   late final int _notificationInterval;
@@ -71,6 +72,8 @@ class ClientConfig implements Config {
 
   get question5 => this._question5;
 
+  /// A private constructor which takes a [Map<String, dynamic> json] and
+  /// assigns all keys to their counterpart.
   ClientConfig._fromJson(Map<String, dynamic> json)
       : this._serverUrl = json['serverUrl'],
         this._notificationInterval = json['notificationInterval'],
@@ -86,6 +89,8 @@ class ClientConfig implements Config {
         this._question4 = json['question4'],
         this._question5 = json['question5'];
 
+  /// This method takes all JSON keys from this class and converts them into a
+  /// JSON object represented as [Map<String, dynamic>].
   Map<String, dynamic> toJson() => {
         'serverUrl': this._serverUrl,
         'notificationInterval': this._notificationInterval,
@@ -103,6 +108,7 @@ class ClientConfig implements Config {
       };
 }
 
+/// This class serves as Builder class for [ClientConfig].
 class ClientConfigBuilder {
   late final String _serverUrl;
   late final int _notificationInterval;
@@ -156,6 +162,8 @@ class ClientConfigBuilder {
 
   set question5(String question5) => this._question5 = question5;
 
+  /// Build a [ClientConfig] instance after specifying all mandatory keys
+  /// manually.
   ClientConfig build() {
     // TODO: Discuss exception handling and adjust this part
     // NOTE: Check whether or not method in @ConfigUtils could be a better fit
@@ -169,6 +177,8 @@ class ClientConfigBuilder {
     return clientConfig;
   }
 
+  /// Build a [ClientConfig] instance by passing a [String jsonString]
+  /// containing valid JSON, e.g. taken from a json file.
   ClientConfig buildWithString(String jsonString) {
     if (!ConfigUtils.isClientConfigJsonValid(jsonString)) {
       throw new Exception('The client config json is invalid. Make sure'

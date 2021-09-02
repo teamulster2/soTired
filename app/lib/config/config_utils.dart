@@ -1,8 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:so_tired/config/client_config.dart';
 
+/// This calls serves as utility class. It contains only [static] methods which
+/// enables you to use them without instantiating a new object.
 class ConfigUtils {
+  /// This method takes a [String clientConfigJsonString] and checks its
+  /// compatibility to the [ClientConfig] class.
   static bool isClientConfigJsonValid(String clientConfigJsonString) {
     late final Map<String, dynamic> jsonResponse;
     // TODO: Discuss exception handling and adjust this part
@@ -28,17 +33,24 @@ class ConfigUtils {
         jsonResponse.containsKey('question5');
   }
 
-    static Future<String> getLocalFilePath(String fileName) async {
+  /// This method uses the [dart:io] package to generate the local file path
+  /// where files can be stored or read from.
+  /// It takes [String fileName] as parameter and return a [Future<String>].
+  static Future<String> getLocalFilePath(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     return '${directory.path}/$fileName';
   }
 
+  /// [getConfigFileObject] takes a [String fileName] as argument and returns
+  /// an [File] pointing to the given fileName.
   static Future<File> getConfigFileObject(String fileName) async {
     final configFilePath = await getLocalFilePath(fileName);
     if (!doesFileExist(configFilePath)) File(configFilePath).create();
     return File(configFilePath);
   }
 
+  /// This methods validates whether or not a file exists.
+  /// It takes [String filePath] as argument and returns a [bool].
   static bool doesFileExist(String filePath) {
     return File(filePath).existsSync();
   }
