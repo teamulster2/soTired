@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class NavigationBar extends StatefulWidget {
   const NavigationBar({Key? key}) : super(key: key);
@@ -10,18 +11,18 @@ class NavigationBar extends StatefulWidget {
 class _NavigationBarState extends State<NavigationBar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 25.0, top: 25.0, right: 25.0),
-      width: MediaQuery.of(context).size.width,
-      height: 90,
-      color: Theme.of(context).shadowColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('soTired', style: Theme.of(context).textTheme.headline3),
-          Icon(Icons.menu, color: Colors.white),
-        ]
-      )
+    return AppBar(
+      title: Text('soTired', style: Theme.of(context).textTheme.headline3),
+      backgroundColor: Theme.of(context).backgroundColor,
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.black, statusBarIconBrightness: Brightness.light),
+      backwardsCompatibility: false,
+      automaticallyImplyLeading: false,
+      leading: GestureDetector(
+        onTap: () { Scaffold.of(context).openDrawer(); },
+        child: Icon(
+          Icons.menu,  // add custom icons also
+        ),
+      ),
     );
   }
 }
