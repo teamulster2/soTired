@@ -11,12 +11,10 @@ class ConfigManager {
   late final ClientConfig _clientConfig;
   final String _clientConfigFileName = 'client_config.json';
 
-  /// Its private constructor ensures that at least one config has been loaded
+  /// The private constructor ensures that at least one config has been loaded
   /// and is available.
+  // TODO: Adjust config load / write methods when implementing settings in STEP III
   ConfigManager._configManager() {
-    // TODO: Discuss exception handling and adjust this part
-    // NOTE: default config will always be loaded - it might be helpful to adjust this in a more efficient way
-
     ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
       if (!ConfigUtils.doesFileExist(value)) {
         // TODO: invoke _fetchConfigFromServer()
@@ -73,6 +71,7 @@ class ConfigManager {
         await ConfigUtils.getConfigFileObject(_clientConfigFileName);
     final config = await configFile.readAsString();
     final clientConfigBuilder = ClientConfigBuilder();
+    // TODO: Discuss exception handling and adjust this part
     try {
       _clientConfig = clientConfigBuilder.buildWithString(config);
     } catch (e) {

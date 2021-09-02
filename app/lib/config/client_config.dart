@@ -166,7 +166,7 @@ class ClientConfigBuilder {
   /// manually.
   ClientConfig build() {
     // TODO: Discuss exception handling and adjust this part
-    // NOTE: Check whether or not method in @ConfigUtils could be a better fit
+    // TODO: Check whether or not method in ConfigUtils could be a better fit
     ClientConfig clientConfig;
     try {
       clientConfig = new ClientConfig._clientConfig(this);
