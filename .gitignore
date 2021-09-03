@@ -94,4 +94,5 @@ GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
+# go executables
 soti-server

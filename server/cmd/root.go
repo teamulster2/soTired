@@ -60,6 +60,8 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	rootCmd.AddCommand(serveCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -83,4 +85,12 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+var serveCmd = &cobra.Command{
+	Use:   "serve :[port]",
+	Short: "Start the grpc server",
+	Long:  "Start the grpc server listening on the given port or the default port ':50051'",
+	Args: cobra.MaximumNArgs(1),
+	Run:   run,
 }
