@@ -35,9 +35,9 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
                 onTap: () => widget.onBack()),
             SizedBox(width: 20),
             Text(
-                'Frage ' +
+                'question ' +
                     widget.currentQuestion.toString() +
-                    ' von ' +
+                    ' of ' +
                     widget.length.toString(),
                 style: Theme.of(context).textTheme.bodyText2),
             SizedBox(width: 20),

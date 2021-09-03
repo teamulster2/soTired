@@ -4,6 +4,7 @@ import 'package:so_tired/core/home/widgets/HomeImage.dart';
 import 'package:so_tired/core/navigation/Navigation.dart';
 import 'package:so_tired/core/navigation/NavigationDrawer.dart';
 import 'package:so_tired/modules/questionnaire/Questionnaire.dart';
+import 'package:so_tired/modules/twoSidesTest/TwoSidesTest.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -15,7 +16,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(55),
@@ -38,9 +38,12 @@ class _HomeState extends State<Home> {
                           // NOTE: Icons from: https://api.flutter.dev/flutter/material/Icons-class.html
                           HomeButton(
                             icon: 57403,
-                            text: 'reaction tests',
+                            text: 'reaction game',
                             onTap: () {
-                              // TODO: navigation to new page: reaction tests
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TwoSidesTest()));
                             },
                           ),
                           HomeButton(

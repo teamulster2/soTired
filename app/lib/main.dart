@@ -16,6 +16,8 @@ class MyApp extends StatelessWidget {
           shadowColor: Color(0xff071129),
           primaryColor: Color(0xff97E8D9),
           accentColor: Color(0xffD7AC94),
+          primaryColorDark: Color(0xff566A9F),
+          primaryColorLight: Color(0xffDF7CA6),
           fontFamily: 'Roboto',
           textTheme: TextTheme(
             headline1: TextStyle(
