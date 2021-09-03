@@ -1,5 +1,7 @@
 name: so_tired
-#description: TODO: Add description based on README.md
+description: |
+  soTired is an application for cognitive fatigue assessment. It includes a stand-alone Android app
+  for fatigue detection and an additional part for data management and further analysis.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
