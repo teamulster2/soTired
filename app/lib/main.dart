@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:so_tired/config/config_manager.dart';
 
+final ConfigManager configManager = ConfigManager();
+
 void main() {
   runApp(const MyApp());
 
+  configManager.loadDefaultConfig();
   // TODO: Use this to initialize config
-  // final ConfigManager configManager = ConfigManager();
   // ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
   //   if (!ConfigUtils.doesFileExist(value)) {
   //     // TODO: invoke _fetchConfigFromServer()
@@ -60,8 +62,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final ConfigManager _configManager = ConfigManager();
-
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text(
               'ClientConfig Test output - studyName: '
-              '${_configManager.clientConfig.studyName}',
+              '${configManager.clientConfig.studyName}',
             ),
             // Text(
             //   '$_counter',
