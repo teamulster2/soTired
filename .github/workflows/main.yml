@@ -89,3 +89,27 @@ jobs:
 #        with:
 #          name: soTired iOS app
 #          path:
+
+  lint-test-build-server:
+    name: Lint, test and build server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+      - name: Install dependencies
+        run: make gotidy
+      - name: Lint
+        run: make gocheck
+      - name: Test
+        run: make gotest
+      - name: Build
+        run: make gobuild
+      - name: Archive server release
+        uses: actions/upload-artifact@v2
+        with:
+          name: soTired server
+          path: server/soti-server
