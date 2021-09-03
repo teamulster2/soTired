@@ -14,18 +14,7 @@ class ConfigManager {
   /// The private constructor ensures that at least one config has been loaded
   /// and is available.
   // TODO: Adjust config load / write methods when implementing settings in STEP III
-  ConfigManager._configManager() {
-    ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
-      if (!ConfigUtils.doesFileExist(value)) {
-        // TODO: invoke _fetchConfigFromServer()
-        // or
-        _loadDefaultConfig();
-        _writeConfigToFile(_clientConfig);
-      } else {
-        _loadConfigFromJson();
-      }
-    });
-  }
+  ConfigManager._configManager();
 
   /// [ConfigManager] has been implemented using the *Singleton* design
   /// pattern which ensures that only one config is available throughout the
@@ -35,7 +24,7 @@ class ConfigManager {
   ClientConfig get clientConfig => _clientConfig;
 
   /// This method contains the default config and restores it on demand.
-  void _loadDefaultConfig() {
+  void loadDefaultConfig() {
     final clientConfigBuilder = ClientConfigBuilder();
 
     // TODO: Adjust default server url based on the default server config
@@ -66,7 +55,7 @@ class ConfigManager {
 
   /// This method loads the config from a existing json file.
   /// It utilizes the [ConfigUtils] class.
-  void _loadConfigFromJson() async {
+  void loadConfigFromJson() async {
     final configFile =
         await ConfigUtils.getConfigFileObject(_clientConfigFileName);
     final config = await configFile.readAsString();
@@ -88,7 +77,7 @@ class ConfigManager {
   /// It takes an instance of type [Config] as argument and uses the
   /// [Config.toJson()] to generate a json object which can be written to a
   /// file.
-  void _writeConfigToFile(Config config) async {
+  void writeConfigToFile(Config config) async {
     final Map<String, dynamic> json = config.toJson();
     final configFile =
         await ConfigUtils.getConfigFileObject(_clientConfigFileName);

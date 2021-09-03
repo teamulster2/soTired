@@ -37,16 +37,16 @@ class ConfigUtils {
   /// where files can be stored or read from.
   /// It takes [String fileName] as parameter and return a [Future<String>].
   static Future<String> getLocalFilePath(String fileName) async {
-    final directory = await getApplicationDocumentsDirectory();
-    return '${directory.path}/$fileName';
+    final Directory directory = await getApplicationDocumentsDirectory();
+    return Future.value('${directory.path}/$fileName');
   }
 
   /// [getConfigFileObject] takes a [String fileName] as argument and returns
   /// an [File] pointing to the given fileName.
   static Future<File> getConfigFileObject(String fileName) async {
     final configFilePath = await getLocalFilePath(fileName);
-    if (!doesFileExist(configFilePath)) File(configFilePath).create();
-    return File(configFilePath);
+    if (!doesFileExist(configFilePath)) File(configFilePath).createSync();
+    return Future.value(File(configFilePath));
   }
 
   /// This methods validates whether or not a file exists.
