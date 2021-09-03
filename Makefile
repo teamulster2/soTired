@@ -15,10 +15,20 @@ gotidy:
 .PHONY: gocheck
 gocheck: gonewer
 	# find all go-source files and fail if one is not formated
-	find . -type f -regex ".*\.go" -exec gofmt -l {} \; | wc -l | grep -q 0 
+	find . -type f -regex ".*\.go" -exec gofmt -l {} \; | wc -l | grep -q 0
 
 
 .PHONY: gonewer
 gonewer:
 	# search for newer go files than go.mod files.
 	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod ); echo $$newer; if [ "$$newer" ];then echo "there are newer go-files then the go.mod files: please run 'make gotidy'"; exit 1; fi; done
+
+.PHONY: gobuild
+gobuild:
+	# build the server executable
+	cd server; go build -o soti-server
+
+.PHONY: gotest
+gotest:
+	# run all the go tests
+	for dir in $$(find . -type d -exec test -e '{}'/_test.go \; -print ); do go test; done

@@ -17,4 +17,3 @@ if [ -f "$(which go)" ]; then
   cd "${SCRIPT_DIR}"/../ || exit 1;
   make gocheck;
 fi
-
