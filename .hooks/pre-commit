@@ -16,7 +16,8 @@ if [ -f "$(which flutter)" ]; then
   # Print if check was unsuccessful
   if [ $? != 0 ]; then
     echo "Failed Makefile output:"
-    cat "$PRE_COMMIT_RESULT"
+    echo "$PRE_COMMIT_RESULT"
+    exit 1
   fi
 fi
 
@@ -29,6 +30,7 @@ if [ -f "$(which go)" ]; then
   # Print if check was unsuccessful
   if [ $? != 0 ]; then
     echo "Failed Makefile output:"
-    cat "$PRE_COMMIT_RESULT"
+    echo "$PRE_COMMIT_RESULT"
+    exit 1
   fi
 fi

@@ -2,6 +2,9 @@
 init:
 	git config core.hooksPath .hooks
 
+.PHONY: go
+go: gofmt gotidy gocheck gotest gobuild
+
 .PHONY: gofmt
 gofmt:
 	# find all go-source files and format them.
@@ -10,7 +13,10 @@ gofmt:
 .PHONY: gotidy
 gotidy:
 	# find all directorys contaning a go.mod file and run go mod tidy to update go.mod and go.sum
-	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); do $$(cd $$dir; go mod tidy; touch go.mod); done
+	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); \
+		do $$(cd $$dir; go mod tidy; \
+		touch go.mod); \
+	done
 
 .PHONY: gocheck
 gocheck: gonewer
@@ -20,17 +26,25 @@ gocheck: gonewer
 .PHONY: gonewer
 gonewer:
 	# search for newer go files than go.mod files.
-	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod ); echo $$newer; if [ "$$newer" ];then echo "there are newer go-files then the go.mod files: please run 'make gotidy'"; exit 1; fi; done
+	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); \
+		do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod ); \
+		if [ "$$newer" ];then echo "there are newer go-files then the go.mod files: please run 'make gotidy'"; \
+			exit 1; \
+		fi; \
+	done
 
 .PHONY: gobuild
 gobuild:
 	# build the server executable
-	cd server; go build -o soti-server
+	cd server; \
+	go build -o soti-server
 
 .PHONY: gotest
 gotest:
 	# run all the go tests
-	for dir in $$(find . -type d -exec test -e '{}'/_test.go \; -print ); do go test; done
+	for dir in $$(find . -type d -exec test -e '{}'/_test.go \; -print ); \
+		do go test; \
+	done
 
 .PHONY: flutter
 flutter: flutterfmt flutterget fluttercheck flutternewer flutterupgrade flutterbuild
