@@ -21,11 +21,13 @@ NOTE - for an important information
 
 The git workflow for this repo is **rebase-merge**, which results in a history of this form:
 
+```
                              F--G
                             /    \
    feature-1 ->     B--C   E------H    <- feature-2
                    /    \ /        \
                 --A------D----------I  <-main
 
+```
 In conclusion, the main branch only contains merge commits from other branches,
 which are rebased onto the most recent commit.
