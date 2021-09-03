@@ -1,4 +1,4 @@
-// Copyright (c) 2018, the gRPC project authors. Please see the AUTHORS file
+// Copyright (c) 2017, the gRPC project authors. Please see the AUTHORS file
 // for details. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,32 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Dart implementation of the gRPC helloworld.Greeter client.
-import 'package:grpc/grpc.dart';
-import 'package:so_tired/src/generated/helloworld.pbgrpc.dart';
+import 'package:so_tired/api/client.dart';
 
 Future<void> main(List<String> args) async {
-  final channel = ClientChannel(
-    'localhost',
-    port: 50051,
-    options: ChannelOptions(
-      credentials: ChannelCredentials.insecure(),
-      codecRegistry:
-      CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
-    ),
-  );
-  final stub = GreeterClient(channel);
-
-  final name = args.isNotEmpty ? args[0] : 'world';
-
-  try {
-    final response = await stub.sayHello(
-      HelloRequest()..name = name,
-      options: CallOptions(compression: const GzipCodec()),
-    );
-    print('Greeter client received: ${response.message}');
-  } catch (e) {
-    print('Caught error: $e');
-  }
-  await channel.shutdown();
+  await Client().main(args);
 }
