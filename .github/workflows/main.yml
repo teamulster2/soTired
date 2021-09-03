@@ -31,18 +31,14 @@ jobs:
           flutter-version: '2.2.3'
       - name: Check environment and install dependencies
         run: |
-          cd app
           flutter doctor -v
-          flutter pub get
+          make flutterget
       - name: Lint and run tests
         run: |
-          cd app
-          flutter analyze
-          flutter test
+          make fluttercheck
+          make fluttertest
       - name: Build Android app
-        run: |
-          cd app
-          flutter build apk
+        run: make flutterbuild
       - name: Archive Android app release
         uses: actions/upload-artifact@v2
         with:

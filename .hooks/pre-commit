@@ -10,8 +10,8 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # Lint client side if flutter is installed
 if [ -f "$(which flutter)" ]; then
   echo "Lint soTired app!"
-  cd "${SCRIPT_DIR}"/../app/ || exit 1;
-  flutter analyze --no-pub;
+  cd "${SCRIPT_DIR}"/../ || exit 1;
+  make fluttercheck;
 fi
 if [ -f "$(which go)" ]; then
   cd "${SCRIPT_DIR}"/../ || exit 1;
