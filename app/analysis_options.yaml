@@ -1,0 +1,50 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Error rules
+    - always_use_package_imports
+    - avoid_returning_null_for_future
+    - cancel_subscriptions
+    - close_sinks
+    - comment_references
+    - literal_only_boolean_expressions
+    - no_adjacent_strings_in_list
+    - test_types_in_equals
+    - throw_in_finally
+    - unnecessary_statements
+    # Style rules
+    - always_put_control_body_on_new_line
+    - always_put_required_named_parameters_first
+    - always_specify_types
+    - avoid_annotating_with_dynamic
+    - avoid_bool_literals_in_conditional_expressions
+    - avoid_escaping_inner_quotes
+    - avoid_multiple_declarations_per_line
+    - avoid_redundant_argument_values
+    - avoid_unused_constructor_parameters
+    - avoid_void_async
+    - cascade_invocations
+    - do_not_use_environment
+    - join_return_with_assignment
+    - leading_newlines_in_multiline_strings
+    - missing_whitespace_between_adjacent_strings
+    - no_runtimeType_toString
+    - only_throw_errors
+    - parameter_assignments
+    - prefer_asserts_in_initializer_lists
+    - prefer_constructors_over_static_methods
+    - prefer_expression_function_bodies
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_foreach
+    - prefer_if_elements_to_conditional_expressions
+    - unnecessary_await_in_return
+    - unnecessary_null_aware_assignments
+    - unnecessary_parenthesis
+    - unnecessary_raw_strings
+    - use_if_null_to_convert_nulls_to_bools
+    - use_is_even_rather_than_modulo
+    - use_named_constants
+    - use_raw_strings
+    - use_string_buffers
