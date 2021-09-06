@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:so_tired/core/home/Home.dart';
-import 'package:so_tired/core/navigation/Navigation.dart';
-import 'package:so_tired/constants/Constants.dart' as Constants;
-import 'package:so_tired/core/navigation/NavigationDrawer.dart';
-import 'package:so_tired/modules/questionnaire/widgets/QuestionnaireAnswer.dart';
-import 'package:so_tired/modules/questionnaire/widgets/QuestionnaireProgress.dart';
-import 'package:so_tired/modules/questionnaire/widgets/QuestionnaireQuestion.dart';
+import 'package:so_tired/ui/core/home/Home.dart';
+import 'package:so_tired/ui/core/navigation/Navigation.dart';
+import 'package:so_tired/ui/constants/Constants.dart' as Constants;
+import 'package:so_tired/ui/core/navigation/NavigationDrawer.dart';
+import 'package:so_tired/ui/modules/questionnaire/widgets/QuestionnaireAnswer.dart';
+import 'package:so_tired/ui/modules/questionnaire/widgets/QuestionnaireProgress.dart';
+import 'package:so_tired/ui/modules/questionnaire/widgets/QuestionnaireQuestion.dart';
 
 class Questionnaire extends StatefulWidget {
   const Questionnaire({Key? key}) : super(key: key);

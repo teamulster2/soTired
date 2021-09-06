@@ -11,26 +11,33 @@ class NavigationDrawer extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(10),
-            child: Text('soTired', style: Theme.of(context).textTheme.headline3),
+            child:
+                Text('soTired', style: Theme.of(context).textTheme.headline3),
           ),
           ListTile(
-            leading: Icon(Icons.input, color: Colors.white,),
+            leading: Icon(
+              Icons.input,
+              color: Colors.white,
+            ),
             title: Text('Home', style: Theme.of(context).textTheme.bodyText1),
             onTap: () => {},
           ),
           ListTile(
             leading: Icon(Icons.verified_user, color: Colors.white),
-            title: Text('Profile', style: Theme.of(context).textTheme.bodyText1),
+            title:
+                Text('Profile', style: Theme.of(context).textTheme.bodyText1),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
             leading: Icon(Icons.settings, color: Colors.white),
-            title: Text('Settings', style: Theme.of(context).textTheme.bodyText1),
+            title:
+                Text('Settings', style: Theme.of(context).textTheme.bodyText1),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
             leading: Icon(Icons.border_color, color: Colors.white),
-            title: Text('Feedback', style: Theme.of(context).textTheme.bodyText1),
+            title:
+                Text('Feedback', style: Theme.of(context).textTheme.bodyText1),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'PreviewContainer.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/PreviewContainer.dart';
 
 class PlainPrimary extends StatelessWidget {
   const PlainPrimary({Key? key}) : super(key: key);
@@ -17,7 +17,9 @@ class PlainPrimaryLight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Preview(
-        color: Theme.of(context).primaryColorLight, icon: false, quarterTurns: 0);
+        color: Theme.of(context).primaryColorLight,
+        icon: false,
+        quarterTurns: 0);
   }
 }
 
@@ -27,7 +29,9 @@ class PlainPrimaryDark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Preview(
-        color: Theme.of(context).primaryColorDark, icon: false, quarterTurns: 0);
+        color: Theme.of(context).primaryColorDark,
+        icon: false,
+        quarterTurns: 0);
   }
 }
 
@@ -40,4 +44,3 @@ class PlainAccent extends StatelessWidget {
         color: Theme.of(context).accentColor, icon: false, quarterTurns: 0);
   }
 }
-

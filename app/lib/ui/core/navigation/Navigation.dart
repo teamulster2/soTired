@@ -14,13 +14,17 @@ class _NavigationBarState extends State<NavigationBar> {
     return AppBar(
       title: Text('soTired', style: Theme.of(context).textTheme.headline3),
       backgroundColor: Theme.of(context).backgroundColor,
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.black, statusBarIconBrightness: Brightness.light),
+      systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.black,
+          statusBarIconBrightness: Brightness.light),
       backwardsCompatibility: false,
       automaticallyImplyLeading: false,
       leading: GestureDetector(
-        onTap: () { Scaffold.of(context).openDrawer(); },
+        onTap: () {
+          Scaffold.of(context).openDrawer();
+        },
         child: Icon(
-          Icons.menu,  // add custom icons also
+          Icons.menu,
         ),
       ),
     );

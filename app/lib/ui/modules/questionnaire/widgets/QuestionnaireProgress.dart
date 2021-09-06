@@ -58,8 +58,7 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
   Future<bool> onWillPop(BuildContext context) async {
     return await showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
                 title: Text('Are you sure to leave the questionnaire?'),
                 content: Text("Your results won't be saved."),
                 actions: [
@@ -71,7 +70,6 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
                     child: Text('Ok'),
                     onPressed: () => Navigator.pop(context, true),
                   )
-                ])
-    );
+                ]));
   }
 }

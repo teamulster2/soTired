@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class QuestionnaireAnswer extends StatefulWidget {
-  const QuestionnaireAnswer({Key? key, required this.number, required this.text, required this.value, required this.onPressed}) : super(key: key);
+  const QuestionnaireAnswer(
+      {Key? key,
+      required this.number,
+      required this.text,
+      required this.value,
+      required this.onPressed})
+      : super(key: key);
 
   final int number;
   final String text;
@@ -18,7 +24,7 @@ class _QuestionnaireAnswerState extends State<QuestionnaireAnswer> {
     return Container(
         width: MediaQuery.of(context).size.width - 50,
         child: GestureDetector(
-          // onTap: () => widget.onTapPressed(int.parse(widget.number)),
+            // onTap: () => widget.onTapPressed(int.parse(widget.number)),
             onTap: () {
               widget.onPressed();
             },

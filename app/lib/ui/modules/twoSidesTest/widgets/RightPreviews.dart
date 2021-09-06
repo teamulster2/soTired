@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'PreviewContainer.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/PreviewContainer.dart';
 
 class ArrowRightPrimary extends StatelessWidget {
   const ArrowRightPrimary({Key? key}) : super(key: key);
@@ -18,7 +17,9 @@ class ArrowRightPrimaryLight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Preview(
-        color: Theme.of(context).primaryColorLight, icon: true, quarterTurns: 0);
+        color: Theme.of(context).primaryColorLight,
+        icon: true,
+        quarterTurns: 0);
   }
 }
 

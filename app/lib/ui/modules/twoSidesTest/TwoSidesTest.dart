@@ -1,13 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:so_tired/core/home/Home.dart';
-import 'package:so_tired/core/navigation/Navigation.dart';
-import 'package:so_tired/core/navigation/NavigationDrawer.dart';
-import 'package:so_tired/modules/twoSidesTest/widgets/DownPreviews.dart';
-import 'package:so_tired/modules/twoSidesTest/widgets/LeftPreviews.dart';
-import 'package:so_tired/modules/twoSidesTest/widgets/PlainPreviews.dart';
-import 'package:so_tired/modules/twoSidesTest/widgets/RightPreviews.dart';
-import 'package:so_tired/modules/twoSidesTest/widgets/UpPreviews.dart';
+import 'package:so_tired/ui/core/home/Home.dart';
+import 'package:so_tired/ui/core/navigation/Navigation.dart';
+import 'package:so_tired/ui/core/navigation/NavigationDrawer.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/DownPreviews.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/LeftPreviews.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/PlainPreviews.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/RightPreviews.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/widgets/UpPreviews.dart';
 
 class TwoSidesTest extends StatefulWidget {
   const TwoSidesTest({Key? key}) : super(key: key);

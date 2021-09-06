@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class Preview extends StatelessWidget {
   const Preview(
       {Key? key,
-        required this.color,
-        required this.icon,
-        required this.quarterTurns})
+      required this.color,
+      required this.icon,
+      required this.quarterTurns})
       : super(key: key);
 
   final Color color;

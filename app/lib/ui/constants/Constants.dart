@@ -1,4 +1,4 @@
-import 'package:so_tired/models/questionnaire.dart';
+import 'package:so_tired/ui/models/Questionnaire.dart';
 
 final questions = <QuestionnaireObject>[
   new QuestionnaireObject(
@@ -40,13 +40,4 @@ final questions = <QuestionnaireObject>[
     'I find it so difficult to concentrate that I have problems, for example reading a newspaper or taking part in a conversation with a group of people.',
     'I always have such difficulty concentrating that it is almost impossible to do anything.'
   ])
-  /*,
-    new QuestionnaireObject(
-        '',
-        [
-          '',
-          '',
-          '',
-          ''
-        ])*/
 ];

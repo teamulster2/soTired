@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:so_tired/core/home/widgets/HomeButton.dart';
-import 'package:so_tired/core/home/widgets/HomeImage.dart';
-import 'package:so_tired/core/navigation/Navigation.dart';
-import 'package:so_tired/core/navigation/NavigationDrawer.dart';
-import 'package:so_tired/modules/questionnaire/Questionnaire.dart';
-import 'package:so_tired/modules/twoSidesTest/TwoSidesTest.dart';
+import 'package:so_tired/ui/core/home/widgets/HomeButton.dart';
+import 'package:so_tired/ui/core/home/widgets/HomeImage.dart';
+import 'package:so_tired/ui/core/navigation/Navigation.dart';
+import 'package:so_tired/ui/core/navigation/NavigationDrawer.dart';
+import 'package:so_tired/ui/modules/questionnaire/Questionnaire.dart';
+import 'package:so_tired/ui/modules/twoSidesTest/TwoSidesTest.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
