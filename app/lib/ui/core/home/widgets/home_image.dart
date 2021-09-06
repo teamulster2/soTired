@@ -9,13 +9,7 @@ class HomeImage extends StatefulWidget {
 
 class _HomeImageState extends State<HomeImage> {
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image(
-          image: AssetImage('assets/images/background_06.png'),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => const Image(
+        image: AssetImage('assets/images/background_06.png'),
+      );
 }

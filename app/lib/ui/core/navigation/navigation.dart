@@ -10,11 +10,10 @@ class NavigationBar extends StatefulWidget {
 
 class _NavigationBarState extends State<NavigationBar> {
   @override
-  Widget build(BuildContext context) {
-    return AppBar(
+  Widget build(BuildContext context) => AppBar(
       title: Text('soTired', style: Theme.of(context).textTheme.headline3),
       backgroundColor: Theme.of(context).backgroundColor,
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.black,
           statusBarIconBrightness: Brightness.light),
       backwardsCompatibility: false,
@@ -23,10 +22,9 @@ class _NavigationBarState extends State<NavigationBar> {
         onTap: () {
           Scaffold.of(context).openDrawer();
         },
-        child: Icon(
+        child: const Icon(
           Icons.menu,
         ),
       ),
     );
-  }
 }

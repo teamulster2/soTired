@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:so_tired/ui/core/home/Home.dart';
-import 'package:so_tired/ui/core/navigation/Navigation.dart';
-import 'package:so_tired/ui/constants/Constants.dart' as Constants;
-import 'package:so_tired/ui/core/navigation/NavigationDrawer.dart';
-import 'package:so_tired/ui/modules/questionnaire/widgets/QuestionnaireAnswer.dart';
-import 'package:so_tired/ui/modules/questionnaire/widgets/QuestionnaireProgress.dart';
-import 'package:so_tired/ui/modules/questionnaire/widgets/QuestionnaireQuestion.dart';
+import 'package:so_tired/ui/core/home/home.dart';
+import 'package:so_tired/ui/core/navigation/navigation.dart';
+import 'package:so_tired/ui/constants/constants.dart' as constants;
+import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
+import 'package:so_tired/ui/models/questionnaire.dart';
+import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_answer.dart';
+import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_progress.dart';
+import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_question.dart';
 
 class Questionnaire extends StatefulWidget {
   const Questionnaire({Key? key}) : super(key: key);
@@ -15,29 +16,27 @@ class Questionnaire extends StatefulWidget {
 }
 
 class _QuestionnaireState extends State<Questionnaire> {
-  final questions = Constants.questions;
+  final List<QuestionnaireObject> questions = constants.questions;
 
-  ValueNotifier currentQuestion = new ValueNotifier<int>(0);
+  ValueNotifier<int> currentQuestion = ValueNotifier<int>(0);
   int score = 0;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(55),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(55),
           child: NavigationBar(),
         ),
-        drawer: NavigationDrawer(),
+        drawer: const NavigationDrawer(),
         body: Container(
             color: Theme.of(context).backgroundColor,
             child: Column(
-              children: [
+              children: <Widget>[
                 Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: ValueListenableBuilder(
+                    padding: const EdgeInsets.all(20.0),
+                    child: ValueListenableBuilder<int>(
                         valueListenable: currentQuestion,
-                        builder: (context, value, child) {
-                          return Column(children: [
+                        builder: (BuildContext context, Object? value, Widget? child) => Column(children: <Widget>[
                             QuestionnaireProgress(
                               length: questions.length,
                               currentQuestion: currentQuestion.value + 1,
@@ -53,13 +52,13 @@ class _QuestionnaireState extends State<Questionnaire> {
                                 }
                               },
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             QuestionnaireQuestion(
                                 question:
                                     questions[currentQuestion.value].question),
-                            SizedBox(height: 50),
-                            for (var i = 0; i < 4; i++)
-                              Column(children: [
+                            const SizedBox(height: 50),
+                            for (int i = 0; i < 4; i++)
+                              Column(children: <Widget>[
                                 QuestionnaireAnswer(
                                   text: questions[currentQuestion.value]
                                       .answers[i],
@@ -71,36 +70,31 @@ class _QuestionnaireState extends State<Questionnaire> {
                                       currentQuestion.value += 1;
                                       score += i;
                                     } else {
-                                      print('final score: ' + score.toString());
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                                title: Text(
+                                          builder: (BuildContext context) => AlertDialog(
+                                                title: const Text(
                                                     'Questionnaire saved successfully.'),
-                                                content: Text(
+                                                content: const Text(
                                                     'Thank you for filling in. You can now continue with the other components'),
-                                                actions: [
+                                                actions: <Widget>[
                                                   TextButton(
-                                                    child: Text('Ok'),
+                                                    child: const Text('Ok'),
                                                     onPressed: () =>
                                                         Navigator.push(
                                                             context,
-                                                            MaterialPageRoute(
+                                                            MaterialPageRoute<BuildContext>(
                                                                 builder:
-                                                                    (context) =>
-                                                                        Home())),
+                                                                    (BuildContext context) =>
+                                                                        const Home())),
                                                   )
-                                                ]);
-                                          });
+                                                ]));
                                     }
                                   },
                                 ),
-                                SizedBox(height: 20)
+                                const SizedBox(height: 20)
                               ])
-                          ]);
-                        }))
+                          ])))
               ],
             )));
-  }
 }
