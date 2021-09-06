@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         // NOTE: Icons from: https://api.flutter.dev/flutter/material/Icons-class.html
                         HomeButton(
-                          icon: 57403,
+                          icon: Icons.access_time_filled,
                           text: 'reaction game',
                           onTap: () {
                             Navigator.push(
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
                           },
                         ),
                         HomeButton(
-                          icon: 983247,
+                          icon: Icons.question_answer_rounded,
                           text: 'questionnaire',
                           onTap: () {
                             Navigator.push(
@@ -58,14 +58,14 @@ class _HomeState extends State<Home> {
                           },
                         ),
                         HomeButton(
-                          icon: 57485,
+                          icon: Icons.app_settings_alt,
                           text: 'settings',
                           onTap: () {
                             // TODO: navigation to new page: settings
                           },
                         ),
                         HomeButton(
-                          icon: 58083,
+                          icon: Icons.graphic_eq,
                           text: 'audio recognition',
                           onTap: () {
                             // TODO: navigation to new page: audio recognition
