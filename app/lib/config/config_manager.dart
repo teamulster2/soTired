@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:so_tired/ui/constants/constants.dart' as constants;
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/config/config.dart';
-import 'package:so_tired/config/config_utils.dart';
+import 'package:so_tired/utils.dart';
 
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
@@ -47,10 +47,10 @@ class ConfigManager {
   }
 
   /// This method loads the config from a existing json file.
-  /// It utilizes the [ConfigUtils] class.
+  /// It utilizes the [Utils] class.
   Future<void> loadConfigFromJson() async {
     final File configFile =
-        await ConfigUtils.getConfigFileObject(_clientConfigFileName);
+        await Utils.getConfigFileObject(_clientConfigFileName);
     final String config = await configFile.readAsString();
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
     // TODO: Discuss exception handling and adjust this part
@@ -74,7 +74,7 @@ class ConfigManager {
   Future<void> writeConfigToFile(Config config) async {
     final Map<String, dynamic> json = config.toJson();
     final File configFile =
-        await ConfigUtils.getConfigFileObject(_clientConfigFileName);
+        await Utils.getConfigFileObject(_clientConfigFileName);
     configFile.writeAsString('$json');
   }
 }

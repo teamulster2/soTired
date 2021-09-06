@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+
+import 'package:so_tired/config/config_manager.dart';
+import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/notification.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 final ConfigManager configManager = ConfigManager();
+final DatabaseManager databaseManager = DatabaseManager();
 final Notifications notification = Notifications();
 
-void main() {
+final Logger logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+Future<void> main() async {
   runApp(const MyApp());
+
+  logger.d(databaseManager.toString());
 
   notification.initializeSetting();
   tz.initializeTimeZones();
@@ -27,8 +38,11 @@ void main() {
   // });
 }
 
+// TODO: Replace Demo App with real frontend and integrate config
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

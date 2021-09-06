@@ -1,6 +1,7 @@
 import 'dart:convert';
+
 import 'package:so_tired/config/config.dart';
-import 'package:so_tired/config/config_utils.dart';
+import 'package:so_tired/utils.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
@@ -140,7 +141,7 @@ class ClientConfigBuilder {
   /// Build a [ClientConfig] instance by passing a [String jsonString]
   /// containing valid JSON, e.g. taken from a json file.
   ClientConfig buildWithString(String jsonString) {
-    if (!ConfigUtils.isClientConfigJsonValid(jsonString)) {
+    if (!Utils.isClientConfigJsonValid(jsonString)) {
       throw Exception('The client config json is invalid. Make sure '
           'to fix your config and try again.');
     }

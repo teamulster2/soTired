@@ -47,7 +47,7 @@ gotest:
 	done
 
 .PHONY: flutter
-flutter: flutterfmt flutterget fluttercheck flutternewer flutterupgrade flutterbuild
+flutter: flutterfmt flutterget fluttercheck flutternewer flutterupgrade flutterbuild flutterrun
 
 .PHONY: flutterfmt
 flutterfmt:
@@ -88,3 +88,8 @@ flutterbuild:
 fluttertest:
 	cd app/; \
 	flutter test
+
+.PHONY: flutterrun
+flutterrun:
+	cd app/; \
+	flutter run --enable-software-rendering --verbose --verbose-system-logs

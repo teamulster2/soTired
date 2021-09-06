@@ -5,7 +5,7 @@ import 'package:so_tired/config/client_config.dart';
 
 /// This calls serves as utility class. It contains only static methods which
 /// enables you to use them without instantiating a new object.
-class ConfigUtils {
+class Utils {
   /// This method takes a [String clientConfigJsonString] and checks its
   /// compatibility to the [ClientConfig] class.
   static bool isClientConfigJsonValid(String clientConfigJsonString) {
