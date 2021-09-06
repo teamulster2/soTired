@@ -6,7 +6,7 @@ class PlainPrimary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).primaryColor, icon: false, quarterTurns: 0);
+      color: Theme.of(context).primaryColor, icon: false, quarterTurns: 0);
 }
 
 class PlainPrimaryLight extends StatelessWidget {
@@ -14,9 +14,7 @@ class PlainPrimaryLight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).primaryColorLight,
-        icon: false,
-        quarterTurns: 0);
+      color: Theme.of(context).primaryColorLight, icon: false, quarterTurns: 0);
 }
 
 class PlainPrimaryDark extends StatelessWidget {
@@ -24,9 +22,7 @@ class PlainPrimaryDark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).primaryColorDark,
-        icon: false,
-        quarterTurns: 0);
+      color: Theme.of(context).primaryColorDark, icon: false, quarterTurns: 0);
 }
 
 class PlainAccent extends StatelessWidget {
@@ -34,5 +30,5 @@ class PlainAccent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).accentColor, icon: false, quarterTurns: 0);
+      color: Theme.of(context).accentColor, icon: false, quarterTurns: 0);
 }

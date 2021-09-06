@@ -16,11 +16,11 @@ class HomeButton extends StatefulWidget {
 class _HomeButtonState extends State<HomeButton> {
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTap: widget.onTap,
-        child: Column(children: <Widget>[
-          Icon(IconData(widget.icon, fontFamily: 'MaterialIcons'),
-              color: Theme.of(context).primaryColor, size: 50),
-          const SizedBox(height: 10),
-          Text(widget.text, style: Theme.of(context).textTheme.bodyText2)
-        ]));
+      onTap: widget.onTap,
+      child: Column(children: <Widget>[
+        Icon(IconData(widget.icon, fontFamily: 'MaterialIcons'),
+            color: Theme.of(context).primaryColor, size: 50),
+        const SizedBox(height: 10),
+        Text(widget.text, style: Theme.of(context).textTheme.bodyText2)
+      ]));
 }

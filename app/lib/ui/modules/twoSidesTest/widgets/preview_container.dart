@@ -14,21 +14,21 @@ class Preview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 120,
-        height: 120,
-        alignment: Alignment.center,
+      width: 120,
+      height: 120,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: Theme.of(context)
+              .backgroundColor, //new Color.fromRGBO(255, 0, 0, 0.0),
+          borderRadius: const BorderRadius.all(Radius.circular(20.0))),
+      child: Container(
         decoration: BoxDecoration(
-            color: Theme.of(context)
-                .backgroundColor, //new Color.fromRGBO(255, 0, 0, 0.0),
-            borderRadius: const BorderRadius.all(Radius.circular(20.0))),
-        child: Container(
-          decoration: BoxDecoration(
-              color: color, //new Color.fromRGBO(255, 0, 0, 0.0),
-              borderRadius: const BorderRadius.all(Radius.circular(13.0))),
-          width: 100,
-          height: 100,
-          child: showIcon(context, icon, quarterTurns),
-        ));
+            color: color, //new Color.fromRGBO(255, 0, 0, 0.0),
+            borderRadius: const BorderRadius.all(Radius.circular(13.0))),
+        width: 100,
+        height: 100,
+        child: showIcon(context, icon, quarterTurns),
+      ));
 
   Widget showIcon(BuildContext context, bool icon, int quarterTurns) {
     if (icon) {

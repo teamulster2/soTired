@@ -23,20 +23,22 @@ class _QuestionnaireState extends State<Questionnaire> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(55),
-          child: NavigationBar(),
-        ),
-        drawer: const NavigationDrawer(),
-        body: Container(
-            color: Theme.of(context).backgroundColor,
-            child: Column(
-              children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: ValueListenableBuilder<int>(
-                        valueListenable: currentQuestion,
-                        builder: (BuildContext context, Object? value, Widget? child) => Column(children: <Widget>[
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(55),
+        child: NavigationBar(),
+      ),
+      drawer: const NavigationDrawer(),
+      body: Container(
+          color: Theme.of(context).backgroundColor,
+          child: Column(
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ValueListenableBuilder<int>(
+                      valueListenable: currentQuestion,
+                      builder: (BuildContext context, Object? value,
+                              Widget? child) =>
+                          Column(children: <Widget>[
                             QuestionnaireProgress(
                               length: questions.length,
                               currentQuestion: currentQuestion.value + 1,
@@ -72,29 +74,30 @@ class _QuestionnaireState extends State<Questionnaire> {
                                     } else {
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context) => AlertDialog(
-                                                title: const Text(
-                                                    'Questionnaire saved successfully.'),
-                                                content: const Text(
-                                                    'Thank you for filling in. You can now continue with the other components'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child: const Text('Ok'),
-                                                    onPressed: () =>
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute<BuildContext>(
-                                                                builder:
-                                                                    (BuildContext context) =>
-                                                                        const Home())),
-                                                  )
-                                                ]));
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                                  title: const Text(
+                                                      'Questionnaire saved successfully.'),
+                                                  content: const Text(
+                                                      'Thank you for filling in. You can now continue with the other components'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child: const Text('Ok'),
+                                                      onPressed: () => Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute<
+                                                                  BuildContext>(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  const Home())),
+                                                    )
+                                                  ]));
                                     }
                                   },
                                 ),
                                 const SizedBox(height: 20)
                               ])
                           ])))
-              ],
-            )));
+            ],
+          )));
 }

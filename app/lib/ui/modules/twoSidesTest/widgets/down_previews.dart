@@ -6,7 +6,7 @@ class ArrowDownPrimary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).primaryColor, icon: true, quarterTurns: 3);
+      color: Theme.of(context).primaryColor, icon: true, quarterTurns: 3);
 }
 
 class ArrowDownPrimaryLight extends StatelessWidget {
@@ -14,9 +14,7 @@ class ArrowDownPrimaryLight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).primaryColorLight,
-        icon: true,
-        quarterTurns: 3);
+      color: Theme.of(context).primaryColorLight, icon: true, quarterTurns: 3);
 }
 
 class ArrowDownPrimaryDark extends StatelessWidget {
@@ -24,7 +22,7 @@ class ArrowDownPrimaryDark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).primaryColorDark, icon: true, quarterTurns: 3);
+      color: Theme.of(context).primaryColorDark, icon: true, quarterTurns: 3);
 }
 
 class ArrowDownAccent extends StatelessWidget {
@@ -32,5 +30,5 @@ class ArrowDownAccent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-        color: Theme.of(context).accentColor, icon: true, quarterTurns: 3);
+      color: Theme.of(context).accentColor, icon: true, quarterTurns: 3);
 }
