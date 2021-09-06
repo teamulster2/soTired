@@ -7,13 +7,30 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 #echo "If the code is not working, the commit is aborted, so that you can fix it first."
 #read -p "Press Enter to continue" </dev/tty
 
-# Lint and build flutter app
-echo "Lint soTired app!"
+# Check client side if flutter is installed
 if [ -f "$(which flutter)" ]; then
-  cd "${SCRIPT_DIR}"/../app/ || exit 1;
-  flutter analyze;
+  echo "Check soTired app!"
+  cd "${SCRIPT_DIR}"/../ || exit 1
+  PRE_COMMIT_RESULT="$(make fluttercheck)"
+
+  # Print if check was unsuccessful
+  if [ $? != 0 ]; then
+    echo "Failed Makefile output:"
+    echo "$PRE_COMMIT_RESULT"
+    exit 1
+  fi
 fi
+
+# Check server side if go is installed
 if [ -f "$(which go)" ]; then
-  cd "${SCRIPT_DIR}"/../ || exit 1;
-  make gocheck;
+  echo "Check soTired server!"
+  cd "${SCRIPT_DIR}"/../ || exit 1
+  PRE_COMMIT_RESULT="$(make gocheck)"
+
+  # Print if check was unsuccessful
+  if [ $? != 0 ]; then
+    echo "Failed Makefile output:"
+    echo "$PRE_COMMIT_RESULT"
+    exit 1
+  fi
 fi
