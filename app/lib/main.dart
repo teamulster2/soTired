@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               'ClientConfig Test output - studyName: '
               '${configManager.clientConfig.studyName}',
             ),

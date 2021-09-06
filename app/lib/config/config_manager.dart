@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/config/config.dart';
 import 'package:so_tired/config/config_utils.dart';
@@ -25,48 +27,44 @@ class ConfigManager {
 
   /// This method contains the default config and restores it on demand.
   void loadDefaultConfig() {
-    final clientConfigBuilder = ClientConfigBuilder();
-
     // TODO: Adjust default server url based on the default server config
-    clientConfigBuilder.serverUrl = 'http://localhost';
-    // TODO: Specify appropriate notification interval format
-    clientConfigBuilder.notificationInterval = 60 * 60 * 3;
     // TODO: Specify appropriate notification text
-    clientConfigBuilder.notificationText =
-        'Hi, You\'ve been notified! Open the app now!';
-
-    clientConfigBuilder.isReactionGameEnabled = true;
-    clientConfigBuilder.isQuestionnaireEnabled = true;
-    clientConfigBuilder.isCurrentActivityEnabled = true;
-
+    // TODO: Specify appropriate notification interval format
     // TODO: Specify real study name
-    clientConfigBuilder.studyName = 'study1';
-    clientConfigBuilder.isStudy = true;
-
     // TODO: Define serious / useful questions
-    clientConfigBuilder.question1 = 'How are you?';
-    clientConfigBuilder.question2 = 'How\'s your dog doing?';
-    clientConfigBuilder.question3 = 'Can you tell me a couple more questions?';
-    clientConfigBuilder.question4 = 'Can you read?';
-    clientConfigBuilder.question5 = 'Why am I here? lol';
+    final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
+      ..serverUrl = 'http://localhost'
+      ..notificationInterval = 60 * 60 * 3
+      ..notificationText = "Hi, You've been notified! Open the app now!"
+      ..isReactionGameEnabled = true
+      ..isQuestionnaireEnabled = true
+      ..isCurrentActivityEnabled = true
+      ..studyName = 'study1'
+      ..isStudy = true
+      ..question1 = 'How are you?'
+      ..question2 = "How's your dog doing?"
+      ..question3 = 'Can you tell me a couple more questions?'
+      ..question4 = 'Can you read?'
+      ..question5 = 'Why am I here? lol';
 
     _clientConfig = clientConfigBuilder.build();
   }
 
   /// This method loads the config from a existing json file.
   /// It utilizes the [ConfigUtils] class.
-  void loadConfigFromJson() async {
-    final configFile =
+  Future<void> loadConfigFromJson() async {
+    final File configFile =
         await ConfigUtils.getConfigFileObject(_clientConfigFileName);
-    final config = await configFile.readAsString();
-    final clientConfigBuilder = ClientConfigBuilder();
+    final String config = await configFile.readAsString();
+    final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
     // TODO: Discuss exception handling and adjust this part
     try {
       _clientConfig = clientConfigBuilder.buildWithString(config);
     } catch (e) {
-      throw new Exception(e);
+      throw Exception(e);
     }
   }
+
 // TODO: Write doc comments
 // TODO: Implement based on server API
 // void fetchConfigFromServer() async {
@@ -77,9 +75,9 @@ class ConfigManager {
   /// It takes an instance of type [Config] as argument and uses the
   /// [Config.toJson()] to generate a json object which can be written to a
   /// file.
-  void writeConfigToFile(Config config) async {
+  Future<void> writeConfigToFile(Config config) async {
     final Map<String, dynamic> json = config.toJson();
-    final configFile =
+    final File configFile =
         await ConfigUtils.getConfigFileObject(_clientConfigFileName);
     configFile.writeAsString('$json');
   }

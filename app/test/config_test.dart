@@ -4,18 +4,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:so_tired/config/config_manager.dart';
 
-late final ConfigManager configManager = ConfigManager();
-late final Map<String, dynamic> assertObject = {
+final ConfigManager configManager = ConfigManager();
+final Map<String, dynamic> assertObject = <String, dynamic>{
   'serverUrl': 'http://localhost',
   'notificationInterval': 60 * 60 * 3,
-  'notificationText': 'Hi, You\'ve been notified! Open the app now!',
+  'notificationText': "Hi, You've been notified! Open the app now!",
   'isReactionGameEnabled': true,
   'isQuestionnaireEnabled': true,
   'isCurrentActivityEnabled': true,
   'studyName': 'study1',
   'isStudy': true,
   'question1': 'How are you?',
-  'question2': 'How\'s your dog doing?',
+  'question2': "How's your dog doing?",
   'question3': 'Can you tell me a couple more questions?',
   'question4': 'Can you read?',
   'question5': 'Why am I here? lol'
@@ -24,7 +24,7 @@ late final Map<String, dynamic> assertObject = {
 setUpAll() async {
   // NOTE: This has been copied from https://flutter.dev/docs/cookbook/persistence/reading-writing-files#testing
   // Create a temporary directory.
-  final directory = await Directory.systemTemp.createTemp();
+  final Directory directory = await Directory.systemTemp.createTemp();
 
   // Mock out the MethodChannel for the path_provider plugin.
   const MethodChannel('plugins.flutter.io/path_provider')
@@ -38,12 +38,12 @@ setUpAll() async {
   });
 }
 
-void main() async {
+void main() {
   configManager.loadDefaultConfig();
 
   test(
       'Test json defaultConfig in ConfigManager class.',
-      () => {
+      () => <void>{
             expect(configManager.clientConfig.serverUrl,
                 assertObject['serverUrl']),
             expect(configManager.clientConfig.notificationInterval,
