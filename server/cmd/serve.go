@@ -1,13 +1,14 @@
 package cmd
 
-    import ("github.com/spf13/cobra"
-            "context"
-            "log"
-            "net"
-			"fmt"
-            "google.golang.org/grpc"
-            pb "google.golang.org/grpc/examples/helloworld/helloworld"
-    )
+import (
+	"context"
+	"fmt"
+	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
+	pb "google.golang.org/grpc/examples/helloworld/helloworld"
+	"log"
+	"net"
+)
 
 // server is used to implement helloworld.GreeterServer.
 type server struct {
@@ -25,9 +26,9 @@ func run(cmd *cobra.Command, args []string) {
 	var port = ":50051" // default port
 	if len(args) == 1 {
 		port = args[0]
-    }
+	}
 	fmt.Println("start server listening on port " + port)
-    lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
