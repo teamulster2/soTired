@@ -58,38 +58,46 @@ flutterfmt:
 flutterget:
 	# install dependencies specified in pubspec.yaml
 	cd app/; \
-	flutter pub get
+flutter pub get
 
 .PHONY: fluttercheck
 fluttercheck:
 	# check all dart files in app/
 	cd app/; \
-	flutter analyze --no-pub
+flutter analyze --no-pub
 
 .PHONY: flutternewer
 flutternewer:
 	# list outdated files
 	cd app; \
-	flutter pub outdated --show-all
+flutter pub outdated --show-all
 
 .PHONY: flutterupgrade
 flutterupgrade:
 	# upgrade pubspec dependencies
 	cd app/; \
-	flutter pub upgrade --no-offline
+flutter pub upgrade --no-offline
 
 .PHONY: flutterbuild
 flutterbuild:
 	# build soTired app
 	cd app/; \
-	flutter build apk --release
+flutter build apk --release
 
 .PHONY: fluttertest
 fluttertest:
+	# Run tests for soTired app
 	cd app/; \
-	flutter test
+flutter test
+
+.PHONY: fluttergeneratedtabaseadapter
+fluttergeneratedtabaseadapter:
+	# Generate TypeAdapters for soTired app database
+	cd app/; \
+flutter packages pub run build_runner build
 
 .PHONY: flutterrun
 flutterrun:
+	# Run soTired app
 	cd app/; \
-	flutter run --enable-software-rendering --verbose --verbose-system-logs
+flutter run --enable-software-rendering --verbose --verbose-system-logs

@@ -6,10 +6,10 @@ import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/utils.dart';
 
 /// This class is responsible for all matters regarding database interactions.
-/// It holds all boxes (comparable to tables in NoSQL) and provides a CRUD API
+/// It holds all boxes (comparable to tables in SQLite) and provides a CRUD API
 /// to interact with the data.
 class DatabaseManager {
-  static final DatabaseManager _databaseManagerInstance =
+  static DatabaseManager? _databaseManagerInstance =
       DatabaseManager._databaseManager();
 
   late final Box<PersonalScore> _personalScoreBox;
@@ -19,7 +19,8 @@ class DatabaseManager {
 
   DatabaseManager._databaseManager();
 
-  factory DatabaseManager() => _databaseManagerInstance;
+  factory DatabaseManager() =>
+      _databaseManagerInstance ?? DatabaseManager._databaseManager();
 
   Future<void> initDatabase() async {
     final String databasePath = await Utils.getLocalFilePath('database');
@@ -126,5 +127,11 @@ class DatabaseManager {
       returnList.add(_questionnaireResultBox.getAt(i));
     }
     return returnList;
+  }
+
+  /// This method closes the database connection.
+  void closeDatabase() {
+    Hive.close();
+    _databaseManagerInstance = null;
   }
 }

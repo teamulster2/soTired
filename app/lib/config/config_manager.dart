@@ -25,6 +25,8 @@ class ConfigManager {
 
   ClientConfig get clientConfig => _clientConfig;
 
+  String get clientConfigFileName => _clientConfigFileName;
+
   /// This method contains the default config and restores it on demand.
   void loadDefaultConfig() {
     // TODO: adjust default server url based on the default server config

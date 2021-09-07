@@ -19,29 +19,17 @@ class QuestionnaireResultAdapter extends TypeAdapter<QuestionnaireResult> {
     return QuestionnaireResult(
       fields[0] as String?,
       fields[1] as QuestionnaireObject?,
-      fields[2] as QuestionnaireObject?,
-      fields[3] as QuestionnaireObject?,
-      fields[4] as QuestionnaireObject?,
-      fields[5] as QuestionnaireObject?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QuestionnaireResult obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
-      ..write(obj.question1)
-      ..writeByte(2)
-      ..write(obj.question2)
-      ..writeByte(3)
-      ..write(obj.question3)
-      ..writeByte(4)
-      ..write(obj.question4)
-      ..writeByte(5)
-      ..write(obj.question5);
+      ..write(obj.questions);
   }
 
   @override

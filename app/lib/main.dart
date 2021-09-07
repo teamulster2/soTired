@@ -3,40 +3,49 @@ import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/core/home/home.dart';
-
 import 'package:so_tired/notification.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-final ConfigManager configManager = ConfigManager();
-final DatabaseManager databaseManager = DatabaseManager();
-final Notifications notification = Notifications();
-
-Future<void> main() async {
-  runApp(const MyApp());
-
-  await databaseManager.initDatabase();
-  notification.initializeSetting();
-  tz.initializeTimeZones();
-
-  configManager.loadDefaultConfig();
-  // TODO: Use this to initialize config
-  // ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
-  //   if (!ConfigUtils.doesFileExist(value)) {
-  //     // TODO: invoke _fetchConfigFromServer()
-  //     // or
-  //     configManager.loadDefaultConfig();
-  //     configManager.writeConfigToFile();
-  //   } else {
-  //     configManager.loadConfigFromJson();
-  //   }
-  // });
-}
+Future<void> main() async => runApp(const MyApp());
 
 // TODO: Rename classes appropriately
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<StatefulWidget> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  final ConfigManager configManager = ConfigManager();
+  final DatabaseManager databaseManager = DatabaseManager();
+  final Notifications notification = Notifications();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+
+    // ignore: always_specify_types
+    Future.wait([databaseManager.initDatabase()]);
+    notification.initializeSetting();
+    tz.initializeTimeZones();
+
+    configManager.loadDefaultConfig();
+    // TODO: Use this to initialize config
+    // ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
+    //   if (!ConfigUtils.doesFileExist(value)) {
+    //     // TODO: invoke _fetchConfigFromServer()
+    //     // or
+    //     configManager.loadDefaultConfig();
+    //     configManager.writeConfigToFile();
+    //   } else {
+    //     configManager.loadConfigFromJson();
+    //   }
+    // });
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     notification.showScheduleNotification(
@@ -82,5 +91,13 @@ class MyApp extends StatelessWidget {
           )),
       home: const Home(),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
+
+    databaseManager.closeDatabase();
   }
 }
