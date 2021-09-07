@@ -32,7 +32,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    notification.showScheduleNotification(1, "soTired", "was geht ab");
+    notification.showScheduleNotification(
+        configManager.clientConfig.notificationInterval,
+        configManager.clientConfig.studyName,
+        configManager.clientConfig.notificationText);
     return MaterialApp(
       title: 'soTired',
       theme: ThemeData(

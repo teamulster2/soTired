@@ -45,7 +45,7 @@ class Notifications {
   /// <RepeatInterval.everyMinute>
   ///
   /// The headline and body msg. will be loaded from the config.
-  Future<void> showPeriodicNotification(RepeatInterval interval) async {
+  Future<void> showPeriodicNotification(RepeatInterval interval, String headLine, String body) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'channel_id', 'Channel Name', 'Channel Description');
@@ -53,9 +53,8 @@ class Notifications {
         NotificationDetails(android: androidNotificationDetails);
     await notificationsPlugin.periodicallyShow(
         0,
-        "soTired", //TODO: load from config
-        "It's time to play with me, you tired warrior.",
-        //TODO: load from config
+        headLine,
+        body,
         interval,
         notificationDetails,
         payload: 'Destination Screen(Periodic Notification)');
