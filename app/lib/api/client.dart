@@ -1,28 +1,32 @@
-import 'package:grpc/grpc.dart';
-import 'generated/api.pbgrpc.dart';
+import "package:grpc/grpc.dart" show CallOptions, ChannelCredentials, ChannelOptions, ClientChannel, CodecRegistry, GzipCodec, IdentityCodec;
+import 'package:so_tired/api/generated/api.pb.dart';
+import 'package:so_tired/api/generated/api.pbgrpc.dart' show GreeterClient, HelloRequest;
 
 class Client {
   Future<void> main(List<String> args) async {
-    final channel = ClientChannel(
-      '141.82.168.213', //'localhost',
+    final ClientChannel channel = ClientChannel(
+      'localhost',
       port: 50051,
       options: ChannelOptions(
-        credentials: ChannelCredentials.insecure(),
+        credentials: const ChannelCredentials.insecure(),
         codecRegistry:
+        // ignore: always_specify_types
             CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
       ),
     );
-    final stub = GreeterClient(channel);
+    final GreeterClient stub = GreeterClient(channel);
 
-    final name = args.isNotEmpty ? args[0] : 'world';
+    final String name = args.isNotEmpty ? args[0] : 'world';
 
     try {
-      final response = await stub.sayHello(
+      final HelloReply response = await stub.sayHello(
         HelloRequest()..name = name,
         options: CallOptions(compression: const GzipCodec()),
       );
+      // ignore: avoid_print
       print('Greeter client received: ${response.message}');
     } catch (e) {
+      // ignore: avoid_print
       print('Caught error: $e');
     }
     await channel.shutdown();
