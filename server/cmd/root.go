@@ -31,7 +31,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "server",
 	Short: "server side backend of soTired apps",
-	Long: `server side backend for data management of soTired apps, e. g. for study management.`,
+	Long:  `server side backend for data management of soTired apps, e. g. for study management.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -86,6 +86,6 @@ var serveCmd = &cobra.Command{
 	Use:   "serve :[port]",
 	Short: "Start the grpc server",
 	Long:  "Start the grpc server listening on the given port or the default port ':50051'",
-	Args: cobra.MaximumNArgs(1),
+	Args:  cobra.MaximumNArgs(1),
 	Run:   run,
 }
