@@ -93,3 +93,8 @@ flutterbuild:
 fluttertest:
 	cd app/; \
 	flutter test
+
+.PHONY: fluttergenerate
+fluttergenerate:
+	# build dart client auto generated files
+	protoc --dart_out=grpc:app/lib/api/generated -Iprotos protos/api.proto
