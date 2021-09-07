@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:so_tired/config/config.dart';
 import 'package:so_tired/config/config_utils.dart';
+import 'package:so_tired/ui/models/questionnaire.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig implements Config {
@@ -17,13 +17,10 @@ class ClientConfig implements Config {
   late final String _studyName;
   late final bool _isStudy;
 
+  late final List<QuestionnaireObject> _questions;
+
   // TODO: extend based on real questions
   // TODO: adjust variable names of questions based on real questions
-  late final String _question1;
-  late final String _question2;
-  late final String _question3;
-  late final String _question4;
-  late final String _question5;
 
   ClientConfig._clientConfig(ClientConfigBuilder clientConfigBuilder) {
     _serverUrl = clientConfigBuilder._serverUrl;
@@ -37,11 +34,7 @@ class ClientConfig implements Config {
     _studyName = clientConfigBuilder._studyName;
     _isStudy = clientConfigBuilder._isStudy;
 
-    _question1 = clientConfigBuilder._question1;
-    _question2 = clientConfigBuilder._question2;
-    _question3 = clientConfigBuilder._question3;
-    _question4 = clientConfigBuilder._question4;
-    _question5 = clientConfigBuilder._question5;
+    _questions = clientConfigBuilder._questions;
   }
 
   get serverUrl => _serverUrl;
@@ -60,15 +53,7 @@ class ClientConfig implements Config {
 
   get isStudy => _isStudy;
 
-  get question1 => _question1;
-
-  get question2 => _question2;
-
-  get question3 => _question3;
-
-  get question4 => _question4;
-
-  get question5 => _question5;
+  get questions => _questions;
 
   /// A private constructor which takes a [Map<String, dynamic> json] and
   /// assigns all keys to their counterpart.
@@ -81,11 +66,7 @@ class ClientConfig implements Config {
         _isCurrentActivityEnabled = json['isCurrentActivityEnabled'],
         _studyName = json['studyName'],
         _isStudy = json['isStudy'],
-        _question1 = json['question1'],
-        _question2 = json['question2'],
-        _question3 = json['question3'],
-        _question4 = json['question4'],
-        _question5 = json['question5'];
+        _questions = json['questions'];
 
   /// This method takes all JSON keys from this class and converts them into a
   /// JSON object represented as [Map<String, dynamic>].
@@ -99,11 +80,7 @@ class ClientConfig implements Config {
         'isCurrentActivityEnabled': _isCurrentActivityEnabled,
         'studyName': _studyName,
         'isStudy': _isStudy,
-        'question1': _question1,
-        'question2': _question2,
-        'question3': _question3,
-        'question4': _question4,
-        'question5': _question5
+        'questions': _questions
       };
 }
 
@@ -121,13 +98,7 @@ class ClientConfigBuilder {
   late final String _studyName;
   late final bool _isStudy;
 
-  // TODO: extend based on real questions
-  // TODO: adjust variable names of questions based on real questions
-  late final String _question1;
-  late final String _question2;
-  late final String _question3;
-  late final String _question4;
-  late final String _question5;
+  late final List<QuestionnaireObject> _questions;
 
   ClientConfigBuilder();
 
@@ -150,15 +121,7 @@ class ClientConfigBuilder {
 
   set isStudy(bool isStudy) => _isStudy = isStudy;
 
-  set question1(String question1) => _question1 = question1;
-
-  set question2(String question2) => _question2 = question2;
-
-  set question3(String question3) => _question3 = question3;
-
-  set question4(String question4) => _question4 = question4;
-
-  set question5(String question5) => _question5 = question5;
+  set questions(List<QuestionnaireObject> questions) => _questions = questions;
 
   /// Build a [ClientConfig] instance after specifying all mandatory keys
   /// manually.
