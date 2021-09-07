@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:so_tired/config/client_config.dart';
+import 'package:uuid/uuid.dart';
 
 /// This calls serves as utility class. It contains only static methods which
 /// enables you to use them without instantiating a new object.
@@ -54,4 +55,10 @@ class Utils {
   /// This methods validates whether or not a file exists.
   /// It takes [String filePath] as argument and returns a [bool].
   static bool doesFileExist(String filePath) => File(filePath).existsSync();
+
+  /// This methods generates a random UUID.
+  static String generateUuid() {
+    const Uuid generator = Uuid();
+    return generator.v4();
+  }
 }

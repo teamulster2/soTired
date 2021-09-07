@@ -1,8 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:logger/logger.dart';
-import 'package:so_tired/database/models/current_activity.dart';
-import 'package:so_tired/database/models/personal_scores.dart';
-import 'package:so_tired/database/models/questionnaire_results.dart';
+import 'package:so_tired/database/models/activity/current_activity.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
+import 'package:so_tired/database/models/score/personal_score.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/utils.dart';
 
@@ -10,15 +9,10 @@ class DatabaseManager {
   static final DatabaseManager _databaseManagerInstance =
       DatabaseManager._databaseManager();
 
-  // TODO: Adjust Box types based on HiveObjects
-  late final Box<PersonalScores> personalScoresBox;
-  late final Box<UserLog> userLogBox;
-  late final Box<CurrentActivity> currentActivityBox;
-  late final Box<QuestionnaireResults> questionnaireResultBox;
-
-  final Logger _logger = Logger(
-    printer: PrettyPrinter(),
-  );
+  late final Box<PersonalScore> _personalScoreBox;
+  late final Box<UserLog> _userLogBox;
+  late final Box<CurrentActivity> _currentActivityBox;
+  late final Box<QuestionnaireResult> _questionnaireResultBox;
 
   DatabaseManager._databaseManager();
 
@@ -27,11 +21,75 @@ class DatabaseManager {
   Future<void> initDatabase() async {
     final String databasePath = await Utils.getLocalFilePath('database');
     Hive.init(databasePath);
-    _logger.i('database has been set up successfully!');
-    personalScoresBox = await Hive.openBox('personalScoresBox');
-    userLogBox = await Hive.openBox('userLogBox');
-    currentActivityBox = await Hive.openBox('currentActivityBox');
-    questionnaireResultBox = await Hive.openBox('questionnaireResultBox');
-    _logger.i('boxes have been opened successfully');
+
+    // ignore: cascade_invocations
+    Hive.registerAdapter(PersonalScoreAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(UserLogAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(CurrentActivityAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(QuestionnaireResultAdapter());
+
+    _personalScoreBox = await Hive.openBox('personalScoresBox');
+    _userLogBox = await Hive.openBox('userLogBox');
+    _currentActivityBox = await Hive.openBox('currentActivityBox');
+    _questionnaireResultBox = await Hive.openBox('questionnaireResultBox');
+  }
+
+  Future<void> writePersonalScores(List<PersonalScore> scores) async =>
+      _personalScoreBox.addAll(scores);
+
+  Future<void> writeUserLogs(List<UserLog> logs) async =>
+      _userLogBox.addAll(logs);
+
+  Future<void> writeCurrentActivities(List<CurrentActivity> activities) async =>
+      _currentActivityBox.addAll(activities);
+
+  Future<void> writeQuestionnaireResults(
+          List<QuestionnaireResult> results) async =>
+      _questionnaireResultBox.addAll(results);
+
+  PersonalScore? getPersonalScoreById(String uuid) =>
+      _personalScoreBox.get(uuid);
+
+  UserLog? getUserLogById(String uuid) => _userLogBox.get(uuid);
+
+  CurrentActivity? getCurrentActivityById(String uuid) =>
+      _currentActivityBox.get(uuid);
+
+  QuestionnaireResult? getQuestionnaireResultById(String uuid) =>
+      _questionnaireResultBox.get(uuid);
+
+  List<PersonalScore?> getAllPersonalScores() {
+    final List<PersonalScore?> returnList = <PersonalScore?>[];
+    for (int i = 0; i < _personalScoreBox.length; i++) {
+      returnList.add(_personalScoreBox.getAt(i));
+    }
+    return returnList;
+  }
+
+  List<UserLog?> getAllUserLogs() {
+    final List<UserLog?> returnList = <UserLog?>[];
+    for (int i = 0; i < _userLogBox.length; i++) {
+      returnList.add(_userLogBox.getAt(i));
+    }
+    return returnList;
+  }
+
+  List<CurrentActivity?> getAllCurrentActivities() {
+    final List<CurrentActivity?> returnList = <CurrentActivity?>[];
+    for (int i = 0; i < _currentActivityBox.length; i++) {
+      returnList.add(_currentActivityBox.getAt(i));
+    }
+    return returnList;
+  }
+
+  List<QuestionnaireResult?> getAllQuestionnaireResults() {
+    final List<QuestionnaireResult?> returnList = <QuestionnaireResult?>[];
+    for (int i = 0; i < _questionnaireResultBox.length; i++) {
+      returnList.add(_questionnaireResultBox.getAt(i));
+    }
+    return returnList;
   }
 }
