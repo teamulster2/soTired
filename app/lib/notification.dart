@@ -63,7 +63,7 @@ class Notifications {
 
   ///initializing the setting for Android.
   initializeSetting() async {
-    const AndroidInitializationSettings initializeAndroid = AndroidInitializationSettings('logo');//TODO: add a real logo
+    const AndroidInitializationSettings initializeAndroid = AndroidInitializationSettings('icon');
     const InitializationSettings initializeSetting = InitializationSettings(android: initializeAndroid);
     await notificationsPlugin.initialize(initializeSetting);
   }
