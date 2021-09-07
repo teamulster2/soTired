@@ -32,7 +32,7 @@ Future<void> main() async {
   // });
 }
 
-// TODO: Replace Demo App with real frontend and integrate config
+// TODO: Rename classes appropriately
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

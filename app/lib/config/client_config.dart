@@ -20,9 +20,6 @@ class ClientConfig implements Config {
 
   late final List<QuestionnaireObject> _questions;
 
-  // TODO: extend based on real questions
-  // TODO: adjust variable names of questions based on real questions
-
   ClientConfig._clientConfig(ClientConfigBuilder clientConfigBuilder) {
     _serverUrl = clientConfigBuilder._serverUrl;
     _notificationInterval = clientConfigBuilder._notificationInterval;

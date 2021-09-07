@@ -7,15 +7,15 @@ import 'package:so_tired/utils.dart';
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
 /// contains the default config.
+// TODO: adjust config load / write methods when implementing settings in STEP III
 class ConfigManager {
   static final ConfigManager _configManagerInstance =
       ConfigManager._configManager();
   late final ClientConfig _clientConfig;
   final String _clientConfigFileName = 'client_config.json';
 
-  /// The private constructor ensures that at least one config has been loaded
-  /// and is available.
-  // TODO: Adjust config load / write methods when implementing settings in STEP III
+  /// The private constructor enables the class to create only one instance of
+  /// itself.
   ConfigManager._configManager();
 
   /// [ConfigManager] has been implemented using the *Singleton* design
@@ -27,11 +27,11 @@ class ConfigManager {
 
   /// This method contains the default config and restores it on demand.
   void loadDefaultConfig() {
-    // TODO: Adjust default server url based on the default server config
-    // TODO: Specify appropriate notification text
-    // TODO: Specify appropriate notification interval format
-    // TODO: Specify real study name
-    // TODO: Define serious / useful questions
+    // TODO: adjust default server url based on the default server config
+    // TODO: specify appropriate notification text
+    // TODO: specify appropriate notification interval format
+    // TODO: specify real study name
+    // TODO: define serious / useful questions
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
       ..serverUrl = 'http://localhost'
       ..notificationInterval = 3 * 60 //minutes
@@ -53,7 +53,7 @@ class ConfigManager {
         await Utils.getConfigFileObject(_clientConfigFileName);
     final String config = await configFile.readAsString();
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
-    // TODO: Discuss exception handling and adjust this part
+    // TODO: discuss exception handling and adjust this part
     try {
       _clientConfig = clientConfigBuilder.buildWithString(config);
     } catch (e) {
@@ -61,13 +61,13 @@ class ConfigManager {
     }
   }
 
-// TODO: Write doc comments
-// TODO: Implement based on server API
+// TODO: write doc comments
+// TODO: implement based on server API
 // void fetchConfigFromServer() async {
 //   _clientConfig = ... json object from server
 // }
 
-  /// This method is capable of writing a config to a existing json file.
+  /// This method is capable of writing a config to an existing JSON file.
   /// It takes an instance of type [Config] as argument and uses the
   /// [Config.toJson()] to generate a json object which can be written to a
   /// file.
