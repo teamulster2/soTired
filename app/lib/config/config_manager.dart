@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:so_tired/ui/constants/constants.dart' as constants;
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/config/config.dart';
 import 'package:so_tired/config/config_utils.dart';
@@ -41,11 +41,7 @@ class ConfigManager {
       ..isCurrentActivityEnabled = true
       ..studyName = 'study1'
       ..isStudy = true
-      ..question1 = 'How are you?'
-      ..question2 = "How's your dog doing?"
-      ..question3 = 'Can you tell me a couple more questions?'
-      ..question4 = 'Can you read?'
-      ..question5 = 'Why am I here? lol';
+      ..questions = constants.questions;
 
     _clientConfig = clientConfigBuilder.build();
   }

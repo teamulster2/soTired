@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:so_tired/config/config_manager.dart';
+import 'package:so_tired/ui/constants/constants.dart' as constants;
 
 final ConfigManager configManager = ConfigManager();
 final Map<String, dynamic> assertObject = <String, dynamic>{
@@ -14,11 +15,7 @@ final Map<String, dynamic> assertObject = <String, dynamic>{
   'isCurrentActivityEnabled': true,
   'studyName': 'study1',
   'isStudy': true,
-  'question1': 'How are you?',
-  'question2': "How's your dog doing?",
-  'question3': 'Can you tell me a couple more questions?',
-  'question4': 'Can you read?',
-  'question5': 'Why am I here? lol'
+  'questions': constants.questions,
 };
 
 setUpAll() async {
@@ -59,16 +56,8 @@ void main() {
             expect(configManager.clientConfig.studyName,
                 assertObject['studyName']),
             expect(configManager.clientConfig.isStudy, assertObject['isStudy']),
-            expect(configManager.clientConfig.question1,
-                assertObject['question1']),
-            expect(configManager.clientConfig.question2,
-                assertObject['question2']),
-            expect(configManager.clientConfig.question3,
-                assertObject['question3']),
-            expect(configManager.clientConfig.question4,
-                assertObject['question4']),
             expect(
-                configManager.clientConfig.question5, assertObject['question5'])
+                configManager.clientConfig.questions, assertObject['questions'])
           });
 
   // TODO: Add further tests for testing each method in ConfigManager

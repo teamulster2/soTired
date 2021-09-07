@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/core/home/home.dart';
+
+final ConfigManager configManager = ConfigManager();
 
 void main() {
   runApp(const MyApp());
+
+  configManager.loadDefaultConfig();
+  // TODO: Use this to initialize config
+  // ConfigUtils.getLocalFilePath(_clientConfigFileName).then((value) {
+  //   if (!ConfigUtils.doesFileExist(value)) {
+  //     // TODO: invoke _fetchConfigFromServer()
+  //     // or
+  //     configManager.loadDefaultConfig();
+  //     configManager.writeConfigToFile(_clientConfig);
+  //   } else {
+  //     configManager.loadConfigFromJson();
+  //   }
+  // });
 }
 
 class MyApp extends StatelessWidget {
