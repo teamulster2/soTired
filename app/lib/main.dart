@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/core/home/home.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:so_tired/notification.dart';
 import 'package:timezone/data/latest.dart' as tz;
 

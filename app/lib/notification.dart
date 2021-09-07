@@ -16,7 +16,7 @@ class Notifications {
         headLine,
         body,
         tz.TZDateTime.now(tz.local).add(Duration(minutes: minutesTimer)),
-        NotificationDetails(
+        const NotificationDetails(
           android: AndroidNotificationDetails(
               'channel id', 'channel name', 'channel description'),
         ),
@@ -29,12 +29,12 @@ class Notifications {
   /// The *[headLine]* will be showed on top in the push notification.
   /// The *[body]* is the main msg. do you will send.
   showSimpleNotification(String headLine, String body) async {
-    var androidDetails = AndroidNotificationDetails(
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
         'id', 'channel ', 'description',
         priority: Priority.high, importance: Importance.max);
-    var iOSDetails = IOSNotificationDetails();
-    var platformDetails =
-        new NotificationDetails(android: androidDetails, iOS: iOSDetails);
+    const IOSNotificationDetails iOSDetails = IOSNotificationDetails();
+    const NotificationDetails platformDetails =
+        NotificationDetails(android: androidDetails, iOS: iOSDetails);
     await notificationsPlugin.show(0, headLine, body, platformDetails,
         payload: 'Destination Screen (Simple Notification)');
   }
@@ -62,9 +62,9 @@ class Notifications {
   }
 
   ///initializing the setting for Android.
-  void initializeSetting() async {
-    var initializeAndroid = AndroidInitializationSettings('logo');//TODO: add a real logo
-    var initializeSetting = InitializationSettings(android: initializeAndroid);
+  initializeSetting() async {
+    const AndroidInitializationSettings initializeAndroid = AndroidInitializationSettings('logo');//TODO: add a real logo
+    const InitializationSettings initializeSetting = InitializationSettings(android: initializeAndroid);
     await notificationsPlugin.initialize(initializeSetting);
   }
 }
