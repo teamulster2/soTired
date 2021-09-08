@@ -39,10 +39,10 @@ gobuild:
 	cd server; \
 	go build -o soti-server
 
-.PHONY: generate
-generate:
-	cd server/api/generated
-	protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative protos/api.proto
+.PHONY: gogenerate
+gogenerate:
+	# build go server auto generated files.
+	protoc --go_out=./server/api/generated/ --go_opt=paths=source_relative --go-grpc_out=./server/api/generated/ --go-grpc_opt=paths=source_relative protos/api.proto
 
 .PHONY: gotest
 gotest:
