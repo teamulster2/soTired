@@ -57,6 +57,7 @@ func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	rootCmd.AddCommand(serveCmd)
+	rootCmd.AddCommand(sendCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -87,5 +88,13 @@ var serveCmd = &cobra.Command{
 	Short: "Start the grpc server",
 	Long:  "Start the grpc server listening on the given port or the default port ':50051'",
 	Args:  cobra.MaximumNArgs(1),
-	Run:   run,
+	Run:   serverRun,
+}
+
+var sendCmd = &cobra.Command{
+	Use:   "client [name]",
+	Short: "Start the grpc client",
+	Long:  "Start the grpc client which sends the given message",
+	Args:  cobra.MaximumNArgs(1),
+	Run:   clientRun,
 }

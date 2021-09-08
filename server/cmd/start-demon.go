@@ -22,7 +22,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 }
 
-func run(cmd *cobra.Command, args []string) {
+func serverRun(cmd *cobra.Command, args []string) {
 	var port = ":50051" // default port
 	if len(args) == 1 {
 		port = args[0]
