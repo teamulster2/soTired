@@ -90,8 +90,8 @@ fluttertest:
 	cd app/; \
 flutter test
 
-.PHONY: fluttergeneratedtabaseadapter
-fluttergeneratedtabaseadapter:
+.PHONY: fluttergeneratedatabaseadapter
+fluttergeneratedatabaseadapter:
 	# Generate TypeAdapters for soTired app database
 	cd app/; \
 flutter packages pub run build_runner build

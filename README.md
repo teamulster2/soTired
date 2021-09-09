@@ -1,4 +1,5 @@
 # soTired
+![build](https://github.com/teamulster2/soTired/actions/workflows/main.yml/badge.svg)
 
 ## Motivation
 
