@@ -8,7 +8,7 @@ import 'package:so_tired/ui/constants/constants.dart' as constants;
 final ConfigManager configManager = ConfigManager();
 final Map<String, dynamic> assertObject = <String, dynamic>{
   'serverUrl': 'http://localhost',
-  'notificationInterval': 60 * 60 * 3,
+  'notificationInterval': 60 * 3,
   'notificationText': "Hi, You've been notified! Open the app now!",
   'isReactionGameEnabled': true,
   'isQuestionnaireEnabled': true,

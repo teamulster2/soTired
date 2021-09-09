@@ -34,7 +34,7 @@ class ConfigManager {
     // TODO: Define serious / useful questions
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
       ..serverUrl = 'http://localhost'
-      ..notificationInterval = 60 * 60 * 3
+      ..notificationInterval = 3 * 60 //minutes
       ..notificationText = "Hi, You've been notified! Open the app now!"
       ..isReactionGameEnabled = true
       ..isQuestionnaireEnabled = true
