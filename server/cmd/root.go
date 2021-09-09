@@ -18,8 +18,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
+	"net"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -55,8 +57,11 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	run.Flags().Uint16P("port", "p", 50000, "port to be used for server")
+	run.Flags().Uint16P("port", "p", 50000, "port to serve on")
 	rootCmd.AddCommand(run)
+	echo.Flags().Uint16P("port", "p", 50000, "port to send to")
+	echo.Flags().IPP("address", "a", net.ParseIP("127.0.0.1"), "ip-address to send the http-request to") // TODO fix ip to localhost constant
+	rootCmd.AddCommand(echo)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -87,4 +92,9 @@ var run = &cobra.Command{
 	Short: "start server",
 	Long:  `start http server listening on given port to send reports from the sotired app`,
 	Run:   serveRun,
+}
+var echo = &cobra.Command{
+	Use:   "echo",
+	Short: "start client for echo test",
+	Run:   echoTest,
 }
