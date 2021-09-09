@@ -31,7 +31,6 @@ class ConfigManager {
   void loadDefaultConfig() {
     // TODO: adjust default server url based on the default server config
     // TODO: specify appropriate notification text
-    // TODO: specify appropriate notification interval format
     // TODO: specify real study name
     // TODO: define serious / useful questions
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
@@ -59,7 +58,9 @@ class ConfigManager {
     try {
       _clientConfig = clientConfigBuilder.buildWithString(config);
     } catch (e) {
-      throw Exception(e);
+      // TODO: add proper exception handling
+      // throw Exception(e);
+      loadDefaultConfig();
     }
   }
 

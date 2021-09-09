@@ -12,7 +12,7 @@ class SpatialSpanTestBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<Color> color =
-        ValueNotifier<Color>(Theme.of(context).accentColor);
+        ValueNotifier<Color>(Theme.of(context).colorScheme.secondary);
     if (primary) {
       color.value = Theme.of(context).primaryColor;
     }
@@ -29,7 +29,7 @@ class SpatialSpanTestBox extends StatelessWidget {
 
                 color.value = Theme.of(context).primaryColor;
                 Timer(const Duration(milliseconds: 500), () {
-                  color.value = Theme.of(context).accentColor;
+                  color.value = Theme.of(context).colorScheme.secondary;
                 });
               }),
     );

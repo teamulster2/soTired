@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:so_tired/ui/models/questionnaire.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_object.dart';
 import 'package:so_tired/utils.dart';
 
 part 'questionnaire_result.g.dart';

@@ -27,11 +27,7 @@ class Utils {
         jsonResponse.containsKey('isCurrentActivityEnabled') &&
         jsonResponse.containsKey('studyName') &&
         jsonResponse.containsKey('isStudy') &&
-        jsonResponse.containsKey('question1') &&
-        jsonResponse.containsKey('question2') &&
-        jsonResponse.containsKey('question3') &&
-        jsonResponse.containsKey('question4') &&
-        jsonResponse.containsKey('question5');
+        jsonResponse.containsKey('questions');
   }
 
   /// This method uses the [dart:io] package to generate the local file path

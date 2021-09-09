@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:so_tired/config/config.dart';
 import 'package:so_tired/utils.dart';
-import 'package:so_tired/ui/models/questionnaire.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_object.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig implements Config {

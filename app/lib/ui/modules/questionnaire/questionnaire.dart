@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:so_tired/main.dart';
+import 'package:provider/provider.dart';
+import 'package:so_tired/services_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
-import 'package:so_tired/ui/models/questionnaire.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_object.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_answer.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_progress.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_question.dart';
@@ -23,7 +24,10 @@ class _QuestionnaireState extends State<Questionnaire> {
   @override
   Widget build(BuildContext context) {
     final List<QuestionnaireObject> questions =
-        configManager.clientConfig.questions;
+        Provider.of<ServicesProvider>(context, listen: false)
+            .configManager
+            .clientConfig
+            .questions;
 
     return Scaffold(
         appBar: const PreferredSize(

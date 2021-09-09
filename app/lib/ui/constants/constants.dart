@@ -1,4 +1,4 @@
-import 'package:so_tired/ui/models/questionnaire.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_object.dart';
 
 final List<QuestionnaireObject> questions = <QuestionnaireObject>[
   QuestionnaireObject(

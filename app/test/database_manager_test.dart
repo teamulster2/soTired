@@ -10,7 +10,7 @@
 // import 'package:so_tired/database/models/user/user_game_execution.dart';
 // import 'package:so_tired/database/models/user/user_log.dart';
 // import 'package:so_tired/services_provider.dart';
-// import 'package:so_tired/ui/models/questionnaire.dart';
+// import 'package:so_tired/ui/models/questionnaire_object.dart';
 // import 'package:so_tired/utils.dart';
 //
 // // ignore_for_file: always_specify_types
