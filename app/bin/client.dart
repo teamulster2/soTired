@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:convert';
 
 void main() async {
 
   // connect to the socket server
-  final Socket socket = await Socket.connect("""
-192.168.42.20""", 50000);
+  final Socket socket = await Socket.connect('192.168.42.20', 50000);
   print('Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
 
   // listen for responses from the server
@@ -31,18 +31,22 @@ void main() async {
   );
 
   // send some messages to the server
-  await sendMessage(socket, 'Knock, knock.');
-  await sendMessage(socket, 'Banana');
-  await sendMessage(socket, 'Banana');
-  await sendMessage(socket, 'Banana');
-  await sendMessage(socket, 'Banana');
-  await sendMessage(socket, 'Banana');
-  await sendMessage(socket, 'Orange');
-  await sendMessage(socket, "Orange you glad I didn't say banana again?");
+  await sendMessage(socket, 'Ich bin eine Config und ich bin wunderschoen.');
+  //await sendMessage(socket, 'app/bin/test.json');
 }
 
+
+
+// Future<void> sendMessage(Socket socket, String jsonUrl) async {
+//   final String response = await rootBundle.loadString(jsonUrl);
+//
+//   var jsonString = json.encode(response);
+//   var bytes = jsonString.codeUnits;
+//
+//   socket.add(bytes);
+// }
+
 Future<void> sendMessage(Socket socket, String message) async {
-  print('Client: $message');
   socket.write(message);
   await Future.delayed(const Duration(seconds: 2));
 }

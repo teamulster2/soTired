@@ -1,0 +1,6 @@
+{"Config":[
+  { "serverUrl": "http://localhost"},
+  { "notificationInterval":180},
+  { "notificationText":"Hi, You've been notified! Open the app now!" },
+  { "isReactionGameEnable":true }
+]}

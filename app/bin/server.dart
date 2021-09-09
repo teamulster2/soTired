@@ -6,7 +6,7 @@ void main() async {
   // bind the socket server to an address and port
   final server = await ServerSocket.bind('192.168.42.20', 50000);
 
-  // listen for clent connections to the server
+  // listen for client connections to the server
   server.listen((client) {
     handleConnection(client);
   });
@@ -23,14 +23,9 @@ void handleConnection(Socket client) {
         (Uint8List data) async {
       await Future.delayed(Duration(seconds: 1));
       final message = String.fromCharCodes(data);
-      if (message == 'Knock, knock.') {
-        client.write('Who is there?');
-      } else if (message.length < 10) {
-        client.write('$message who?');
-      } else {
-        client.write('Very funny.');
+      print('Client:' + message);
+        client.write('Prima');
         client.close();
-      }
     },
 
     // handle errors
