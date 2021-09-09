@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
+
 void main() async {
 
   // connect to the socket server
@@ -32,7 +34,7 @@ void main() async {
 
   // send some messages to the server
   await sendMessage(socket, 'Ich bin eine Config und ich bin wunderschoen.');
-  //await sendMessage(socket, 'app/bin/test.json');
+  //await sendJson(socket, 'app/bin/test.json');
 }
 
 
@@ -45,6 +47,14 @@ void main() async {
 //
 //   socket.add(bytes);
 // }
+
+Future<void> sendJson(Socket socket, String jsonUrl) async {
+
+  final String response = await rootBundle.loadString(jsonUrl);
+
+  socket.add(response.codeUnits);
+}
+
 
 Future<void> sendMessage(Socket socket, String message) async {
   socket.write(message);
