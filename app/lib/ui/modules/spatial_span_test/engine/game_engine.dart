@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,8 @@ class GameEngine {
   final int durationTilesShown = 500;
 
   int next(int min, int max) => min + Random().nextInt(max - min);
-  final ValueNotifier<List<int>> currentSequence = ValueNotifier<List<int>>(<int>[]);
+  final ValueNotifier<List<int>> currentSequence =
+      ValueNotifier<List<int>>(<int>[]);
   final ValueNotifier<int> level = ValueNotifier<int>(1);
   final ValueNotifier<int> currentValue = ValueNotifier<int>(0);
   int i = 0;
@@ -26,17 +28,56 @@ class GameEngine {
     this.gameState.setGameEngine(this);
   }
 
-  void startGame() => gameState.startGame();
+  void startGame() {
+    try {
+      gameState.startGame();
+    } on GameWrongStateException {
+      //TODO: Exception handling
+      showDialog(InfoDialogObject('Exception', 'Something went wrong. Please restart the application', (){
+        // TODO: onTap ok
+      }, false, true, true));
+    }
+  }
 
-  void showSequence() => gameState.showSequence();
+  void showSequence() {
+    try {
+      gameState.showSequence();
+    } on GameWrongStateException {
+      //TODO: Exception handling
+    }
+  }
 
-  void startUserInteraction() => gameState.startUserInteraction();
+  void startUserInteraction() {
+    try {
+      gameState.startUserInteraction();
+    } on GameWrongStateException {
+      //TODO: Exception handling
+    }
+  }
 
-  void checkUserInteraction(int boxId) => gameState.checkUserInteraction(boxId);
+  void checkUserInteraction(int boxId) {
+    try {
+      gameState.checkUserInteraction(boxId);
+    } on GameWrongStateException {
+      //TODO: Exception handling
+    }
+  }
 
-  void gameOver() => gameState.gameOver();
+  void gameOver() {
+    try {
+      gameState.gameOver();
+    } on GameWrongStateException {
+      //TODO: Exception handling
+    }
+  }
 
-  void toNextLevel() => gameState.toNextLevel();
+  void toNextLevel() {
+    try {
+      gameState.toNextLevel();
+    } on GameWrongStateException {
+      //TODO: Exception handling
+    }
+  }
 
   void startSequence(VoidCallback transition) {
     currentValue.value = 0;

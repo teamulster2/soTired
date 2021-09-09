@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
 
 abstract class GameState {
@@ -40,27 +41,27 @@ class StartState extends GameState {
 
   @override
   void showSequence() {
-    // TODO: implement showSequence
+    throw GameWrongStateException();
   }
 
   @override
   void startUserInteraction() {
-    // TODO: implement startUserInteraction
+    throw GameWrongStateException();
   }
 
   @override
   void checkUserInteraction(int boxId) {
-    // TODO: implement checkTappedBox
+    throw GameWrongStateException();
   }
 
   @override
   void gameOver() {
-    // TODO: implement gameOver
+    throw GameWrongStateException();
   }
 
   @override
   void toNextLevel() {
-    // TODO: implement toNextLevel
+    throw GameWrongStateException();
   }
 }
 
@@ -69,7 +70,7 @@ class ShowSequenceState extends GameState {
 
   @override
   void startGame() {
-    // TODO: implement toStartState
+    throw GameWrongStateException();
   }
 
   @override
@@ -83,22 +84,22 @@ class ShowSequenceState extends GameState {
 
   @override
   void startUserInteraction() {
-    // TODO: implement startUserInteraction
+    throw GameWrongStateException();
   }
 
   @override
   void checkUserInteraction(int boxId) {
-    // TODO: implement checkTappedBox
+    throw GameWrongStateException();
   }
 
   @override
   void gameOver() {
-    // TODO: implement gameOver
+    throw GameWrongStateException();
   }
 
   @override
   void toNextLevel() {
-    // TODO: implement toNextLevel
+    throw GameWrongStateException();
   }
 }
 
@@ -107,12 +108,12 @@ class UserInteractionState extends GameState {
 
   @override
   void startGame() {
-    // TODO: implement toStartState
+    throw GameWrongStateException();
   }
 
   @override
   void showSequence() {
-    // TODO: implement showSequence
+    throw GameWrongStateException();
   }
 
   @override
@@ -139,12 +140,12 @@ class UserInteractionState extends GameState {
 
   @override
   void gameOver() {
-    // TODO: implement gameOver
+    throw GameWrongStateException();
   }
 
   @override
   void toNextLevel() {
-    // TODO: implement toNextLevel
+    throw GameWrongStateException();
   }
 }
 
@@ -153,22 +154,22 @@ class GameOverState extends GameState {
 
   @override
   void startGame() {
-    // TODO: implement toStartState
+    throw GameWrongStateException();
   }
 
   @override
   void showSequence() {
-    // TODO: implement showSequence
+    throw GameWrongStateException();
   }
 
   @override
   void startUserInteraction() {
-    // TODO: implement startUserInteraction
+    throw GameWrongStateException();
   }
 
   @override
   void checkUserInteraction(int boxId) {
-    // TODO: implement checkTappedBox
+    throw GameWrongStateException();
   }
 
   @override
@@ -179,34 +180,34 @@ class GameOverState extends GameState {
 
   @override
   void toNextLevel() {
-    // TODO: implement toNextLevel
+    throw GameWrongStateException();
   }
 }
 
 class NextLevelState extends GameState {
   @override
   void checkUserInteraction(int boxId) {
-    // TODO: implement checkTappedBox
+    throw GameWrongStateException();
   }
 
   @override
   void gameOver() {
-    // TODO: implement gameOver
+    throw GameWrongStateException();
   }
 
   @override
   void showSequence() {
-    // TODO: implement showSequence
+    throw GameWrongStateException();
   }
 
   @override
   void startGame() {
-    // TODO: implement startGame
+    throw GameWrongStateException();
   }
 
   @override
   void startUserInteraction() {
-    // TODO: implement startUserInteraction
+    throw GameWrongStateException();
   }
 
   @override
