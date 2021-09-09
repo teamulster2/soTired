@@ -29,9 +29,9 @@ class Notifications {
   /// The *[headLine]* will be showed on top in the push notification.
   /// The *[body]* is the main msg. do you will send.
   showSimpleNotification(String headLine, String body) async {
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-        'id', 'channel ', 'description',
-        priority: Priority.high, importance: Importance.max);
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails('id', 'channel ', 'description',
+            priority: Priority.high, importance: Importance.max);
     const IOSNotificationDetails iOSDetails = IOSNotificationDetails();
     const NotificationDetails platformDetails =
         NotificationDetails(android: androidDetails, iOS: iOSDetails);
@@ -45,25 +45,24 @@ class Notifications {
   /// <RepeatInterval.everyMinute>
   ///
   /// The headline and body msg. will be loaded from the config.
-  Future<void> showPeriodicNotification(RepeatInterval interval, String headLine, String body) async {
+  Future<void> showPeriodicNotification(
+      RepeatInterval interval, String headLine, String body) async {
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
             'channel_id', 'Channel Name', 'Channel Description');
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await notificationsPlugin.periodicallyShow(
-        0,
-        headLine,
-        body,
-        interval,
-        notificationDetails,
+        0, headLine, body, interval, notificationDetails,
         payload: 'Destination Screen(Periodic Notification)');
   }
 
   ///initializing the setting for Android.
   initializeSetting() async {
-    const AndroidInitializationSettings initializeAndroid = AndroidInitializationSettings('icon');
-    const InitializationSettings initializeSetting = InitializationSettings(android: initializeAndroid);
+    const AndroidInitializationSettings initializeAndroid =
+        AndroidInitializationSettings('icon');
+    const InitializationSettings initializeSetting =
+        InitializationSettings(android: initializeAndroid);
     await notificationsPlugin.initialize(initializeSetting);
   }
 }
