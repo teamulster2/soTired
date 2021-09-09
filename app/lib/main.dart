@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 
+
 final ConfigManager configManager = ConfigManager();
 
 void main() {
