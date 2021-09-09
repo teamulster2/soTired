@@ -16,6 +16,7 @@ class SpatialSpanTestBox extends StatelessWidget {
     if (primary) {
       color.value = Theme.of(context).primaryColor;
     }
+
     return ValueListenableBuilder<Color>(
       valueListenable: color,
       builder: (BuildContext context, Color value, Widget? child) =>
@@ -25,8 +26,9 @@ class SpatialSpanTestBox extends StatelessWidget {
               ),
               onTap: () {
                 onTap();
+
                 color.value = Theme.of(context).primaryColor;
-                Timer(const Duration(milliseconds: 100), () {
+                Timer(const Duration(milliseconds: 500), () {
                   color.value = Theme.of(context).accentColor;
                 });
               }),

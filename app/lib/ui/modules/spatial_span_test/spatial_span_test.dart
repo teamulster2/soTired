@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
+import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
+import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_box.dart';
+import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_progress.dart';
 
 class SpatialSpanTest extends StatefulWidget {
   const SpatialSpanTest({Key? key}) : super(key: key);
@@ -14,17 +16,19 @@ class SpatialSpanTest extends StatefulWidget {
 }
 
 class _SpatialSpanTestState extends State<SpatialSpanTest> {
-  final ValueNotifier<int> currentPrimary = ValueNotifier<int>(0);
-
-  int next(int min, int max) => min + Random().nextInt(max - min);
-  int i = 0;
-  GameState currentGameState = GameState.start;
-
-  List<int> currentSequence = <int>[];
+  late GameEngine gameEngine;
 
   @override
   Widget build(BuildContext context) {
-    Future<dynamic>.delayed(Duration.zero, () => showStartDialog());
+    gameEngine = GameEngine(StartState(), (InfoDialogObject ido) {
+      if (ido.colored) {
+        showGameOverDialog(ido);
+      } else {
+        showInfoDialog(ido);
+      }
+    });
+
+    Future<dynamic>.delayed(Duration.zero, () => gameEngine.startGame());
 
     return Scaffold(
         appBar: const PreferredSize(
@@ -36,12 +40,11 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
             color: Theme.of(context).backgroundColor,
             child: Column(
               children: <Widget>[
-                TextButton(
-                    onPressed: () => startSequence(),
-                    child: Text('Start',
-                        style: Theme.of(context).textTheme.bodyText1)),
+                SpatialSpanTestProgress(
+                    level: gameEngine.level,
+                    currentValue: gameEngine.currentValue),
                 SizedBox(
-                    height: MediaQuery.of(context).size.height - 129,
+                    height: MediaQuery.of(context).size.height - 250,
                     width: MediaQuery.of(context).size.width,
                     child: GridView.count(
                       crossAxisCount: 4,
@@ -49,149 +52,75 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                       crossAxisSpacing: 4,
                       children: <Widget>[
                         for (int i = 1; i < 17; i++)
-                          ValueListenableBuilder<int>(
-                              valueListenable: currentPrimary,
+                          ValueListenableBuilder<List<int>>(
+                              valueListenable: gameEngine.currentSequence,
                               builder: (BuildContext context, Object? value,
                                       Widget? widget) =>
-                                  SpatialSpanTestBox(
-                                      primary: i == currentPrimary.value,
-                                      onTap: () => checkTappedBox(i)))
+                                  ValueListenableBuilder<int>(
+                                      valueListenable:
+                                          gameEngine.currentPrimary,
+                                      builder: (BuildContext context,
+                                              Object? value, Widget? widget) =>
+                                          SpatialSpanTestBox(
+                                            primary: i ==
+                                                gameEngine.currentPrimary.value,
+                                            onTap: () => gameEngine
+                                                .checkUserInteraction(i),
+                                          ))),
                       ],
                     )),
               ],
             )));
   }
 
-  List<int> getSequence(int length) {
-    final List<int> values = <int>[];
-    for (int i = 0; i < length; i++) {
-      final int randomValue = next(1, 16);
-      if (!values.contains(randomValue)) {
-        values.add(randomValue);
-      } else {
-        i--;
-      }
-    }
-    return values;
-  }
-
-  void checkTappedBox(int value) {
-    if(currentGameState == GameState.userInteraction){
-      if (currentSequence[0] == value){
-        currentSequence.removeAt(0);
-        if (currentSequence.isEmpty){
-          showGameFinished();
-        }
-      } else {
-        currentGameState = GameState.gameOver;
-        showGameOverDialog();
-      }
-    }
-  }
-
-  void showGameOverDialog(){
+  void showInfoDialog(InfoDialogObject ido) {
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-            title: const Text('Game over'),
-            content: const Text(
-                'You did not tap the right box. Game over.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Ok'),
-                onPressed: () {
-                  Timer(const Duration(seconds: 1), () {
-                    startSequence();
-                  });
-                  Navigator.pop(context);
-                },
-              )
-            ]));
-  }
-
-  void showGameFinished(){
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-            title: const Text('You have successfully finished the level.'),
-            content: const Text(
-                'Tap Ok to enter the next level.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Ok'),
-                onPressed: () {
-                  Timer(const Duration(seconds: 1), () {
-                    startSequence();
-                  });
-                  Navigator.pop(context);
-                },
-              )
-            ]));
-  }
-
-  void startSequence() {
-    const int length = 3;
-    currentSequence = getSequence(length);
-    currentPrimary.value = currentSequence[i];
-    Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      if (i == length - 1) {
-        i = 0;
-        currentPrimary.value = 0;
-        timer.cancel();
-        startUserInteraction();
-      } else {
-        i++;
-        currentPrimary.value = currentSequence[i];
-      }
-    });
-  }
-
-  void startUserInteraction() {
-    showUserDialog();
-    currentGameState = GameState.userInteraction;
-  }
-
-  void showStartDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-                title: const Text('Start Game'),
-                content: const Text(
-                    'When you tap on "OK" the game will start. Then you have to remeber all the boxes that flash up.'),
+                title: Text(ido.title),
+                content: Text(ido.content),
                 actions: <Widget>[
                   TextButton(
                     child: const Text('Ok'),
                     onPressed: () {
-                      Timer(const Duration(seconds: 1), () {
-                        startSequence();
-                      });
-                      Navigator.pop(context);
+                      ido.onOk();
+                      if (ido.pop) {
+                        Navigator.pop(context);
+                      } else if (ido.push) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<BuildContext>(
+                                builder: (BuildContext context) =>
+                                    const Home()));
+                      }
                     },
                   )
                 ]));
   }
 
-  void showUserDialog() {
+  void showGameOverDialog(InfoDialogObject ido) {
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-                title: const Text('Now its your turn'),
-                content:
-                    const Text('Tap the boxes in the order shown earlier.'),
+                backgroundColor: Theme.of(context).primaryColorLight,
+                title: Text(ido.title),
+                content: Text(ido.content),
                 actions: <Widget>[
                   TextButton(
                     child: const Text('Ok'),
                     onPressed: () {
-                      Navigator.pop(context);
+                      ido.onOk();
+                      if (ido.pop) {
+                        Navigator.pop(context);
+                      } else if (ido.push) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<BuildContext>(
+                                builder: (BuildContext context) =>
+                                    const Home()));
+                      }
                     },
                   )
                 ]));
   }
-}
-
-enum GameState {
-  start,
-  showSequence,
-  userInteraction,
-  gameOver,
 }
