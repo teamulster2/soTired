@@ -28,7 +28,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
       }
     });
 
-    Future<dynamic>.delayed(Duration.zero, () => gameEngine.startGame());
+    Future<dynamic>.delayed(Duration.zero, () => gameEngine.handleState());
 
     return Scaffold(
         appBar: const PreferredSize(

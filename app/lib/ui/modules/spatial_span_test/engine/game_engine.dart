@@ -28,54 +28,19 @@ class GameEngine {
     this.gameState.setGameEngine(this);
   }
 
-  void startGame() {
-    try {
-      gameState.startGame();
-    } on GameWrongStateException {
-      //TODO: Exception handling
-      showDialog(InfoDialogObject('Exception', 'Something went wrong. Please restart the application', (){
-        // TODO: onTap ok
-      }, false, true, true));
-    }
-  }
-
-  void showSequence() {
-    try {
-      gameState.showSequence();
-    } on GameWrongStateException {
-      //TODO: Exception handling
-    }
-  }
-
-  void startUserInteraction() {
-    try {
-      gameState.startUserInteraction();
-    } on GameWrongStateException {
-      //TODO: Exception handling
-    }
+  void handleState() {
+    gameState.handleState();
   }
 
   void checkUserInteraction(int boxId) {
     try {
       gameState.checkUserInteraction(boxId);
     } on GameWrongStateException {
-      //TODO: Exception handling
-    }
-  }
-
-  void gameOver() {
-    try {
-      gameState.gameOver();
-    } on GameWrongStateException {
-      //TODO: Exception handling
-    }
-  }
-
-  void toNextLevel() {
-    try {
-      gameState.toNextLevel();
-    } on GameWrongStateException {
-      //TODO: Exception handling
+      showDialog(InfoDialogObject(
+          'Exception', 'Something went wrong. Please restart the application',
+          () {
+        // TODO: onTap ok
+      }, false, true, true));
     }
   }
 

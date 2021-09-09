@@ -10,57 +10,29 @@ abstract class GameState {
     this.engine = engine;
   }
 
-  void startGame();
-
-  void showSequence();
-
-  void startUserInteraction();
+  void handleState();
 
   void checkUserInteraction(int boxId);
-
-  void gameOver();
-
-  void toNextLevel();
 }
 
 class StartState extends GameState {
   StartState() : super();
 
   @override
-  void startGame() {
+  void handleState() {
     engine.showDialog(InfoDialogObject('Start Game',
         'When you tap on "OK" the game will start. Then you have to remember all the boxes that flash up.',
         () {
       Timer(Duration(milliseconds: engine.durationTilesShown), () {
         engine
           ..transitionTo(ShowSequenceState())
-          ..showSequence();
+          ..handleState();
       });
     }, true, false, false));
   }
 
   @override
-  void showSequence() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void startUserInteraction() {
-    throw GameWrongStateException();
-  }
-
-  @override
   void checkUserInteraction(int boxId) {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void gameOver() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void toNextLevel() {
     throw GameWrongStateException();
   }
 }
@@ -69,36 +41,16 @@ class ShowSequenceState extends GameState {
   ShowSequenceState() : super();
 
   @override
-  void startGame() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void showSequence() {
+  void handleState() {
     engine.startSequence(() {
       engine
         ..transitionTo(UserInteractionState())
-        ..startUserInteraction();
+        ..handleState();
     });
   }
 
   @override
-  void startUserInteraction() {
-    throw GameWrongStateException();
-  }
-
-  @override
   void checkUserInteraction(int boxId) {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void gameOver() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void toNextLevel() {
     throw GameWrongStateException();
   }
 }
@@ -107,17 +59,7 @@ class UserInteractionState extends GameState {
   UserInteractionState() : super();
 
   @override
-  void startGame() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void showSequence() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void startUserInteraction() {
+  void handleState() {
     engine.showDialog(InfoDialogObject(
         'Now its your turn', 'Tap the boxes in the order shown earlier.', () {
       //TODO: add on tap
@@ -130,22 +72,12 @@ class UserInteractionState extends GameState {
     if (value == 1) {
       engine
         ..transitionTo(NextLevelState())
-        ..toNextLevel();
+        ..handleState();
     } else if (value == 2) {
       engine
         ..transitionTo(GameOverState())
-        ..gameOver();
+        ..handleState();
     }
-  }
-
-  @override
-  void gameOver() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void toNextLevel() {
-    throw GameWrongStateException();
   }
 }
 
@@ -153,34 +85,14 @@ class GameOverState extends GameState {
   GameOverState() : super();
 
   @override
-  void startGame() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void showSequence() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void startUserInteraction() {
-    throw GameWrongStateException();
-  }
-
-  @override
   void checkUserInteraction(int boxId) {
     throw GameWrongStateException();
   }
 
   @override
-  void gameOver() {
+  void handleState() {
     engine.showDialog(InfoDialogObject('Game over',
         'You did not tap the right box. Game over.', () {}, false, true, true));
-  }
-
-  @override
-  void toNextLevel() {
-    throw GameWrongStateException();
   }
 }
 
@@ -191,27 +103,7 @@ class NextLevelState extends GameState {
   }
 
   @override
-  void gameOver() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void showSequence() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void startGame() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void startUserInteraction() {
-    throw GameWrongStateException();
-  }
-
-  @override
-  void toNextLevel() {
+  void handleState() {
     engine.showDialog(InfoDialogObject(
         'You have successfully finished level ${engine.level.value}.',
         'Tap Ok to enter the next level.', () {
@@ -219,7 +111,7 @@ class NextLevelState extends GameState {
       Timer(Duration(milliseconds: engine.durationTilesShown), () {
         engine
           ..transitionTo(ShowSequenceState())
-          ..showSequence();
+          ..handleState();
       });
     }, true, false, false));
   }
