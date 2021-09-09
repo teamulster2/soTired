@@ -25,4 +25,5 @@ func serveRun(cmd *cobra.Command, args []string) {
 func root(w http.ResponseWriter, r *http.Request) {
 	buf, _ := io.ReadAll(r.Body)
 	io.WriteString(w, string(buf))
+	fmt.Println("recieved and replyed:", string(buf))
 }
