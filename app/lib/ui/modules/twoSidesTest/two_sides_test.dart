@@ -62,7 +62,7 @@ class _TwoSidesTestState extends State<TwoSidesTest> {
               child: Container(
                 width: MediaQuery.of(context).size.width / 2 - 10,
                 height: MediaQuery.of(context).size.height,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
               ),
               onTap: () => detectTap(1)),
         ],

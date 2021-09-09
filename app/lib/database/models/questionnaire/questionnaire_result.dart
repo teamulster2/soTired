@@ -14,7 +14,7 @@ class QuestionnaireResult {
   String? uuid;
 
   @HiveField(1)
-  QuestionnaireObject? questions;
+  List<QuestionnaireObject?> questions;
 
   QuestionnaireResult(this.uuid, this.questions);
 

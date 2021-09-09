@@ -17,7 +17,7 @@ class CurrentActivity {
   @HiveField(2)
   String? currentMood;
 
-  CurrentActivity(this.currentActivity, this.currentMood);
+  CurrentActivity(this.uuid, this.currentActivity, this.currentMood);
 
   @override
   String toString() => 'UUID: $uuid,\nCurrentActivity: $currentActivity,\n'

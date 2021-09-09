@@ -16,7 +16,6 @@ class _NavigationBarState extends State<NavigationBar> {
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.black,
             statusBarIconBrightness: Brightness.light),
-        backwardsCompatibility: false,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {

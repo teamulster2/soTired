@@ -17,9 +17,10 @@ class CurrentActivityAdapter extends TypeAdapter<CurrentActivity> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CurrentActivity(
+      fields[0] as String?,
       fields[1] as String?,
       fields[2] as String?,
-    )..uuid = fields[0] as String?;
+    );
   }
 
   @override

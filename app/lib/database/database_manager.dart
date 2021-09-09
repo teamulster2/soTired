@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:so_tired/database/models/activity/current_activity.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
