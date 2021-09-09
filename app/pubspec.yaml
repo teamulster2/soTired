@@ -64,6 +64,13 @@ flutter:
 
   assets:
     - assets/images/background_06.png
+    - assets/images/happy.png
+    - assets/images/happy2.png
+    - assets/images/happy3.png
+    - assets/images/happy4.png
+    - assets/images/boring.png
+    - assets/images/angry.png
+    - assets/images/exiting.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
