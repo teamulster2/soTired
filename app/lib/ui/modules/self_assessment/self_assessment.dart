@@ -43,7 +43,7 @@ class _SelfAssessmentState extends State<SelfAssessment> {
         final String uuid = Utils.generateUuid();
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
-            .writeCurrentActivities(<UserState>[
+            .writeUserStates(<UserState>[
           UserState(uuid, currentActivity, emotionalState.value)
         ]);
         widget.onFinished();
