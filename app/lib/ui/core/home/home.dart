@@ -4,6 +4,7 @@ import 'package:so_tired/ui/core/home/widgets/home_image.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
 import 'package:so_tired/ui/modules/questionnaire/questionnaire.dart';
+import 'package:so_tired/ui/modules/self_assessment/self_assessment.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/spatial_span_test.dart';
 
 class Home extends StatefulWidget {
@@ -37,13 +38,13 @@ class _HomeState extends State<Home> {
                         // NOTE: Icons from: https://api.flutter.dev/flutter/material/Icons-class.html
                         HomeButton(
                           icon: Icons.access_time_filled,
-                          text: 'reaction game',
+                          text: 'self test',
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute<BuildContext>(
                                     builder: (BuildContext context) =>
-                                        const SpatialSpanTest()));
+                                        const SelfAssessment()));
                           },
                         ),
                         HomeButton(
