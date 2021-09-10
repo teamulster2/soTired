@@ -80,8 +80,7 @@ class DatabaseManager {
   /// It is responsible for the [UserState] hive box.
   /// It takes an uuid as argument and returns a single [UserState]
   /// object.
-  UserState? getCurrentActivityById(String uuid) =>
-      _userStateBox.get(uuid);
+  UserState? getCurrentActivityById(String uuid) => _userStateBox.get(uuid);
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [QuestionnaireResult] hive box.

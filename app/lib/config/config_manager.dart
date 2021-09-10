@@ -44,7 +44,23 @@ class ConfigManager {
       ..isCurrentActivityEnabled = true
       ..studyName = 'study1'
       ..isStudy = true
-      ..questions = constants.questions;
+      ..questions = constants.questions
+      ..moods = <List<int>>[
+        <int>[int.parse('F0'), int.parse('9F'), 98, 84],
+        <int>[
+          int.parse('F0'),
+          int.parse('9F'),
+          int.parse('A4'),
+          int.parse('A9')
+        ],
+        <int>[
+          int.parse('F0'),
+          int.parse('9F'),
+          int.parse('A5'),
+          int.parse('B1')
+        ],
+        <int>[int.parse('F0'), int.parse('9F'), 98, int.parse('A2')]
+      ];
 
     _clientConfig = clientConfigBuilder.build();
   }

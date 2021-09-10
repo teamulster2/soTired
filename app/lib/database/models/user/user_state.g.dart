@@ -19,7 +19,7 @@ class UserStateAdapter extends TypeAdapter<UserState> {
     return UserState(
       fields[0] as String?,
       fields[1] as String?,
-      fields[2] as String?,
+      (fields[2] as List?)?.cast<int>(),
     );
   }
 

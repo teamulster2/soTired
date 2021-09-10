@@ -30,5 +30,7 @@ class ArrowUpAccent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-      color: Theme.of(context).colorScheme.secondary, icon: true, quarterTurns: 1);
+      color: Theme.of(context).colorScheme.secondary,
+      icon: true,
+      quarterTurns: 1);
 }

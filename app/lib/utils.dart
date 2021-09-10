@@ -1,37 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:path_provider/path_provider.dart';
-import 'package:so_tired/config/client_config.dart';
 import 'package:uuid/uuid.dart';
 
 /// This calls serves as utility class. It contains only static methods which
 /// enables you to use them without instantiating a new object.
 class Utils {
-  /// This method takes a [String clientConfigJsonString] and checks its
-  /// compatibility to the [ClientConfig] class.
-  static bool isClientConfigJsonValid(String clientConfigJsonString) {
-    late final Map<String, dynamic> jsonResponse;
-    // TODO: Discuss exception handling and adjust this part
-    try {
-      jsonResponse = jsonDecode(clientConfigJsonString);
-    } catch (e) {
-      return false;
-    }
-
-    // TODO: check specific keys when they're defined, e.g. is URL valid, ...
-    return jsonResponse.containsKey('serverUrl') &&
-        jsonResponse.containsKey('notificationInterval') &&
-        jsonResponse.containsKey('notificationText') &&
-        jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
-        jsonResponse.containsKey('isMentalArithmeticEnabled') &&
-        jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
-        jsonResponse.containsKey('isQuestionnaireEnabled') &&
-        jsonResponse.containsKey('isCurrentActivityEnabled') &&
-        jsonResponse.containsKey('studyName') &&
-        jsonResponse.containsKey('isStudy') &&
-        jsonResponse.containsKey('questions');
-  }
-
   /// This method uses the [dart:io] package to generate the local file path
   /// where files can be stored or read from.
   /// It takes [String fileName] as parameter and return a [Future<String>].
@@ -58,5 +33,20 @@ class Utils {
   static String generateUuid() {
     const Uuid generator = Uuid();
     return generator.v4();
+  }
+
+  static String codeUnitsToString(List<int> codeUnits) {
+    try {
+      const Utf8Decoder utf8decoder = Utf8Decoder();
+      return utf8decoder.convert(codeUnits);
+    } on FormatException {
+      throw const FormatException('The given List can not be converted into a '
+          'valid UTF-8 String.');
+    }
+  }
+
+  static List<int> stringToCodeUnits(String utf8) {
+    const Utf8Encoder utf8encoder = Utf8Encoder();
+    return utf8encoder.convert(utf8);
   }
 }

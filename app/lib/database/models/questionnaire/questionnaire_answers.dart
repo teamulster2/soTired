@@ -1,6 +1,1 @@
-enum QuestionnaireAnswers {
-  first,
-  second,
-  third,
-  fourth
-}
+enum QuestionnaireAnswers { first, second, third, fourth }
