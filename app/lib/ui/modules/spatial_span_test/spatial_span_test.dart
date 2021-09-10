@@ -50,7 +50,8 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
           child: Column(
             children: <Widget>[
               SpatialSpanTestProgress(
-                  level: gameEngine.level, currentValue: gameEngine.currentValue),
+                  level: gameEngine.level,
+                  currentValue: gameEngine.currentValue),
               SizedBox(
                   height: MediaQuery.of(context).size.height - 250,
                   width: MediaQuery.of(context).size.width,
@@ -66,13 +67,13 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                                     Widget? widget) =>
                                 ValueListenableBuilder<int>(
                                     valueListenable: gameEngine.currentPrimary,
-                                    builder: (BuildContext context, Object? value,
-                                            Widget? widget) =>
+                                    builder: (BuildContext context,
+                                            Object? value, Widget? widget) =>
                                         SpatialSpanTestBox(
                                           primary: i ==
                                               gameEngine.currentPrimary.value,
-                                          onTap: () =>
-                                              gameEngine.checkUserInteraction(i),
+                                          onTap: () => gameEngine
+                                              .checkUserInteraction(i),
                                         ))),
                     ],
                   )),
