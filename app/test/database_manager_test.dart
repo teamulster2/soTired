@@ -9,7 +9,7 @@
 // import 'package:so_tired/database/models/user/user_access_method.dart';
 // import 'package:so_tired/database/models/user/user_game_execution.dart';
 // import 'package:so_tired/database/models/user/user_log.dart';
-// import 'package:so_tired/services_provider.dart';
+// import 'package:so_tired/service_provider.dart';
 // import 'package:so_tired/ui/models/questionnaire_object.dart';
 // import 'package:so_tired/utils.dart';
 //

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:so_tired/services_provider.dart';
+import 'package:so_tired/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 
 Future<void> main() async => runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   // ignore: always_specify_types
   Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (BuildContext context) => ServicesProvider(),
+        create: (BuildContext context) => ServiceProvider(),
         child: const MyAppContent(),
       );
 }
@@ -34,7 +34,7 @@ class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
 
-    Provider.of<ServicesProvider>(context, listen: false)
+    Provider.of<ServiceProvider>(context, listen: false)
         .init(() => setState(() => _doneInitializing = true));
   }
 
@@ -92,7 +92,7 @@ class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
     super.dispose();
     WidgetsBinding.instance?.removeObserver(this);
 
-    Provider.of<ServicesProvider>(context, listen: false)
+    Provider.of<ServiceProvider>(context, listen: false)
         .databaseManager
         .closeDatabase();
   }

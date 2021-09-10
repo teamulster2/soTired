@@ -5,7 +5,9 @@ import 'package:so_tired/notification.dart';
 import 'package:so_tired/utils.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-class ServicesProvider extends ChangeNotifier {
+/// This class serves as service provider providing a [ConfigManager],
+/// [DatabaseManager] and a [Notifications] instance.
+class ServiceProvider extends ChangeNotifier {
   final ConfigManager _configManager = ConfigManager();
   final DatabaseManager _databaseManager = DatabaseManager();
   final Notifications _notifications = Notifications();
@@ -16,6 +18,8 @@ class ServicesProvider extends ChangeNotifier {
 
   Notifications get notification => _notifications;
 
+  /// This method initializes [ConfigManager], [DatabaseManager] and
+  /// [Notifications] synchronously.
   Future<void> init(Function onDoneInitializing) async {
     // initialize config
     // TODO: Add exception handling for invalid config

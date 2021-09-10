@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:so_tired/services_provider.dart';
+import 'package:so_tired/service_provider.dart';
 import 'package:so_tired/ui/constants/constants.dart' as constants;
 
 // ignore_for_file: always_specify_types
 
-ServicesProvider _servicesProvider = ServicesProvider();
+ServiceProvider _servicesProvider = ServiceProvider();
 
 final Map<String, dynamic> assertObject = <String, dynamic>{
   'serverUrl': 'http://localhost',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:so_tired/services_provider.dart';
+import 'package:so_tired/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
@@ -24,7 +24,7 @@ class _QuestionnaireState extends State<Questionnaire> {
   @override
   Widget build(BuildContext context) {
     final List<QuestionnaireObject> questions =
-        Provider.of<ServicesProvider>(context, listen: false)
+        Provider.of<ServiceProvider>(context, listen: false)
             .configManager
             .clientConfig
             .questions;
