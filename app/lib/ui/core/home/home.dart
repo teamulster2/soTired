@@ -4,8 +4,7 @@ import 'package:so_tired/ui/core/home/widgets/home_image.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
 import 'package:so_tired/ui/modules/questionnaire/questionnaire.dart';
-import 'package:so_tired/ui/modules/self_assessment/self_assessment.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/spatial_span_test.dart';
+import 'package:so_tired/ui/modules/self_test_engine/self_test.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -44,7 +43,7 @@ class _HomeState extends State<Home> {
                                 context,
                                 MaterialPageRoute<BuildContext>(
                                     builder: (BuildContext context) =>
-                                        const SelfAssessment()));
+                                        const SelfTest()));
                           },
                         ),
                         HomeButton(
