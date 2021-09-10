@@ -40,7 +40,7 @@ class GameEngine {
           'Exception', 'Something went wrong. Please restart the application',
           () {
         // TODO: onTap ok
-      }, false, true, true));
+      }, () {}, false, true, true));
     }
   }
 

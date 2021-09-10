@@ -28,7 +28,7 @@ class StartState extends GameState {
           ..transitionTo(ShowSequenceState())
           ..handleState();
       });
-    }, true, false, false));
+    }, () {}, true, false, false));
   }
 
   @override
@@ -63,7 +63,7 @@ class UserInteractionState extends GameState {
     engine.showDialog(InfoDialogObject(
         'Now its your turn', 'Tap the boxes in the order shown earlier.', () {
       //TODO: add on tap
-    }, true, false, false));
+    }, () {}, true, false, false));
   }
 
   @override
@@ -91,8 +91,14 @@ class GameOverState extends GameState {
 
   @override
   void handleState() {
-    engine.showDialog(InfoDialogObject('Game over',
-        'You did not tap the right box. Game over.', () {}, false, true, true));
+    engine.showDialog(InfoDialogObject(
+        'Game over',
+        'You did not tap the right box. Game over.',
+        () {},
+        () {},
+        false,
+        true,
+        true));
   }
 }
 
@@ -113,7 +119,7 @@ class NextLevelState extends GameState {
           ..transitionTo(ShowSequenceState())
           ..handleState();
       });
-    }, true, false, false));
+    }, () {}, true, false, false));
   }
 }
 
@@ -121,10 +127,11 @@ class InfoDialogObject {
   String title;
   String content;
   VoidCallback onOk;
-  bool pop;
-  bool push;
-  bool colored;
+  VoidCallback onCancel;
+  bool onOkPop;
+  bool onOkPush;
+  bool dialogColored;
 
-  InfoDialogObject(
-      this.title, this.content, this.onOk, this.pop, this.push, this.colored);
+  InfoDialogObject(this.title, this.content, this.onOk, this.onCancel,
+      this.onOkPop, this.onOkPush, this.dialogColored);
 }
