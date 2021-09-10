@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:so_tired/config/client_config.dart';
+import 'package:uuid/uuid.dart';
 
 /// This calls serves as utility class. It contains only static methods which
 /// enables you to use them without instantiating a new object.
-class ConfigUtils {
+class Utils {
   /// This method takes a [String clientConfigJsonString] and checks its
   /// compatibility to the [ClientConfig] class.
   static bool isClientConfigJsonValid(String clientConfigJsonString) {
@@ -21,16 +22,14 @@ class ConfigUtils {
     return jsonResponse.containsKey('serverUrl') &&
         jsonResponse.containsKey('notificationInterval') &&
         jsonResponse.containsKey('notificationText') &&
-        jsonResponse.containsKey('isReactionGameEnabled') &&
+        jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
+        jsonResponse.containsKey('isMentalArithmeticEnabled') &&
+        jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
         jsonResponse.containsKey('isQuestionnaireEnabled') &&
         jsonResponse.containsKey('isCurrentActivityEnabled') &&
         jsonResponse.containsKey('studyName') &&
         jsonResponse.containsKey('isStudy') &&
-        jsonResponse.containsKey('question1') &&
-        jsonResponse.containsKey('question2') &&
-        jsonResponse.containsKey('question3') &&
-        jsonResponse.containsKey('question4') &&
-        jsonResponse.containsKey('question5');
+        jsonResponse.containsKey('questions');
   }
 
   /// This method uses the [dart:io] package to generate the local file path
@@ -54,4 +53,10 @@ class ConfigUtils {
   /// This methods validates whether or not a file exists.
   /// It takes [String filePath] as argument and returns a [bool].
   static bool doesFileExist(String filePath) => File(filePath).existsSync();
+
+  /// This methods generates a random UUID.
+  static String generateUuid() {
+    const Uuid generator = Uuid();
+    return generator.v4();
+  }
 }

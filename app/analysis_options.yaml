@@ -48,3 +48,7 @@ linter:
     - use_named_constants
     - use_raw_strings
     - use_string_buffers
+
+analyzer:
+  exclude:
+    - 'lib/database/models/**.g.dart'

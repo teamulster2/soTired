@@ -30,5 +30,5 @@ class PlainAccent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Preview(
-      color: Theme.of(context).accentColor, icon: false, quarterTurns: 0);
+      color: Theme.of(context).colorScheme.secondary, icon: false, quarterTurns: 0);
 }
