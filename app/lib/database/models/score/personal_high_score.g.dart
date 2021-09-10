@@ -1,35 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'personal_score.dart';
+part of 'personal_high_score.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PersonalScoreAdapter extends TypeAdapter<PersonalScore> {
+class PersonalHighScoreAdapter extends TypeAdapter<PersonalHighScore> {
   @override
   final int typeId = 0;
 
   @override
-  PersonalScore read(BinaryReader reader) {
+  PersonalHighScore read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PersonalScore(
+    return PersonalHighScore(
       fields[0] as String?,
       fields[1] as int?,
+      fields[2] as ModuleType?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, PersonalScore obj) {
+  void write(BinaryWriter writer, PersonalHighScore obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
-      ..write(obj.gameScore);
+      ..write(obj.gameScore)
+      ..writeByte(2)
+      ..write(obj.gameType);
   }
 
   @override
@@ -38,7 +41,7 @@ class PersonalScoreAdapter extends TypeAdapter<PersonalScore> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PersonalScoreAdapter &&
+      other is PersonalHighScoreAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

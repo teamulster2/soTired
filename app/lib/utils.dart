@@ -22,7 +22,9 @@ class Utils {
     return jsonResponse.containsKey('serverUrl') &&
         jsonResponse.containsKey('notificationInterval') &&
         jsonResponse.containsKey('notificationText') &&
-        jsonResponse.containsKey('isReactionGameEnabled') &&
+        jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
+        jsonResponse.containsKey('isMentalArithmeticEnabled') &&
+        jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
         jsonResponse.containsKey('isQuestionnaireEnabled') &&
         jsonResponse.containsKey('isCurrentActivityEnabled') &&
         jsonResponse.containsKey('studyName') &&

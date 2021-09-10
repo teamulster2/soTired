@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:so_tired/database/models/activity/current_activity.dart';
+import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
-import 'package:so_tired/database/models/score/personal_score.dart';
+import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/utils.dart';
 
@@ -14,9 +14,9 @@ class DatabaseManager {
   static DatabaseManager? _databaseManagerInstance =
       DatabaseManager._databaseManager();
 
-  late final Box<PersonalScore> _personalScoreBox;
+  late final Box<PersonalHighScore> _personalScoreBox;
   late final Box<UserLog> _userLogBox;
-  late final Box<CurrentActivity> _currentActivityBox;
+  late final Box<UserState> _userStateBox;
   late final Box<QuestionnaireResult> _questionnaireResultBox;
 
   DatabaseManager._databaseManager();
@@ -29,23 +29,23 @@ class DatabaseManager {
     Hive.init(databasePath);
 
     // ignore: cascade_invocations
-    Hive.registerAdapter(PersonalScoreAdapter());
+    Hive.registerAdapter(PersonalHighScoreAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(UserLogAdapter());
     // ignore: cascade_invocations
-    Hive.registerAdapter(CurrentActivityAdapter());
+    Hive.registerAdapter(UserStateAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(QuestionnaireResultAdapter());
 
     _personalScoreBox = await Hive.openBox('personalScoresBox');
     _userLogBox = await Hive.openBox('userLogBox');
-    _currentActivityBox = await Hive.openBox('currentActivityBox');
+    _userStateBox = await Hive.openBox('userStateBox');
     _questionnaireResultBox = await Hive.openBox('questionnaireResultBox');
   }
 
   /// This method provides write access to the database regarding all
-  /// [PersonalScore] objects taken as [List] argument.
-  Future<void> writePersonalScores(List<PersonalScore> scores) async =>
+  /// [PersonalHighScore] objects taken as [List] argument.
+  Future<void> writePersonalHighScores(List<PersonalHighScore> scores) async =>
       _personalScoreBox.addAll(scores);
 
   /// This method provides write access to the database regarding all
@@ -54,9 +54,9 @@ class DatabaseManager {
       _userLogBox.addAll(logs);
 
   /// This method provides write access to the database regarding all
-  /// [CurrentActivity] objects taken as [List] argument.
-  Future<void> writeCurrentActivities(List<CurrentActivity> activities) async =>
-      _currentActivityBox.addAll(activities);
+  /// [UserState] objects taken as [List] argument.
+  Future<void> writeCurrentActivities(List<UserState> activities) async =>
+      _userStateBox.addAll(activities);
 
   /// This method provides write access to the database regarding all
   /// [QuestionnaireResult] objects taken as [List] argument.
@@ -65,9 +65,10 @@ class DatabaseManager {
       _questionnaireResultBox.addAll(results);
 
   /// This method provides the ability to get an object by uuid.
-  /// It is responsible for the [PersonalScore] hive box.
-  /// It takes an uuid as argument and returns a single [PersonalScore] object.
-  PersonalScore? getPersonalScoreById(String uuid) =>
+  /// It is responsible for the [PersonalHighScore] hive box.
+  /// It takes an uuid as argument and returns a single [PersonalHighScore]
+  /// object.
+  PersonalHighScore? getPersonalHighScoreById(String uuid) =>
       _personalScoreBox.get(uuid);
 
   /// This method provides the ability to get an object by uuid.
@@ -76,22 +77,24 @@ class DatabaseManager {
   UserLog? getUserLogById(String uuid) => _userLogBox.get(uuid);
 
   /// This method provides the ability to get an object by uuid.
-  /// It is responsible for the [CurrentActivity] hive box.
-  /// It takes an uuid as argument and returns a single [CurrentActivity] object.
-  CurrentActivity? getCurrentActivityById(String uuid) =>
-      _currentActivityBox.get(uuid);
+  /// It is responsible for the [UserState] hive box.
+  /// It takes an uuid as argument and returns a single [UserState]
+  /// object.
+  UserState? getCurrentActivityById(String uuid) =>
+      _userStateBox.get(uuid);
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [QuestionnaireResult] hive box.
-  /// It takes an uuid as argument and returns a single [QuestionnaireResult] object.
+  /// It takes an uuid as argument and returns a single [QuestionnaireResult]
+  /// object.
   QuestionnaireResult? getQuestionnaireResultById(String uuid) =>
       _questionnaireResultBox.get(uuid);
 
-  /// This method returns all entries from the [PersonalScore] box.
+  /// This method returns all entries from the [PersonalHighScore] box.
   /// It is null-aware. Therefore, the returned List is of type
   /// [PersonalScore?].
-  List<PersonalScore?> getAllPersonalScores() {
-    final List<PersonalScore?> returnList = <PersonalScore?>[];
+  List<PersonalHighScore?> getAllPersonalHighScores() {
+    final List<PersonalHighScore?> returnList = <PersonalHighScore?>[];
     for (int i = 0; i < _personalScoreBox.length; i++) {
       returnList.add(_personalScoreBox.getAt(i));
     }
@@ -109,13 +112,13 @@ class DatabaseManager {
     return returnList;
   }
 
-  /// This method returns all entries from the [CurrentActivity] box.
+  /// This method returns all entries from the [UserState] box.
   /// It is null-aware. Therefore, the returned List is of type
   /// [CurrentActivity?].
-  List<CurrentActivity?> getAllCurrentActivities() {
-    final List<CurrentActivity?> returnList = <CurrentActivity?>[];
-    for (int i = 0; i < _currentActivityBox.length; i++) {
-      returnList.add(_currentActivityBox.getAt(i));
+  List<UserState?> getAllCurrentActivities() {
+    final List<UserState?> returnList = <UserState?>[];
+    for (int i = 0; i < _userStateBox.length; i++) {
+      returnList.add(_userStateBox.getAt(i));
     }
     return returnList;
   }

@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'current_activity.dart';
+part of 'user_state.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CurrentActivityAdapter extends TypeAdapter<CurrentActivity> {
+class UserStateAdapter extends TypeAdapter<UserState> {
   @override
   final int typeId = 2;
 
   @override
-  CurrentActivity read(BinaryReader reader) {
+  UserState read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CurrentActivity(
+    return UserState(
       fields[0] as String?,
       fields[1] as String?,
       fields[2] as String?,
@@ -24,7 +24,7 @@ class CurrentActivityAdapter extends TypeAdapter<CurrentActivity> {
   }
 
   @override
-  void write(BinaryWriter writer, CurrentActivity obj) {
+  void write(BinaryWriter writer, UserState obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -41,7 +41,7 @@ class CurrentActivityAdapter extends TypeAdapter<CurrentActivity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CurrentActivityAdapter &&
+      other is UserStateAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,13 +1,13 @@
 import 'package:hive/hive.dart';
 import 'package:so_tired/utils.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
-import 'package:so_tired/database/models/user/user_game_execution.dart';
+import 'package:so_tired/database/models/module_type.dart';
 
 part 'user_log.g.dart';
 
 /// This class defines the [UserLog] model by extending a [HiveObject].
-/// It holds an [uuid], a [accessMethod] and [Map] defining which game the user
-/// has executed.
+/// It holds an [uuid], a [accessMethod], a [Map] defining which game the
+/// user has executed and a [timestamp].
 /// The UUID can be generated using the [Utils] class.
 @HiveType(typeId: 1)
 class UserLog extends HiveObject {
@@ -18,11 +18,28 @@ class UserLog extends HiveObject {
   UserAccessMethod? accessMethod;
 
   @HiveField(2)
-  Map<UserGameExecution, Map<String, dynamic>>? gameExecution;
+  Map<ModuleType, Map<String, dynamic>>? gamesExecuted;
 
-  UserLog(this.uuid, this.accessMethod, this.gameExecution);
+  @HiveField(3)
+  DateTime? timestamp;
+
+  UserLog(this.uuid, this.accessMethod, this.gamesExecuted, this.timestamp);
+
+  UserLog.fromJson(Map<String, dynamic> json)
+      : uuid = json['uuid'],
+        accessMethod = json['accessMethod'],
+        gamesExecuted = json['gamesExecuted'],
+        timestamp = json['timestamp'];
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'uuid': uuid,
+        'accessMethod': accessMethod,
+        'gamesExecuted': gamesExecuted,
+        'timestamp': timestamp
+      };
 
   @override
   String toString() => 'UUID: $uuid,\nAccessMethod: $accessMethod,\n'
-      ' Which game has been executed?: $gameExecution';
+      'Which games have been executed?: $gamesExecuted,\n'
+      'Timestamp: $timestamp';
 }

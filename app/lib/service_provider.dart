@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
-import 'package:so_tired/notification.dart';
+import 'package:so_tired/notifications.dart';
 import 'package:so_tired/utils.dart';
 import 'package:timezone/data/latest.dart' as tz;
 

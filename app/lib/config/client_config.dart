@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-import 'package:so_tired/config/config.dart';
 import 'package:so_tired/utils.dart';
-import 'package:so_tired/database/models/questionnaire/questionnaire_object.dart';
+import 'package:so_tired/ui/models/questionnaire.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
-class ClientConfig implements Config {
+class ClientConfig {
   late final String _serverUrl;
   late final int _notificationInterval;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
-  late final bool _isReactionGameEnabled;
+  late final bool _isSpatialSpanTaskEnabled;
+  late final bool _isMentalArithmeticEnabled;
+  late final bool _isPsychomotorVigilanceTaskEnabled;
   late final bool _isQuestionnaireEnabled;
   late final bool _isCurrentActivityEnabled;
 
@@ -25,7 +26,10 @@ class ClientConfig implements Config {
     _notificationInterval = clientConfigBuilder._notificationInterval;
     _notificationText = clientConfigBuilder._notificationText;
 
-    _isReactionGameEnabled = clientConfigBuilder._isReactionGameEnabled;
+    _isSpatialSpanTaskEnabled = clientConfigBuilder._isSpatialSpanTaskEnabled;
+    _isMentalArithmeticEnabled = clientConfigBuilder._isMentalArithmeticEnabled;
+    _isPsychomotorVigilanceTaskEnabled =
+        clientConfigBuilder._isPsychomotorVigilanceTaskEnabled;
     _isQuestionnaireEnabled = clientConfigBuilder._isQuestionnaireEnabled;
     _isCurrentActivityEnabled = clientConfigBuilder._isCurrentActivityEnabled;
 
@@ -41,7 +45,11 @@ class ClientConfig implements Config {
 
   get notificationText => _notificationText;
 
-  get isReactionGameEnabled => _isReactionGameEnabled;
+  get isReactionGameEnabled => _isSpatialSpanTaskEnabled;
+
+  get isMentalArithmeticEnabled => _isMentalArithmeticEnabled;
+
+  get isPsychomotorVigilanceTaskEnabled => _isPsychomotorVigilanceTaskEnabled;
 
   get isQuestionnaireEnabled => _isQuestionnaireEnabled;
 
@@ -59,7 +67,10 @@ class ClientConfig implements Config {
       : _serverUrl = json['serverUrl'],
         _notificationInterval = json['notificationInterval'],
         _notificationText = json['notificationText'],
-        _isReactionGameEnabled = json['isReactionGameEnabled'],
+        _isSpatialSpanTaskEnabled = json['isSpatialSpanTaskEnabled'],
+        _isMentalArithmeticEnabled = json['isMentalArithmeticEnabled'],
+        _isPsychomotorVigilanceTaskEnabled =
+            json['isPsychomotorVigilanceTaskEnabled'],
         _isQuestionnaireEnabled = json['isQuestionnaireEnabled'],
         _isCurrentActivityEnabled = json['isCurrentActivityEnabled'],
         _studyName = json['studyName'],
@@ -68,12 +79,13 @@ class ClientConfig implements Config {
 
   /// This method takes all JSON keys from this class and converts them into a
   /// JSON object represented as [Map<String, dynamic>].
-  @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         'serverUrl': _serverUrl,
         'notificationInterval': _notificationInterval,
         'notificationText': _notificationText,
-        'isReactionGameEnabled': _isReactionGameEnabled,
+        'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
+        'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
+        'isPsychomotorVigilanceTaskEnabled': _isPsychomotorVigilanceTaskEnabled,
         'isQuestionnaireEnabled': _isQuestionnaireEnabled,
         'isCurrentActivityEnabled': _isCurrentActivityEnabled,
         'studyName': _studyName,
@@ -89,7 +101,9 @@ class ClientConfigBuilder {
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
-  late final bool _isReactionGameEnabled;
+  late final bool _isSpatialSpanTaskEnabled;
+  late final bool _isMentalArithmeticEnabled;
+  late final bool _isPsychomotorVigilanceTaskEnabled;
   late final bool _isQuestionnaireEnabled;
   late final bool _isCurrentActivityEnabled;
 
@@ -106,8 +120,15 @@ class ClientConfigBuilder {
 
   set notificationText(String text) => _notificationText = text;
 
-  set isReactionGameEnabled(bool isReactionGameEnabled) =>
-      _isReactionGameEnabled = isReactionGameEnabled;
+  set isSpatialSpanTaskEnabled(bool isSpatialSpanTaskEnabled) =>
+      _isSpatialSpanTaskEnabled = isSpatialSpanTaskEnabled;
+
+  set isPsychomotorVigilanceTaskEnabled(
+          bool isPsychomotorVigilanceTaskEnabled) =>
+      _isPsychomotorVigilanceTaskEnabled = isPsychomotorVigilanceTaskEnabled;
+
+  set isMentalArithmeticEnabled(bool isMentalArithmeticEnabled) =>
+      _isMentalArithmeticEnabled = isMentalArithmeticEnabled;
 
   set isQuestionnaireEnabled(bool isQuestionnaireEnabled) =>
       _isQuestionnaireEnabled = isQuestionnaireEnabled;
@@ -125,7 +146,6 @@ class ClientConfigBuilder {
   /// manually.
   ClientConfig build() {
     // TODO: Discuss exception handling and adjust this part
-    // TODO: Check whether or not method in ConfigUtils could be a better fit
     ClientConfig clientConfig;
     try {
       clientConfig = ClientConfig._clientConfig(this);

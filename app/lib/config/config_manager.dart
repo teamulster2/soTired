@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:so_tired/ui/constants/constants.dart' as constants;
+
 import 'package:so_tired/config/client_config.dart';
-import 'package:so_tired/config/config.dart';
+import 'package:so_tired/ui/constants/constants.dart' as constants;
 import 'package:so_tired/utils.dart';
 
 /// This class is the main part of configs.
@@ -37,7 +37,9 @@ class ConfigManager {
       ..serverUrl = 'http://localhost'
       ..notificationInterval = 3 * 60 //minutes
       ..notificationText = "Hi, You've been notified! Open the app now!"
-      ..isReactionGameEnabled = true
+      ..isSpatialSpanTaskEnabled = true
+      ..isMentalArithmeticEnabled = true
+      ..isPsychomotorVigilanceTaskEnabled = true
       ..isQuestionnaireEnabled = true
       ..isCurrentActivityEnabled = true
       ..studyName = 'study1'
@@ -71,10 +73,10 @@ class ConfigManager {
 // }
 
   /// This method is capable of writing a config to an existing JSON file.
-  /// It takes an instance of type [Config] as argument and uses the
+  /// It takes an instance of type [ClientConfig] as argument and uses the
   /// [Config.toJson()] to generate a json object which can be written to a
   /// file.
-  Future<void> writeConfigToFile(Config config) async {
+  Future<void> writeConfigToFile(ClientConfig config) async {
     final Map<String, dynamic> json = config.toJson();
     final File configFile =
         await Utils.getConfigFileObject(_clientConfigFileName);

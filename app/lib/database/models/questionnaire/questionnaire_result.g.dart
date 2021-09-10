@@ -18,7 +18,7 @@ class QuestionnaireResultAdapter extends TypeAdapter<QuestionnaireResult> {
     };
     return QuestionnaireResult(
       fields[0] as String?,
-      (fields[1] as List).cast<QuestionnaireObject?>(),
+      (fields[1] as Map).cast<String, QuestionnaireAnswer?>(),
     );
   }
 

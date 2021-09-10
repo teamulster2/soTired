@@ -3,14 +3,14 @@
 //
 // import 'package:flutter/services.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:so_tired/database/models/activity/current_activity.dart';
+// import 'package:so_tired/database/models/activity/user_state.dart';
 // import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
-// import 'package:so_tired/database/models/score/personal_score.dart';
+// import 'package:so_tired/database/models/score/personal_high_score.dart';
 // import 'package:so_tired/database/models/user/user_access_method.dart';
-// import 'package:so_tired/database/models/user/user_game_execution.dart';
+// import 'package:so_tired/database/models/user/module_type.dart';
 // import 'package:so_tired/database/models/user/user_log.dart';
 // import 'package:so_tired/service_provider.dart';
-// import 'package:so_tired/ui/models/questionnaire_object.dart';
+// import 'package:so_tired/ui/models/questionnaire.dart';
 // import 'package:so_tired/utils.dart';
 //
 // // ignore_for_file: always_specify_types
