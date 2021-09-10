@@ -26,10 +26,10 @@ class PersonalHighScore extends HiveObject {
         gameType = json['gameType'];
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-    'uuid': uuid,
-    'gameScore': gameScore,
-    'gameType': gameType
-  };
+        'uuid': uuid,
+        'gameScore': gameScore,
+        'gameType': gameType
+      };
 
   @override
   String toString() => 'UUID: $uuid,\nGameScore: $gameScore,'

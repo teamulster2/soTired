@@ -44,7 +44,13 @@ class ConfigManager {
       ..isCurrentActivityEnabled = true
       ..studyName = 'study1'
       ..isStudy = true
-      ..questions = constants.questions;
+      ..questions = constants.questions
+      ..moods = <List<int>>[
+        <int>[...Utils.stringToCodeUnits('😄')],
+        <int>[...Utils.stringToCodeUnits('🤩')],
+        <int>[...Utils.stringToCodeUnits('🥱')],
+        <int>[...Utils.stringToCodeUnits('😢')]
+      ];
 
     _clientConfig = clientConfigBuilder.build();
   }

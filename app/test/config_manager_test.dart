@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:so_tired/service_provider.dart';
 import 'package:so_tired/ui/constants/constants.dart' as constants;
+import 'package:so_tired/utils.dart';
 
 // ignore_for_file: always_specify_types
 
-ServiceProvider _servicesProvider = ServiceProvider();
+ServiceProvider _serviceProvider = ServiceProvider();
 
 final Map<String, dynamic> assertObject = <String, dynamic>{
   'serverUrl': 'http://localhost',
@@ -16,6 +17,12 @@ final Map<String, dynamic> assertObject = <String, dynamic>{
   'studyName': 'study1',
   'isStudy': true,
   'questions': constants.questions,
+  'moods': <List<int>>[
+        <int>[...Utils.stringToCodeUnits('😄')],
+        <int>[...Utils.stringToCodeUnits('🤩')],
+        <int>[...Utils.stringToCodeUnits('🥱')],
+        <int>[...Utils.stringToCodeUnits('😢')]
+      ]
 };
 
 void main() {
@@ -38,28 +45,29 @@ void main() {
     //   });
     // });
 
-    _servicesProvider.configManager.loadDefaultConfig();
+    _serviceProvider.configManager.loadDefaultConfig();
     test('default config should be available after loading it', () {
-      expect(_servicesProvider.configManager.clientConfig.serverUrl,
+      expect(_serviceProvider.configManager.clientConfig.serverUrl,
           assertObject['serverUrl']);
-      expect(_servicesProvider.configManager.clientConfig.notificationInterval,
+      expect(_serviceProvider.configManager.clientConfig.notificationInterval,
           assertObject['notificationInterval']);
-      expect(_servicesProvider.configManager.clientConfig.notificationText,
+      expect(_serviceProvider.configManager.clientConfig.notificationText,
           assertObject['notificationText']);
-      expect(_servicesProvider.configManager.clientConfig.isReactionGameEnabled,
+      expect(_serviceProvider.configManager.clientConfig.isReactionGameEnabled,
           assertObject['isReactionGameEnabled']);
-      expect(
-          _servicesProvider.configManager.clientConfig.isQuestionnaireEnabled,
+      expect(_serviceProvider.configManager.clientConfig.isQuestionnaireEnabled,
           assertObject['isQuestionnaireEnabled']);
       expect(
-          _servicesProvider.configManager.clientConfig.isCurrentActivityEnabled,
+          _serviceProvider.configManager.clientConfig.isCurrentActivityEnabled,
           assertObject['isCurrentActivityEnabled']);
-      expect(_servicesProvider.configManager.clientConfig.studyName,
+      expect(_serviceProvider.configManager.clientConfig.studyName,
           assertObject['studyName']);
-      expect(_servicesProvider.configManager.clientConfig.isStudy,
+      expect(_serviceProvider.configManager.clientConfig.isStudy,
           assertObject['isStudy']);
-      expect(_servicesProvider.configManager.clientConfig.questions,
+      expect(_serviceProvider.configManager.clientConfig.questions,
           assertObject['questions']);
+      expect(_serviceProvider.configManager.clientConfig.moods,
+          assertObject['moods']);
     });
 
     // TODO: Add further tests for testing each method in ConfigManager
