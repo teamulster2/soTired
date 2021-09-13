@@ -46,17 +46,36 @@ type UserLog struct {
 }
 
 // Mood holds the provided mood of an user.
-type Mood struct {
-	gorm.Model
-	ID   int
-	Mood string
-}
+type Mood int
+
+const (
+	// Happy is the highest mood
+	Happy Mood = iota
+	// Exited is the second highest mood
+	Exited
+	// Bored is the second lowest mood
+	Bored
+	// Sad is the lowest Mood
+	Sad
+)
 
 // Activity holds the provided activity of an user.
-type Activity struct {
-	gorm.Model
-	Activity string
-}
+type Activity int
+
+const (
+	// Home location
+	Home Activity = iota
+	//Work location
+	Work
+	// University location
+	University
+	// University location
+	Shops
+	// FriendsOrFamily location
+	FriendsOrFamily
+	// Other location
+	Other
+)
 
 // AccessMethod holds the provided accessMethod an user.
 type AccessMethod struct {
