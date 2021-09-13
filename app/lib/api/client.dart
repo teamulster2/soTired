@@ -1,15 +1,14 @@
 import 'package:http/http.dart' as http;
 
 Future<String> loadConfig() async {
-  final http.Response response = await http.get(
-    Uri.parse('http://192.168.1.243:50000/config'),
+   final http.Response response = await http.post(
+    Uri.parse('http://192.168.42.103:50000/config'),
     headers: <String, String>{
-      'Content-Type': 'config/json; charset=UTF-8',
+      'Content-Type': 'application/json; charset=UTF-8',
     },
   );
-//ignore: avoid_print
-  //print('Response: ' + response.body);
 
+  // TODO: Add better exception handling for response.
   if (response.statusCode == 200) {
     return response.body;
   } else {

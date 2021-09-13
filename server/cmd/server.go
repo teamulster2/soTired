@@ -139,3 +139,15 @@ func data(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "thanks for the data")
 	fmt.Println("recieved data")
 }
+
+func config(w http.ResponseWriter, r *http.Request) {
+	_, _ := io.ReadAll(r.Body)
+	io.WriteString(w, "it's a config for you")
+	fmt.Println("replyed config")
+}
+
+func data(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "thanks for the data")
+
+	fmt.Println("recieved data")
+}

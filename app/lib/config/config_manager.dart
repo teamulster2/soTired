@@ -70,16 +70,16 @@ class ConfigManager {
 
 // TODO: Write doc comments
 // TODO: Implement based on server API
-void fetchConfigFromServer() {
-  final String config = loadConfig() as String;
+  Future<void> fetchConfigFromServer() async {
+    final String configString = await loadConfig();
 
-  if (Utils.isClientConfigJsonValid(config)){
-    final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
-    final ClientConfig configJson =clientConfigBuilder.buildWithString(config);
-    writeConfigToFile(configJson);
-    _clientConfig = configJson;
+    if (Utils.isClientConfigJsonValid(configString)) {
+      final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
+      final ClientConfig configJson =
+          clientConfigBuilder.buildWithString(configString);
+      _clientConfig = configJson;
+    }
   }
-}
 
   /// This method is capable of writing a config to an existing JSON file.
   /// It takes an instance of type [ClientConfig] as argument and uses the
