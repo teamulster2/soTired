@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
+import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/utils.dart';
 
 /// This class is responsible for all matters regarding database interactions.
@@ -14,7 +14,7 @@ class DatabaseManager {
   static DatabaseManager? _databaseManagerInstance =
       DatabaseManager._databaseManager();
 
-  late final Box<PersonalHighScore> _personalScoreBox;
+  late final Box<PersonalHighScore> _personalHighScoreBox;
   late final Box<UserLog> _userLogBox;
   late final Box<UserState> _userStateBox;
   late final Box<QuestionnaireResult> _questionnaireResultBox;
@@ -37,7 +37,7 @@ class DatabaseManager {
     // ignore: cascade_invocations
     Hive.registerAdapter(QuestionnaireResultAdapter());
 
-    _personalScoreBox = await Hive.openBox('personalScoresBox');
+    _personalHighScoreBox = await Hive.openBox('personalScoresBox');
     _userLogBox = await Hive.openBox('userLogBox');
     _userStateBox = await Hive.openBox('userStateBox');
     _questionnaireResultBox = await Hive.openBox('questionnaireResultBox');
@@ -46,7 +46,7 @@ class DatabaseManager {
   /// This method provides write access to the database regarding all
   /// [PersonalHighScore] objects taken as [List] argument.
   Future<void> writePersonalHighScores(List<PersonalHighScore> scores) async =>
-      _personalScoreBox.addAll(scores);
+      _personalHighScoreBox.addAll(scores);
 
   /// This method provides write access to the database regarding all
   /// [UserLog] objects taken as [List] argument.
@@ -55,7 +55,7 @@ class DatabaseManager {
 
   /// This method provides write access to the database regarding all
   /// [UserState] objects taken as [List] argument.
-  Future<void> writeCurrentActivities(List<UserState> activities) async =>
+  Future<void> writeUserStates(List<UserState> activities) async =>
       _userStateBox.addAll(activities);
 
   /// This method provides write access to the database regarding all
@@ -68,34 +68,56 @@ class DatabaseManager {
   /// It is responsible for the [PersonalHighScore] hive box.
   /// It takes an uuid as argument and returns a single [PersonalHighScore]
   /// object.
-  PersonalHighScore? getPersonalHighScoreById(String uuid) =>
-      _personalScoreBox.get(uuid);
+  PersonalHighScore? getPersonalHighScoreById(String uuid) {
+    for (final PersonalHighScore score in _personalHighScoreBox.values) {
+      if (score.uuid == uuid) {
+        return score;
+      }
+    }
+  }
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [UserLog] hive box.
   /// It takes an uuid as argument and returns a single [UserLog] object.
-  UserLog? getUserLogById(String uuid) => _userLogBox.get(uuid);
+  UserLog? getUserLogById(String uuid) {
+    for (final UserLog log in _userLogBox.values) {
+      if (log.uuid == uuid) {
+        return log;
+      }
+    }
+  }
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [UserState] hive box.
   /// It takes an uuid as argument and returns a single [UserState]
   /// object.
-  UserState? getCurrentActivityById(String uuid) => _userStateBox.get(uuid);
+  UserState? getUserStateById(String uuid) {
+    for (final UserState state in _userStateBox.values) {
+      if (state.uuid == uuid) {
+        return state;
+      }
+    }
+  }
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [QuestionnaireResult] hive box.
   /// It takes an uuid as argument and returns a single [QuestionnaireResult]
   /// object.
-  QuestionnaireResult? getQuestionnaireResultById(String uuid) =>
-      _questionnaireResultBox.get(uuid);
+  QuestionnaireResult? getQuestionnaireResultById(String uuid) {
+    for (final QuestionnaireResult result in _questionnaireResultBox.values) {
+      if (result.uuid == uuid) {
+        return result;
+      }
+    }
+  }
 
   /// This method returns all entries from the [PersonalHighScore] box.
   /// It is null-aware. Therefore, the returned List is of type
   /// [PersonalScore?].
   List<PersonalHighScore?> getAllPersonalHighScores() {
     final List<PersonalHighScore?> returnList = <PersonalHighScore?>[];
-    for (int i = 0; i < _personalScoreBox.length; i++) {
-      returnList.add(_personalScoreBox.getAt(i));
+    for (int i = 0; i < _personalHighScoreBox.length; i++) {
+      returnList.add(_personalHighScoreBox.getAt(i));
     }
     return returnList;
   }
@@ -114,7 +136,7 @@ class DatabaseManager {
   /// This method returns all entries from the [UserState] box.
   /// It is null-aware. Therefore, the returned List is of type
   /// [CurrentActivity?].
-  List<UserState?> getAllCurrentActivities() {
+  List<UserState?> getAllUserStates() {
     final List<UserState?> returnList = <UserState?>[];
     for (int i = 0; i < _userStateBox.length; i++) {
       returnList.add(_userStateBox.getAt(i));
@@ -131,6 +153,65 @@ class DatabaseManager {
       returnList.add(_questionnaireResultBox.getAt(i));
     }
     return returnList;
+  }
+
+  /// This method takes a [uuid] and deletes the corresponding value from
+  /// the [PersonalHighScore] box.
+  Future<void> deletePersonalHighScoreById(String uuid) async {
+    final PersonalHighScore? score = getPersonalHighScoreById(uuid);
+    _personalHighScoreBox.deleteAt(score!.key);
+  }
+
+  /// This method takes a [uuid] and deletes the corresponding value from
+  /// the [UserLog] box.
+  Future<void> deleteUserLogsById(String uuid) async {
+    final UserLog? log = getUserLogById(uuid);
+    _userLogBox.deleteAt(log!.key);
+  }
+
+  /// This method takes a [uuid] and deletes the corresponding value from
+  /// the [UserState] box.
+  Future<void> deleteUserStatesById(String uuid) async {
+    final UserState? state = getUserStateById(uuid);
+    _userStateBox.deleteAt(state!.key);
+  }
+
+  /// This method takes a [uuid] and deletes the corresponding value from
+  /// the [QuestionnaireResult] box.
+  Future<void> deleteQuestionnaireResultById(String uuid) async {
+    final QuestionnaireResult? result = getQuestionnaireResultById(uuid);
+    _questionnaireResultBox.deleteAt(result!.key);
+  }
+
+  /// This method exports all relevant information for the server and bundles
+  /// them into one JSON object ([Map]).
+  Map<String, dynamic> exportDatabaseForTransfer() {
+    final Map<String, dynamic> returnMap = <String, dynamic>{};
+    final Map<String, dynamic> userLogs = <String, dynamic>{};
+    final Map<String, dynamic> userStates = <String, dynamic>{};
+    final Map<String, dynamic> questionnaireResults = <String, dynamic>{};
+
+    for (final UserLog? userLog in getAllUserLogs()) {
+      final Map<String, dynamic>? userLogJson = userLog?.toJson();
+      userLogs.addAll(userLogJson!);
+    }
+    returnMap.addAll(userLogs);
+
+    for (final UserState? userState in getAllUserStates()) {
+      final Map<String, dynamic>? userStateJson = userState?.toJson();
+      userStates.addAll(userStateJson!);
+    }
+    returnMap.addAll(userStates);
+
+    for (final QuestionnaireResult? questionnaireResult
+        in getAllQuestionnaireResults()) {
+      final Map<String, dynamic>? questionnaireResultJson =
+          questionnaireResult?.toJson();
+      questionnaireResults.addAll(questionnaireResultJson!);
+    }
+    returnMap.addAll(questionnaireResults);
+
+    return returnMap;
   }
 
   /// This method closes the database connection.
