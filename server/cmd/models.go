@@ -15,6 +15,7 @@ type Study struct {
 	NotificationText                  string
 	IsSpartalTaskEnabled              bool
 	IsPsychomotorVigilanceTaskEnabled bool
+	IsReactionGameEnabled             bool
 	IsQuestionnaireEnabled            bool
 	IsCurrentActivityEnabled          bool
 }
@@ -24,25 +25,19 @@ type User struct {
 	gorm.Model
 	ID      int
 	StudyID int
-	Study   Study
 }
 
 // UserLog binds the data from an execution flow to an user and a timestamp.
 type UserLog struct {
 	gorm.Model
-	UserID         int
-	User           User
-	MoodID         int
-	Mood           Mood
-	ActivityID     int
-	Activity       Activity
-	AccessMethodID int
-	AccessMethod   AccessMethod
-	SSTID          int
-	SSTResult      SSTResult
-	PVTID          int
-	PVTResult      PVTResult
-	TimeStamp      time.Time
+	UserID              int
+	MoodID              int
+	ActivityID          int
+	AccessMethodID      int
+	SSTResultID         int
+	PVTResultID         int
+	ReationGameResultID int
+	TimeStamp           time.Time
 }
 
 // Mood holds the provided mood of an user.
@@ -65,11 +60,11 @@ type Activity int
 const (
 	// Home location
 	Home Activity = iota
-	//Work location
+	// Work location
 	Work
 	// University location
 	University
-	// University location
+	// Shops location
 	Shops
 	// FriendsOrFamily location
 	FriendsOrFamily
@@ -78,30 +73,43 @@ const (
 )
 
 // AccessMethod holds the provided accessMethod an user.
-type AccessMethod struct {
-	gorm.Model
-	ID           int
-	AccessMethod string
-}
+type AccessMethod int
+
+const (
+	// Notification over the app
+	Notification AccessMethod = iota
+	// RegulareAppStart by user
+	RegulareAppStart
+	// InviteLink lead to start of app
+	InviteLink
+)
 
 // SSTResult holds the sstResult value.
 type SSTResult struct {
 	gorm.Model
-	ID        int
-	SSTResult int
+	ID             int
+	SSTResultValue int
 }
 
 // PVTResult holds the pvtResult value.
 type PVTResult struct {
 	gorm.Model
-	ID        int
-	PVTResult int
+	ID             int
+	PVTResultValue int
+}
+
+// ReationGameResult holds the Result of Reaction time measuring game
+type ReationGameResult struct {
+	gorm.Model
+	ID                     int
+	ReationGameResultValue int
 }
 
 // QuestionnaireLog binds the questionnaire results to an user and a timestamp.
 type QuestionnaireLog struct {
 	gorm.Model
 	ID        int
+	UserID    int
 	timestamp time.Time
 }
 
@@ -110,26 +118,22 @@ type QuestionnaireResult struct {
 	gorm.Model
 	ID                 int
 	AnswerID           int
-	Answer             Answer
 	QuestionID         int
-	Question           Question
 	QuestionnaireLogID int
-	QuestionnaireLog   QuestionnaireLog
 }
 
 // Question holds the question text and a reference to the corresponding study.
 type Question struct {
 	gorm.Model
-	ID       int
-	StudyID  int
-	Study    Study
-	Question string
+	ID           int
+	StudyID      int
+	QuestionText string
 }
 
 // Answer holds the answer text and a reference to the question.
 type Answer struct {
 	gorm.Model
+	ID         int
 	QuestionID int
-	Question   Question
-	Answer     string
+	AnswerText string
 }
