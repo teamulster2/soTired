@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
@@ -36,6 +37,8 @@ class DatabaseManager {
     Hive.registerAdapter(UserStateAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(QuestionnaireResultAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(QuestionnaireAnswersAdapter());
 
     _personalHighScoreBox = await Hive.openBox('personalScoresBox');
     _userLogBox = await Hive.openBox('userLogBox');
