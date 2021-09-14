@@ -53,7 +53,6 @@ func serveRun(cmd *cobra.Command, args []string) {
 	// Set routing rules
 	http.HandleFunc("/", root)
 	http.HandleFunc("/config", config)
-	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
 	fmt.Println("Start to listen on:", addr)
 	// Use the default DefaultServeMux
@@ -70,14 +69,17 @@ func root(w http.ResponseWriter, r *http.Request) {
 func config(w http.ResponseWriter, r *http.Request) {
 	io.ReadAll(r.Body)
 
-	content, err := ioutil.ReadFile("config.json")
+	// Create study entry in db from  config data
+	content, err := ioutil.ReadFile("./config.json")
 	if err != nil {
 		log.Fatal("Error when opening config file: ", err)
+		fmt.Println("Error when opening config file: ", err)
 	}
 	var jsonConfig jsonConfig
 	err = json.Unmarshal(content, &jsonConfig)
 	if err != nil {
 		log.Fatal("Error during unmarshaling config data: ", err)
+		fmt.Println("Error during unmarshaling config data: ", err)
 	}
 
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
@@ -119,16 +121,27 @@ func config(w http.ResponseWriter, r *http.Request) {
 		questionnaire = append(questionnaire, questionWithAnswers{Answers: answers, Question: question})
 	}
 
+<<<<<<< HEAD
 	studyData := &studyData{
 		Study:             study,
 		IsStudy:           true,
 		NotificationTimes: notificationTimes,
 		Questionnaire:     questionnaire,
+=======
+	// Read study entry from db, create json and send to client
+	var studyFromDB Study
+	db.First(&studyFromDB, studyFromFile.ID)
+	if &studyFromDB == nil {
+		log.Fatal("Failed to retrieve study data from db")
+		fmt.Println("Failed to retrieve study data from db")
+		return
+>>>>>>> bb354e1... [issue/64] - Add debug print to server, Fix HandlerFunc server
 	}
 
 	studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")
 	if err != nil {
 		log.Fatal("Error during marsheling study data: ", err)
+		fmt.Println("Error during marsheling study data: ", err)
 		return
 	}
 	io.WriteString(w, string(studyDataAsBytes))
@@ -140,14 +153,14 @@ func data(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("recieved data")
 }
 
-func config(w http.ResponseWriter, r *http.Request) {
-	_, _ := io.ReadAll(r.Body)
-	io.WriteString(w, "it's a config for you")
-	fmt.Println("replyed config")
-}
-
-func data(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "thanks for the data")
-
-	fmt.Println("recieved data")
-}
+// func config(w http.ResponseWriter, r *http.Request) {
+// 	_, _ := io.ReadAll(r.Body)
+// 	io.WriteString(w, "it's a config for you")
+// 	fmt.Println("replyed config")
+// }
+//
+// func data(w http.ResponseWriter, r *http.Request) {
+// 	io.WriteString(w, "thanks for the data")
+//
+// 	fmt.Println("recieved data")
+// }
