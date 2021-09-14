@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
@@ -8,6 +10,7 @@ import 'package:so_tired/ui/models/questionnaire.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_answer.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_progress.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_question.dart';
+import 'package:so_tired/utils/utils.dart';
 
 class Questionnaire extends StatefulWidget {
   const Questionnaire({Key? key}) : super(key: key);
@@ -20,6 +23,8 @@ class _QuestionnaireState extends State<Questionnaire> {
   ValueNotifier<int> currentQuestion = ValueNotifier<int>(0);
   int score = 0;
   int answeredQuestion = 0;
+
+  Map<String, QuestionnaireAnswers?> questionnaireResult = <String, QuestionnaireAnswers?>{};
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +95,31 @@ class _QuestionnaireState extends State<Questionnaire> {
             currentQuestion.value += 1;
             answeredQuestion += 1;
             score += i;
+
+            QuestionnaireAnswers answer;
+            if (i == 1) {
+              answer = QuestionnaireAnswers.first;
+            } else if (i == 2) {
+              answer = QuestionnaireAnswers.second;
+            } else if (i == 3) {
+              answer = QuestionnaireAnswers.third;
+            } else {
+              answer = QuestionnaireAnswers.fourth;
+            }
+            questionnaireResult.addAll(<String, QuestionnaireAnswers?>{
+              questions[currentQuestion.value].question: answer
+            });
+
+            Provider.of<ServiceProvider>(context, listen: false)
+                .databaseManager
+                .writeQuestionnaireResults(<QuestionnaireResult>[
+              QuestionnaireResult(Utils.generateUuid(), questionnaireResult)
+            ]);
+
+            debugPrint(Provider.of<ServiceProvider>(context, listen: false)
+                .databaseManager
+                .getAllQuestionnaireResults()
+                .toString());
           } else {
             showDialogQuestionnaireFinished();
           }

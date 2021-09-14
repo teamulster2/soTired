@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CurrentActivity extends StatelessWidget {
   const CurrentActivity({required this.onTap, Key? key}) : super(key: key);
-  final Function(int) onTap;
+  final Function(String) onTap;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -20,30 +20,30 @@ class CurrentActivity extends StatelessWidget {
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
-                onTap: () => onTap(1), icon: Icons.home_rounded, text: 'home'),
+                onTap: () => onTap('home'), icon: Icons.home_rounded, text: 'home'),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(2), icon: Icons.work_rounded, text: 'work'),
+                onTap: () => onTap('work'), icon: Icons.work_rounded, text: 'work'),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(3),
+                onTap: () => onTap('university'),
                 icon: Icons.maps_home_work_rounded,
                 text: 'university'),
           ]),
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
-                onTap: () => onTap(4),
+                onTap: () => onTap('shops'),
                 icon: Icons.shopping_bag_rounded,
                 text: 'shops'),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(5),
+                onTap: () => onTap('friends / family'),
                 icon: Icons.people_rounded,
                 text: 'friends / family'),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(6),
+                onTap: () => onTap('other'),
                 icon: Icons.my_location_rounded,
                 text: 'other'),
           ]),
