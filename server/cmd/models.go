@@ -120,10 +120,10 @@ type QuestionnaireResult struct {
 // Question holds the question text and a reference to the corresponding study.
 type Question struct {
 	gorm.Model
-	ID       int
-	StudyID  int
-	Study    Study
-	Question string
+	ID           int
+	StudyID      int
+	Study        Study
+	QuestionText string
 }
 
 // Answer holds the answer text and a reference to the question.
@@ -131,5 +131,5 @@ type Answer struct {
 	gorm.Model
 	QuestionID int
 	Question   Question
-	Answer     string
+	AnswerText string
 }
