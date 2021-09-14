@@ -42,7 +42,6 @@ class ServiceProvider extends ChangeNotifier {
     notification.initializeSetting();
     tz.initializeTimeZones();
     await _notifications.showScheduleNotification(
-        configManager.clientConfig.notificationInterval,
         configManager.clientConfig.studyName,
         configManager.clientConfig.notificationText);
 
