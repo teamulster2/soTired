@@ -28,6 +28,12 @@ class ServiceProvider extends ChangeNotifier {
         // TODO: Add exception handling for server not reachable
         // TODO: invoke _configManager.fetchConfigFromServer()
         // ignore: cascade_invocations
+        try {
+          await _configManager
+              .fetchConfigFromServer('http://192.168.42.14:50000');
+        } on Exception {
+          _configManager.loadDefaultConfig();
+        }
         _configManager.writeConfigToFile();
       } else {
         _configManager.loadConfigFromJson();

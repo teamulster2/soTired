@@ -68,7 +68,7 @@ class ConfigManager {
     }
   }
 
-  /// This method loads the config from a server, check it, and write it to [_clientConfig].
+  /// This method loads the config from a server, and write it to [_clientConfig].
   Future<void> fetchConfigFromServer(String url) async {
     final String configString = await loadConfig(url);
 
