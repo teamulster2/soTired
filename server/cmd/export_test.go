@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -15,8 +16,6 @@ func TestWriteRead(t *testing.T) {
 	db, path := setUpTmpDB()
 	defer os.RemoveAll(path)
 
-	db.AutoMigrate(&Study{})
-
 	studyAmount := 10
 	inStudyList := make([]Study, studyAmount)
 
@@ -29,10 +28,15 @@ func TestWriteRead(t *testing.T) {
 }
 
 func TestJsonExport(t *testing.T) {
-	_, err := fillDatabase()
+	db, err := fillDatabase()
 	if err != nil {
 		t.Error(err)
 	}
+	studyList, err := toJSONStudyList(db)
+	if err != nil {
+		t.Error(err)
+	}
+	_, _ = json.MarshalIndent(studyList, "", "    ")
 	// FIXME implement json validation
 }
 
@@ -40,46 +44,62 @@ func fillDatabase() (*gorm.DB, error) {
 	db, path := setUpTmpDB()
 	defer os.RemoveAll(path)
 
-	db.AutoMigrate(&Study{})
-	db.Create(&Study{StudyName: "study1"})
+	db.Create(&Study{
+		StudyName: "study1",
+	})
 	var study1 Study
 	db.Take(&study1)
 
-	db.AutoMigrate(&Question{})
-	db.Create(&Question{StudyID: study1.ID, QuestionText: "quest1"})
-	var quest1 Study
+	db.Create(&Question{
+		StudyID:      study1.ID,
+		QuestionText: "quest1",
+	})
+	var quest1 Question
 	db.Take(&quest1)
 
-	db.AutoMigrate(&Answer{})
-	db.Create(&Answer{QuestionID: quest1.ID, AnswerText: "answer1"})
-	var answer1 Study
+	db.Create(&Answer{
+		QuestionID: quest1.ID,
+		AnswerText: "answer1",
+	})
+	var answer1 Answer
 	db.Take(&answer1)
 
-	db.AutoMigrate(&User{})
-	db.Create(&User{StudyID: study1.ID})
+	db.Create(&User{
+		StudyID: study1.ID,
+	})
 	var user1 User
 	db.Take(&user1)
 
-	db.AutoMigrate(&QuestionnaireLog{})
-	db.Create(&QuestionnaireLog{UserID: user1.ID})
+	db.Create(&QuestionnaireLog{
+		UserID: user1.ID,
+	})
 	var log1 QuestionnaireLog
 	db.Take(&log1)
 
-	db.AutoMigrate(&QuestionnaireResult{})
-	db.Create(&QuestionnaireResult{QuestionnaireLogID: log1.ID, QuestionID: quest1.ID, AnswerID: answer1.ID})
+	db.Create(&QuestionnaireResult{
+		QuestionnaireLogID: log1.ID,
+		QuestionID:         quest1.ID,
+		AnswerID:           answer1.ID,
+	})
 
-	db.AutoMigrate(&SSTResult{})
 	db.Create(&SSTResult{})
 	var sst1 SSTResult
 	db.Take(&sst1)
 
-	db.AutoMigrate(&PVTResult{})
 	db.Create(&PVTResult{})
 	var pvt1 PVTResult
 	db.Take(&pvt1)
 
-	db.AutoMigrate(&UserLog{})
-	db.Create(&UserLog{UserID: user1.ID, SSTResultID: sst1.ID, PVTResultID: pvt1.ID})
+	db.Create(&ReationGameResult{})
+	var rgResult ReationGameResult
+	db.Take(&rgResult)
+
+	db.Create(&UserLog{
+		UserID:              user1.ID,
+		SSTResultID:         sst1.ID,
+		PVTResultID:         pvt1.ID,
+		ReationGameResultID: rgResult.ID,
+	})
 
 	return db, nil
 }
@@ -95,6 +115,19 @@ func setUpTmpDB() (*gorm.DB, string) {
 	if err != nil {
 		panic(fmt.Sprintf("failed to open db: %s", err.Error()))
 	}
+
+	// Migrate all structs relevant in the database
+	db.AutoMigrate(&Study{})
+	db.AutoMigrate(&UserLog{})
+	db.AutoMigrate(&PVTResult{})
+	db.AutoMigrate(&SSTResult{})
+	db.AutoMigrate(&QuestionnaireResult{})
+	db.AutoMigrate(&QuestionnaireLog{})
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Answer{})
+	db.AutoMigrate(&Question{})
+	db.AutoMigrate(&ReationGameResult{})
+
 	return db, path
 
 }
