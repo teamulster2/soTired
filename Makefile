@@ -27,8 +27,9 @@ gocheck: gonewer
 gonewer:
 	# search for newer go files than go.mod files.
 	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); \
-		do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod ); \
+		do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod -print ); \
 		if [ "$$newer" ];then echo "there are newer go-files then the go.mod files: please run 'make gotidy'"; \
+			echo $$newer ;\
 			exit 1; \
 		fi; \
 	done
