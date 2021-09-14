@@ -38,9 +38,9 @@ type UserLog struct {
 	Activity       Activity
 	AccessMethodID int
 	AccessMethod   AccessMethod
-	SSTID          int
+	SSTResultID    int
 	SSTResult      SSTResult
-	PVTID          int
+	PVTResultID    int
 	PVTResult      PVTResult
 	TimeStamp      time.Time
 }
@@ -102,6 +102,8 @@ type PVTResult struct {
 type QuestionnaireLog struct {
 	gorm.Model
 	ID        int
+	UserID    int
+	User      User
 	timestamp time.Time
 }
 
