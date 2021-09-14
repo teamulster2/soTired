@@ -24,7 +24,8 @@ class _QuestionnaireState extends State<Questionnaire> {
   int score = 0;
   int answeredQuestion = 0;
 
-  Map<String, QuestionnaireAnswers?> questionnaireResult = <String, QuestionnaireAnswers?>{};
+  Map<String, QuestionnaireAnswers?> questionnaireResult =
+      <String, QuestionnaireAnswers?>{};
 
   @override
   Widget build(BuildContext context) {
@@ -109,17 +110,6 @@ class _QuestionnaireState extends State<Questionnaire> {
             questionnaireResult.addAll(<String, QuestionnaireAnswers?>{
               questions[currentQuestion.value].question: answer
             });
-
-            Provider.of<ServiceProvider>(context, listen: false)
-                .databaseManager
-                .writeQuestionnaireResults(<QuestionnaireResult>[
-              QuestionnaireResult(Utils.generateUuid(), questionnaireResult)
-            ]);
-
-            debugPrint(Provider.of<ServiceProvider>(context, listen: false)
-                .databaseManager
-                .getAllQuestionnaireResults()
-                .toString());
           } else {
             showDialogQuestionnaireFinished();
           }
@@ -135,12 +125,20 @@ class _QuestionnaireState extends State<Questionnaire> {
                     'Thank you for filling in. You can now continue with the other components'),
                 actions: <Widget>[
                   TextButton(
-                    child: const Text('Ok'),
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute<BuildContext>(
-                            builder: (BuildContext context) => const Home())),
-                  )
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Provider.of<ServiceProvider>(context, listen: false)
+                            .databaseManager
+                            .writeQuestionnaireResults(<QuestionnaireResult>[
+                          QuestionnaireResult(
+                              Utils.generateUuid(), questionnaireResult)
+                        ]);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute<BuildContext>(
+                                builder: (BuildContext context) =>
+                                    const Home()));
+                      })
                 ]));
   }
 
