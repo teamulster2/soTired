@@ -14,7 +14,7 @@ gofmt:
 gotidy:
 	# find all directorys contaning a go.mod file and run go mod tidy to update go.mod and go.sum
 	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); \
-		do $$(cd $$dir; go mod tidy; \
+		do $$(cd $$dir; go mod tidy -e; \
 		touch go.mod); \
 	done
 
@@ -27,8 +27,11 @@ gocheck: gonewer
 gonewer:
 	# search for newer go files than go.mod files.
 	for dir in $$(find . -type d -exec test -e '{}'/go.mod \; -print ); \
-		do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod ); \
-		if [ "$$newer" ];then echo "there are newer go-files then the go.mod files: please run 'make gotidy'"; \
+		do newer=$$(cd $$dir; find . -type f -regex ".*\.go" -newer go.mod -print ); \
+		if [ "$$newer" ];then echo "there are newer go-files then the go.mod files:"; \
+			echo $$newer ;\
+			echo "please run 'make gotidy'"; \
+			echo "and add all then changed files."; \
 			exit 1; \
 		fi; \
 	done
@@ -42,9 +45,8 @@ gobuild:
 .PHONY: gotest
 gotest:
 	# run all the go tests
-	for dir in $$(find . -type d -exec test -e '{}'/_test.go \; -print ); \
-		do go test; \
-	done
+	cd server/cmd; \
+	go test;
 
 .PHONY: flutter
 flutter: flutterFmt flutterPubGet flutterCheck flutterNewer flutterPubUpgrade flutterBuild flutterRun
