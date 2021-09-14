@@ -65,11 +65,11 @@ type Activity int
 const (
 	// Home location
 	Home Activity = iota
-	//Work location
+	// Work location
 	Work
 	// University location
 	University
-	// University location
+	// Shops location
 	Shops
 	// FriendsOrFamily location
 	FriendsOrFamily
@@ -78,11 +78,16 @@ const (
 )
 
 // AccessMethod holds the provided accessMethod an user.
-type AccessMethod struct {
-	gorm.Model
-	ID           int
-	AccessMethod string
-}
+type AccessMethod int
+
+const (
+	// Notification over the app
+	Notification AccessMethod = iota
+	// RegulareAppStart by user
+	RegulareAppStart
+	// InviteLink lead to start of app
+	InviteLink
+)
 
 // SSTResult holds the sstResult value.
 type SSTResult struct {

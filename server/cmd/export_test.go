@@ -68,11 +68,6 @@ func fillDatabase() (*gorm.DB, error) {
 	db.AutoMigrate(&QuestionnaireResult{})
 	db.Create(&QuestionnaireResult{QuestionnaireLogID: log1.ID, QuestionID: quest1.ID, AnswerID: answer1.ID})
 
-	db.AutoMigrate(&AccessMethod{})
-	db.Create(&AccessMethod{})
-	var ac1 AccessMethod
-	db.Take(&ac1)
-
 	db.AutoMigrate(&SSTResult{})
 	db.Create(&SSTResult{})
 	var sst1 SSTResult
@@ -84,7 +79,7 @@ func fillDatabase() (*gorm.DB, error) {
 	db.Take(&pvt1)
 
 	db.AutoMigrate(&UserLog{})
-	db.Create(&UserLog{UserID: user1.ID, AccessMethodID: ac1.ID, SSTResultID: sst1.ID, PVTResultID: pvt1.ID})
+	db.Create(&UserLog{UserID: user1.ID, SSTResultID: sst1.ID, PVTResultID: pvt1.ID})
 
 	return db, nil
 }
