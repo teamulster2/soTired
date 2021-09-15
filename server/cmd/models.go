@@ -15,6 +15,7 @@ type Study struct {
 	NotificationText                  string
 	IsSpartalTaskEnabled              bool
 	IsPsychomotorVigilanceTaskEnabled bool
+	IsReactionGameEnabled             bool
 	IsQuestionnaireEnabled            bool
 	IsCurrentActivityEnabled          bool
 }
@@ -30,19 +31,21 @@ type User struct {
 // UserLog binds the data from an execution flow to an user and a timestamp.
 type UserLog struct {
 	gorm.Model
-	UserID         int
-	User           User
-	MoodID         int
-	Mood           Mood
-	ActivityID     int
-	Activity       Activity
-	AccessMethodID int
-	AccessMethod   AccessMethod
-	SSTResultID    int
-	SSTResult      SSTResult
-	PVTResultID    int
-	PVTResult      PVTResult
-	TimeStamp      time.Time
+	UserID              int
+	User                User
+	MoodID              int
+	Mood                Mood
+	ActivityID          int
+	Activity            Activity
+	AccessMethodID      int
+	AccessMethod        AccessMethod
+	SSTResultID         int
+	SSTResult           SSTResult
+	PVTResultID         int
+	PVTResult           PVTResult
+	ReationGameResultID int
+	ReationGameResult   ReationGameResult
+	TimeStamp           time.Time
 }
 
 // Mood holds the provided mood of an user.
@@ -92,15 +95,22 @@ const (
 // SSTResult holds the sstResult value.
 type SSTResult struct {
 	gorm.Model
-	ID        int
-	SSTResult int
+	ID             int
+	SSTResultValue int
 }
 
 // PVTResult holds the pvtResult value.
 type PVTResult struct {
 	gorm.Model
-	ID        int
-	PVTResult int
+	ID             int
+	PVTResultValue int
+}
+
+// ReationGameResult holds the Result of Reaction time measuring game
+type ReationGameResult struct {
+	gorm.Model
+	ID                     int
+	ReationGameResultValue int
 }
 
 // QuestionnaireLog binds the questionnaire results to an user and a timestamp.
