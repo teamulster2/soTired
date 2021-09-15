@@ -16,25 +16,27 @@ class Notifications {
     return scheduledDate;
   }
 
-  Future<void> showScheduleNotification(String headLine, String body) async {
+  /// Show a notification at a specific time, for the next three days after starting the app.
+  /// The *[utcNotificationTimes]* is a list with the specific times when the push notification will be delivered.
+  /// Note: The time is given in the UTC format as an tuple.
+  /// The *[headLine]* will be showed on top in the push notification.
+  /// The *[body]* is the main msg. do you will send.
+  Future<void> showScheduleNotification(String headLine, String body, List<Tuple2<int, int>> utcNotificationTimes) async {
     int _day = 0;
-    final List<Tuple2<int, int>> utcTimes = <Tuple2<int, int>>[
-      //ignore: prefer_const_constructors, always_specify_types
-      Tuple2(13, 07),
-      //ignore: prefer_const_constructors, always_specify_types
-      Tuple2(13, 08),
-      //ignore: prefer_const_constructors, always_specify_types
-      Tuple2(13, 09),
+    final List<Tuple2<int, int>> utcNotificationTimes = <Tuple2<int, int>>[
+      const Tuple2<int ,int> (13, 07),
+      const Tuple2<int ,int> (13, 08),
+      const Tuple2<int ,int> (13, 09),
     ];
 
     while (_day <= 3) {
       //notifications for the next 3 days will be added
-      for (int i = 0; i < utcTimes.length; i++) {
+      for (int i = 0; i < utcNotificationTimes.length; i++) {
         await notificationsPlugin.zonedSchedule(
             i,
             headLine,
             body,
-            _nextTime(_day, utcTimes[i].item1, utcTimes[i].item2),
+            _nextTime(_day, utcNotificationTimes[i].item1, utcNotificationTimes[i].item2),
             const NotificationDetails(
               android: AndroidNotificationDetails(
                   'channel id', 'channel name', 'channel description'),
