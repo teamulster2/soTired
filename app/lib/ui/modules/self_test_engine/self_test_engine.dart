@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_state.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 
 class SelfTestEngine {
   late SelfTestState selfTestState;
-  Function(InfoDialogObject) showDialog;
+  Function(ProgressDialogObject) showDialog;
 
   late ValueNotifier<SelfTestState> currentState =
       ValueNotifier<SelfTestState>(StartSelfTestState());

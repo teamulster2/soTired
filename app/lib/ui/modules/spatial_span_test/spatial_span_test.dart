@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:so_tired/ui/core/home/home.dart';
+import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_box.dart';
@@ -67,6 +68,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
 
   void showInfoDialog(InfoDialogObject ido) {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => AlertDialog(
                 title: Text(ido.title),
@@ -92,6 +94,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
 
   void showGameOverDialog(InfoDialogObject ido) {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => AlertDialog(
                 backgroundColor: Theme.of(context).primaryColorLight,
