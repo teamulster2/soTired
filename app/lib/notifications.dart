@@ -1,15 +1,15 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/timezone.dart';
 import 'package:tuple/tuple.dart';
 
 class Notifications {
   FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  tz.TZDateTime _nextTime(int day, int hour, int minute) {
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
-        tz.local, now.year, now.month, now.day + day, hour, minute);
+  TZDateTime _nextTime(int day, int hour, int minute) {
+    final TZDateTime now = TZDateTime.now(local);
+    TZDateTime scheduledDate = TZDateTime(
+        local, now.year, now.month, now.day + day, hour, minute);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
@@ -57,7 +57,7 @@ class Notifications {
         0,
         headLine,
         body,
-        tz.TZDateTime.now(tz.local).add(Duration(minutes: minutesTimer)),
+        TZDateTime.now(local).add(Duration(minutes: minutesTimer)),
         const NotificationDetails(
           android: AndroidNotificationDetails(
               'channel id', 'channel name', 'channel description'),
