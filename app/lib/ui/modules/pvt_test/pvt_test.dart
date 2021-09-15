@@ -7,9 +7,11 @@ import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_progress.dart';
 import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_square.dart';
 
 class PVTTest extends StatefulWidget {
-  const PVTTest({required this.onFinished, Key? key}) : super(key: key);
+  const PVTTest({required this.onFinished, required this.setDiff, Key? key})
+      : super(key: key);
 
   final VoidCallback onFinished;
+  final Function(int) setDiff;
 
   @override
   _PVTTestState createState() => _PVTTestState();
@@ -28,6 +30,7 @@ class _PVTTestState extends State<PVTTest> {
   final ValueNotifier<bool> showDiff = ValueNotifier<bool>(false);
 
   int now = 0;
+  List<int> diffs = <int>[];
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +97,7 @@ class _PVTTestState extends State<PVTTest> {
       if (counter.value < 1) {
         boxAppears.value = false;
         timer.cancel();
+        widget.setDiff(calculateAverageDiff().round());
         widget.onFinished();
       }
     });
@@ -121,6 +125,7 @@ class _PVTTestState extends State<PVTTest> {
   calculateAndShowDiff() {
     diff.value = DateTime.now().millisecondsSinceEpoch - now;
     if (boxAppears.value && boxInPlanning) {
+      diffs.add(diff.value);
       showDiff.value = true;
       Future<dynamic>.delayed(const Duration(seconds: 1), () {
         showDiff.value = false;
@@ -129,5 +134,13 @@ class _PVTTestState extends State<PVTTest> {
       boxInPlanning = false;
       counter.value -= 1;
     }
+  }
+
+  double calculateAverageDiff() {
+    int all = 0;
+    for (int i = 0; i < diffs.length; i++) {
+      all += diffs[i];
+    }
+    return all / diffs.length;
   }
 }

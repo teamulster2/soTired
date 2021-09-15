@@ -9,6 +9,11 @@ class SelfTestEngine {
   late ValueNotifier<SelfTestState> currentState =
       ValueNotifier<SelfTestState>(StartSelfTestState());
 
+  late String currentMood;
+  late String currentActivity;
+  late int averageDiffPVT;
+  late int levelSpatialSpanTask;
+
   SelfTestEngine(SelfTestState selfTestState, this.showDialog) {
     transitionTo(selfTestState);
     currentState = ValueNotifier<SelfTestState>(selfTestState);
