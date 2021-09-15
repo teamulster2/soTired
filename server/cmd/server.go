@@ -38,7 +38,7 @@ func config(w http.ResponseWriter, r *http.Request) {
 	io.ReadAll(r.Body)
 
 	// Create study entry in db from  config data
-	content, err := ioutil.ReadFile("./config.json")
+	content, err := ioutil.ReadFile("server/config.json")
 	if err != nil {
 		log.Fatal("Error when opening config file: ", err)
 	}
