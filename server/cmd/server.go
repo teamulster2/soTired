@@ -14,9 +14,32 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type JSONConfig struct {
+	ServerURL                         string `json:"serverUrl"`
+	NotificationInterval              int    `json:"notificationInterval"`
+	NotificationText                  string `json:"notificationText"`
+	IsReactionGameEnabled             bool   `json:"isReactionGameEnabled"`
+	IsSpartalTaskEnabled              bool   `json:"isSpartalTaskEnabled"`
+	IsPsychomotorVigilanceTaskEnabled bool   `json:"isPsychomotorVigilanceTaskEnabled"`
+	IsQuestionnaireEnabled            bool   `json:"isQuestionnaireEnabled"`
+	IsCurrentActivityEnabled          bool   `json:"isCurrentActivityEnabled"`
+	StudyName                         string `json:"studyName"`
+	Questionnaire                     []QuestionWithAnswer
+}
+
+type QuestionWithAnswer struct {
+	Question string   `json:"question"`
+	Answers  []string `json:"answers"`
+}
+
+type studyData struct {
+	Study   Study
+	IsStudy bool
+}
+
 func serveRun(cmd *cobra.Command, args []string) {
 	// Set routing rules
-	http.HandleFunc("/", root)
+	http.HandleFunc("/", config)
 	http.HandleFunc("/config", config)
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
@@ -47,34 +70,45 @@ func config(w http.ResponseWriter, r *http.Request) {
 		panic("Failed to connect database")
 	}
 	db.AutoMigrate(&Study{}, &Question{}, &Answer{})
-	var configData []byte
-	err = json.Unmarshal(content, &configData)
+	var jsonConfig JSONConfig
+	err = json.Unmarshal(content, &jsonConfig)
 	if err != nil {
 		log.Fatal("Error during unmarshaling config data: ", err)
 	}
-	var studyData []byte
-	var questionnaireData []byte
-	// studyData =
-	fmt.Println(configData)
+	jsonConfigBytes, _ := json.MarshalIndent(jsonConfig, "", "    ")
+	fmt.Printf("Unmarshaled successfully: %s\n", jsonConfigBytes)
+	db.Create(&Study{
+		ServerURL:                         jsonConfig.ServerURL,
+		StudyName:                         jsonConfig.StudyName,
+		NotificationInterval:              jsonConfig.NotificationInterval,
+		NotificationText:                  jsonConfig.NotificationText,
+		IsSpartalTaskEnabled:              jsonConfig.IsSpartalTaskEnabled,
+		IsPsychomotorVigilanceTaskEnabled: jsonConfig.IsPsychomotorVigilanceTaskEnabled,
+		IsReactionGameEnabled:             jsonConfig.IsReactionGameEnabled,
+		IsQuestionnaireEnabled:            jsonConfig.IsQuestionnaireEnabled,
+		IsCurrentActivityEnabled:          jsonConfig.IsCurrentActivityEnabled,
+	})
 
-	var studyFromFile Study
+	// var questionnaireData []byte = configData["questionaire"]
 
-	db.Create(&studyFromFile)
-	//TODO: Add isStudy field = true
 	// Read study entry from db, create json and send to client
 	var studyFromDB Study
-	db.First(&studyFromDB, studyFromFile.ID)
+	db.First(&studyFromDB, "study_name = ?", jsonConfig.StudyName)
 	if &studyFromDB == nil {
 		log.Fatal("Failed to retrieve study data from db")
 		return
 	}
-	buff, err := json.Marshal(&studyFromDB)
+	studyData := &studyData{
+		Study:   studyFromDB,
+		IsStudy: true,
+	}
+	studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")
 	if err != nil {
 		log.Fatal("Error during marsheling study data: ", err)
 		return
 	}
-	io.WriteString(w, string(buff))
-	fmt.Println("replyied config: ", string(buff))
+	io.WriteString(w, string(studyDataAsBytes))
+	fmt.Println("replied config: ", string(studyDataAsBytes))
 }
 
 func data(w http.ResponseWriter, r *http.Request) {
