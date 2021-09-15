@@ -7,9 +7,16 @@ import 'package:so_tired/ui/modules/self_assessment/widgets/current_emotional_st
 import 'package:so_tired/utils/utils.dart';
 
 class SelfAssessment extends StatefulWidget {
-  const SelfAssessment({required this.onFinished, Key? key}) : super(key: key);
+  const SelfAssessment(
+      {required this.onFinished,
+      required this.setMood,
+      required this.setActivity,
+      Key? key})
+      : super(key: key);
 
   final VoidCallback onFinished;
+  final Function(String) setMood;
+  final Function(String) setActivity;
 
   @override
   _SelfAssessmentState createState() => _SelfAssessmentState();
@@ -47,6 +54,8 @@ class _SelfAssessmentState extends State<SelfAssessment> {
             .writeUserStates(<UserState>[
           UserState(uuid, currentActivity, emotionalState.value)
         ]);
+        widget.setMood(Utils.codeUnitsToString(emotionalState.value));
+        widget.setActivity(currentActivity);
         widget.onFinished();
       });
     }

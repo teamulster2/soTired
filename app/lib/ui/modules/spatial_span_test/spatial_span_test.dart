@@ -8,9 +8,12 @@ import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_
 import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_progress.dart';
 
 class SpatialSpanTest extends StatefulWidget {
-  const SpatialSpanTest({required this.onFinished, Key? key}) : super(key: key);
+  const SpatialSpanTest(
+      {required this.onFinished, required this.setLevel, Key? key})
+      : super(key: key);
 
   final VoidCallback onFinished;
+  final Function(int) setLevel;
 
   @override
   _SpatialSpanTestState createState() => _SpatialSpanTestState();
@@ -113,6 +116,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                             MaterialPageRoute<BuildContext>(
                                 builder: (BuildContext context) =>
                                     const Home()));*/
+                        widget.setLevel(gameEngine.level.value - 1);
                         widget.onFinished();
                       }
                     },

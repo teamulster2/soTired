@@ -47,8 +47,15 @@ class SpatialSpanTaskState extends SelfTestState {
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you for doing the spatial span task state. You will now return to the home page.',
-        content: 'When you want to leave the self test press Cancel',
+            'Thank you for doing the spatial span task. You will now return to the home page.',
+        content: 'Your results:\n\nActivity: ' +
+            engine.currentActivity +
+            '\nEmotional state: ' +
+            engine.currentMood +
+            '\n\nAverage pvt time: ' +
+            engine.averageDiffPVT.toString() +
+            '\nLevel reached in spatial span task: ' +
+            engine.levelSpatialSpanTask.toString(),
         progress: 'Finished.',
         onOk: () {},
         onOkPush: true,
@@ -61,7 +68,7 @@ class PVTState extends SelfTestState {
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you doing the pvt test. Now you will be forwarded to a spatial span test',
+            'Thank you for doing the pvt test. Now you will be forwarded to a spatial span test',
         content: 'When you want to leave the self test press Cancel',
         progress: 'Step 3 of 3',
         onOk: () {

@@ -46,14 +46,19 @@ class _SelfTestState extends State<SelfTest> {
         SelfAssessmentState().toString()) {
       return SelfAssessment(
         onFinished: () => engine.handleState(),
+        setMood: (String mood) => engine.currentMood = mood,
+        setActivity: (String activity) => engine.currentActivity = activity,
       );
     } else if (engine.currentState.value.toString() ==
         SpatialSpanTaskState().toString()) {
       return SpatialSpanTest(
         onFinished: () => engine.handleState(),
+        setLevel: (int value) => engine.levelSpatialSpanTask = value,
       );
     } else if (engine.currentState.value.toString() == PVTState().toString()) {
-      return PVTTest(onFinished: () => engine.handleState());
+      return PVTTest(
+          onFinished: () => engine.handleState(),
+          setDiff: (int value) => engine.averageDiffPVT = value);
     }
     return Container();
   }
