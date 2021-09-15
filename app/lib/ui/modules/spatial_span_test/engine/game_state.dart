@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
 
@@ -121,17 +121,4 @@ class NextLevelState extends GameState {
       });
     }, () {}, true, false, false));
   }
-}
-
-class InfoDialogObject {
-  String title;
-  String content;
-  VoidCallback onOk;
-  VoidCallback onCancel;
-  bool onOkPop;
-  bool onOkPush;
-  bool dialogColored;
-
-  InfoDialogObject(this.title, this.content, this.onOk, this.onCancel,
-      this.onOkPop, this.onOkPush, this.dialogColored);
 }

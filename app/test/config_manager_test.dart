@@ -18,11 +18,11 @@ final Map<String, dynamic> assertObject = <String, dynamic>{
   'isStudy': true,
   'questions': constants.questions,
   'moods': <List<int>>[
-        <int>[...Utils.stringToCodeUnits('😄')],
-        <int>[...Utils.stringToCodeUnits('🤩')],
-        <int>[...Utils.stringToCodeUnits('🥱')],
-        <int>[...Utils.stringToCodeUnits('😢')]
-      ]
+    <int>[...Utils.stringToCodeUnits('😄')],
+    <int>[...Utils.stringToCodeUnits('🤩')],
+    <int>[...Utils.stringToCodeUnits('🥱')],
+    <int>[...Utils.stringToCodeUnits('😢')]
+  ]
 };
 
 void main() {

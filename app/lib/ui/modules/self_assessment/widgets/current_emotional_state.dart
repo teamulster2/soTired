@@ -24,22 +24,26 @@ class CurrentEmotionalState extends StatelessWidget {
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x8A]),
                 image: const AssetImage('assets/images/happy.png'),
-                text: ' happy', emoji: const <int>[0xF0, 0x9F, 0x98, 0x8A]),
+                text: ' happy',
+                emoji: const <int>[0xF0, 0x9F, 0x98, 0x8A]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x86]),
                 image: const AssetImage('assets/images/exiting.png'),
-                text: 'excited', emoji: const <int>[0xF0, 0x9F, 0x98, 0x86]),
+                text: 'excited',
+                emoji: const <int>[0xF0, 0x9F, 0x98, 0x86]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x92]),
                 image: const AssetImage('assets/images/boring.png'),
-                text: 'bored', emoji: const <int>[0xF0, 0x9F, 0x98, 0x92]),
+                text: 'bored',
+                emoji: const <int>[0xF0, 0x9F, 0x98, 0x92]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0xB0]),
                 image: const AssetImage('assets/images/angry.png'),
-                text: 'sad', emoji: const <int>[0xF0, 0x9F, 0x98, 0xB0]),
+                text: 'sad',
+                emoji: const <int>[0xF0, 0x9F, 0x98, 0xB0]),
           ]),
         ],
       ));
@@ -47,7 +51,11 @@ class CurrentEmotionalState extends StatelessWidget {
 
 class EmotionalState extends StatelessWidget {
   const EmotionalState(
-      {required this.image, required this.text, required this.onTap, required this.emoji, Key? key})
+      {required this.image,
+      required this.text,
+      required this.onTap,
+      required this.emoji,
+      Key? key})
       : super(key: key);
   final AssetImage image;
   final String text;
@@ -59,7 +67,8 @@ class EmotionalState extends StatelessWidget {
       onTap: onTap,
       child: Column(children: <Widget>[
         /*Image(image: image, width: 65, height: 65),*/
-        Text(Utils.codeUnitsToString(emoji), style: Theme.of(context).textTheme.headline2),
+        Text(Utils.codeUnitsToString(emoji),
+            style: Theme.of(context).textTheme.headline2),
         const SizedBox(height: 5),
         Text(text, style: Theme.of(context).textTheme.bodyText2)
       ]));

@@ -16,7 +16,8 @@ class SelfAssessment extends StatefulWidget {
 }
 
 class _SelfAssessmentState extends State<SelfAssessment> {
-  late ValueNotifier<List<int>> emotionalState = ValueNotifier<List<int>>(<int>[]);
+  late ValueNotifier<List<int>> emotionalState =
+      ValueNotifier<List<int>>(<int>[]);
   late String currentActivity;
 
   @override

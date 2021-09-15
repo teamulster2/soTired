@@ -20,10 +20,14 @@ class CurrentActivity extends StatelessWidget {
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
-                onTap: () => onTap('home'), icon: Icons.home_rounded, text: 'home'),
+                onTap: () => onTap('home'),
+                icon: Icons.home_rounded,
+                text: 'home'),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap('work'), icon: Icons.work_rounded, text: 'work'),
+                onTap: () => onTap('work'),
+                icon: Icons.work_rounded,
+                text: 'work'),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap('university'),
