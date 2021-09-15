@@ -41,18 +41,24 @@ func config(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal("Error when opening config file: ", err)
 	}
-	var studyFromFile Study
-	err = json.Unmarshal(content, &studyFromFile)
-	if err != nil {
-		log.Fatal("Error during unmarshaling config data: ", err)
-	}
 	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect database")
 	}
-	db.AutoMigrate(&Study{})
-	db.Create(&studyFromFile)
+	db.AutoMigrate(&Study{}, &Question{}, &Answer{})
+	var configData []byte
+	err = json.Unmarshal(content, &configData)
+	if err != nil {
+		log.Fatal("Error during unmarshaling config data: ", err)
+	}
+	var studyData []byte
+	var questionnaireData []byte
+	studyData = 
 
+	var studyFromFile Study
+
+	db.Create(&studyFromFile)
+	//TODO: Add isStudy field = true
 	// Read study entry from db, create json and send to client
 	var studyFromDB Study
 	db.First(&studyFromDB, studyFromFile.ID)
