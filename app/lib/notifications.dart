@@ -21,13 +21,9 @@ class Notifications {
   /// Note: The time is given in the UTC format as an tuple.
   /// The *[headLine]* will be showed on top in the push notification.
   /// The *[body]* is the main msg. do you will send.
-  Future<void> showScheduleNotification(String headLine, String body, List<Tuple2<int, int>> utcNotificationTimes) async {
+  Future<void> showScheduleNotification(String headLine, String body,
+      List<Tuple2<int, int>> utcNotificationTimes) async {
     int _day = 0;
-    final List<Tuple2<int, int>> utcNotificationTimes = <Tuple2<int, int>>[
-      const Tuple2<int ,int> (13, 07),
-      const Tuple2<int ,int> (13, 08),
-      const Tuple2<int ,int> (13, 09),
-    ];
 
     while (_day <= 3) {
       //notifications for the next 3 days will be added
@@ -36,7 +32,8 @@ class Notifications {
             i,
             headLine,
             body,
-            _nextTime(_day, utcNotificationTimes[i].item1, utcNotificationTimes[i].item2),
+            _nextTime(_day, utcNotificationTimes[i].item1,
+                utcNotificationTimes[i].item2),
             const NotificationDetails(
               android: AndroidNotificationDetails(
                   'channel id', 'channel name', 'channel description'),

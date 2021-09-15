@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:so_tired/ui/models/questionnaire.dart';
+import 'package:tuple/tuple.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig {
   late final String _serverUrl;
-  late final int _notificationInterval;
+  late final List<Tuple2<int, int>> _utcNotificationTimes;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
@@ -24,7 +25,7 @@ class ClientConfig {
 
   ClientConfig._clientConfig(ClientConfigBuilder clientConfigBuilder) {
     _serverUrl = clientConfigBuilder._serverUrl;
-    _notificationInterval = clientConfigBuilder._notificationInterval;
+    _utcNotificationTimes = clientConfigBuilder._utcNotificationTimes;
     _notificationText = clientConfigBuilder._notificationText;
 
     _isSpatialSpanTaskEnabled = clientConfigBuilder._isSpatialSpanTaskEnabled;
@@ -44,7 +45,7 @@ class ClientConfig {
 
   get serverUrl => _serverUrl;
 
-  get notificationInterval => _notificationInterval;
+  get utcNotificationTimes => _utcNotificationTimes;
 
   get notificationText => _notificationText;
 
@@ -70,7 +71,7 @@ class ClientConfig {
   /// assigns all keys to their counterpart.
   ClientConfig._fromJson(Map<String, dynamic> json)
       : _serverUrl = json['serverUrl'],
-        _notificationInterval = json['notificationInterval'],
+        _utcNotificationTimes = json['utcNotificationTimes'],
         _notificationText = json['notificationText'],
         _isSpatialSpanTaskEnabled = json['isSpatialSpanTaskEnabled'],
         _isMentalArithmeticEnabled = json['isMentalArithmeticEnabled'],
@@ -87,7 +88,7 @@ class ClientConfig {
   /// JSON object represented as [Map<String, dynamic>].
   Map<String, dynamic> toJson() => <String, dynamic>{
         'serverUrl': _serverUrl,
-        'notificationInterval': _notificationInterval,
+        'notificationInterval': _utcNotificationTimes,
         'notificationText': _notificationText,
         'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
         'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
@@ -104,7 +105,7 @@ class ClientConfig {
 /// This class serves as Builder class for [ClientConfig].
 class ClientConfigBuilder {
   late final String _serverUrl;
-  late final int _notificationInterval;
+  late final List<Tuple2<int, int>> _utcNotificationTimes;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
@@ -125,7 +126,8 @@ class ClientConfigBuilder {
 
   set serverUrl(String url) => _serverUrl = url;
 
-  set notificationInterval(int interval) => _notificationInterval = interval;
+  set utcNotificationTimes(List<Tuple2<int, int>> notificationTimes) =>
+      _utcNotificationTimes = notificationTimes;
 
   set notificationText(String text) => _notificationText = text;
 
@@ -190,7 +192,7 @@ class ClientConfigBuilder {
 
     // TODO: check specific keys when they're defined, e.g. is URL valid, ...
     return jsonResponse.containsKey('serverUrl') &&
-        jsonResponse.containsKey('notificationInterval') &&
+        jsonResponse.containsKey('utcNotificationTimes') &&
         jsonResponse.containsKey('notificationText') &&
         jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
         jsonResponse.containsKey('isMentalArithmeticEnabled') &&

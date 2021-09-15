@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:so_tired/service_provider.dart';
 import 'package:so_tired/ui/constants/constants.dart' as constants;
 import 'package:so_tired/utils.dart';
+import 'package:tuple/tuple.dart';
 
 // ignore_for_file: always_specify_types
 
@@ -9,7 +10,12 @@ ServiceProvider _serviceProvider = ServiceProvider();
 
 final Map<String, dynamic> assertObject = <String, dynamic>{
   'serverUrl': 'http://localhost',
-  'notificationInterval': 60 * 3,
+  'utcNotificationTimes': <Tuple2<int, int>>[
+    // (hour, minutes) use UTC time
+    const Tuple2<int, int>(8, 15),
+    const Tuple2<int, int>(12, 30),
+    const Tuple2<int, int>(15, 00),
+  ],
   'notificationText': "Hi, You've been notified! Open the app now!",
   'isReactionGameEnabled': true,
   'isQuestionnaireEnabled': true,
@@ -18,11 +24,11 @@ final Map<String, dynamic> assertObject = <String, dynamic>{
   'isStudy': true,
   'questions': constants.questions,
   'moods': <List<int>>[
-        <int>[...Utils.stringToCodeUnits('😄')],
-        <int>[...Utils.stringToCodeUnits('🤩')],
-        <int>[...Utils.stringToCodeUnits('🥱')],
-        <int>[...Utils.stringToCodeUnits('😢')]
-      ]
+    <int>[...Utils.stringToCodeUnits('😄')],
+    <int>[...Utils.stringToCodeUnits('🤩')],
+    <int>[...Utils.stringToCodeUnits('🥱')],
+    <int>[...Utils.stringToCodeUnits('😢')]
+  ]
 };
 
 void main() {
@@ -49,8 +55,8 @@ void main() {
     test('default config should be available after loading it', () {
       expect(_serviceProvider.configManager.clientConfig.serverUrl,
           assertObject['serverUrl']);
-      expect(_serviceProvider.configManager.clientConfig.notificationInterval,
-          assertObject['notificationInterval']);
+      expect(_serviceProvider.configManager.clientConfig.utcNotificationTimes,
+          assertObject['utcNotificationTimes']);
       expect(_serviceProvider.configManager.clientConfig.notificationText,
           assertObject['notificationText']);
       expect(_serviceProvider.configManager.clientConfig.isReactionGameEnabled,
