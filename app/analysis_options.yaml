@@ -53,3 +53,4 @@ linter:
 analyzer:
   exclude:
     - 'lib/database/models/**.g.dart'
+    - 'test/**.mocks.dart'

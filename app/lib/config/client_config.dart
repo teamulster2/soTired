@@ -49,7 +49,7 @@ class ClientConfig {
 
   get notificationText => _notificationText;
 
-  get isReactionGameEnabled => _isSpatialSpanTaskEnabled;
+  get isSpatialSpanTaskEnabled => _isSpatialSpanTaskEnabled;
 
   get isMentalArithmeticEnabled => _isMentalArithmeticEnabled;
 
@@ -86,20 +86,26 @@ class ClientConfig {
 
   /// This method takes all JSON keys from this class and converts them into a
   /// JSON object represented as [Map<String, dynamic>].
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'serverUrl': _serverUrl,
-        'notificationInterval': _utcNotificationTimes,
-        'notificationText': _notificationText,
-        'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
-        'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
-        'isPsychomotorVigilanceTaskEnabled': _isPsychomotorVigilanceTaskEnabled,
-        'isQuestionnaireEnabled': _isQuestionnaireEnabled,
-        'isCurrentActivityEnabled': _isCurrentActivityEnabled,
-        'studyName': _studyName,
-        'isStudy': _isStudy,
-        'questions': _questions,
-        'moods': _moods
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> returnMap = <String, dynamic>{
+      'serverUrl': _serverUrl,
+      'notificationInterval': _utcNotificationTimes,
+      'notificationText': _notificationText,
+      'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
+      'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
+      'isPsychomotorVigilanceTaskEnabled': _isPsychomotorVigilanceTaskEnabled,
+      'isQuestionnaireEnabled': _isQuestionnaireEnabled,
+      'isCurrentActivityEnabled': _isCurrentActivityEnabled,
+      'studyName': _studyName,
+      'isStudy': _isStudy,
+      'questions': _questions,
+      'moods': _moods
+    };
+    returnMap['questions'] =
+        ClientConfigBuilder._serializeQuestionnaireObjects(_questions);
+
+    return returnMap;
+  }
 }
 
 /// This class serves as Builder class for [ClientConfig].
@@ -171,12 +177,20 @@ class ClientConfigBuilder {
   /// Build a [ClientConfig] instance by passing a [String]
   /// containing valid JSON, e.g. taken from a json file.
   ClientConfig buildWithString(String jsonString) {
-    if (!_isClientConfigJsonValid(jsonString)) {
-      // TODO: add customized exception
-      throw Exception('The client config json is invalid. Make sure '
-          'to fix your config and try again.');
+    try {
+      if (!_isClientConfigJsonValid(jsonString)) {
+        // TODO: add customized exception
+        throw Exception('The client config json is invalid. Make sure '
+            'to fix your config and try again.');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
     final Map<String, dynamic> clientJson = jsonDecode(jsonString);
+
+    clientJson['questions'] = _deserializeQuestionnaireObjects(clientJson);
+    clientJson['moods'] = _deserializeMoods(clientJson);
+
     return ClientConfig._fromJson(clientJson);
   }
 
@@ -187,8 +201,26 @@ class ClientConfigBuilder {
     try {
       jsonResponse = jsonDecode(clientConfigJsonString);
     } catch (e) {
+      // TODO: create MalformedJsonException
       return false;
     }
+
+    // TODO: Add this when reworking exception handling
+    // late final List<Map<String, dynamic>> jsonResponseQuestions;
+    // try {
+    //   jsonResponseQuestions = jsonResponse['questions'];
+    // } catch (e) {
+    //   // TODO: create MalformedQuestionnaireObjectException
+    //   return false;
+    // }
+    //
+    // late final List<List<int>> jsonResponseMoods;
+    // try {
+    //   jsonResponseMoods = jsonResponse['moods'];
+    // } catch (e) {
+    //   // TODO: create MalformedQuestionnaireObjectException
+    //   return false;
+    // }
 
     // TODO: check specific keys when they're defined, e.g. is URL valid, ...
     return jsonResponse.containsKey('serverUrl') &&
@@ -203,5 +235,40 @@ class ClientConfigBuilder {
         jsonResponse.containsKey('isStudy') &&
         jsonResponse.containsKey('questions') &&
         jsonResponse.containsKey('moods');
+  }
+
+  static List<Map<String, dynamic>> _serializeQuestionnaireObjects(
+      List<QuestionnaireObject> questions) {
+    final List<Map<String, dynamic>> questionsJson = <Map<String, dynamic>>[];
+    for (final QuestionnaireObject question in questions) {
+      questionsJson.add(question.toJson());
+    }
+    return questionsJson;
+  }
+
+  static List<QuestionnaireObject> _deserializeQuestionnaireObjects(
+      Map<String, dynamic> json) {
+    final List<QuestionnaireObject> questions = <QuestionnaireObject>[];
+    final List<Map<String, dynamic>> questionsJson =
+        List<Map<String, dynamic>>.from(json['questions']);
+    for (final Map<String, dynamic> question in questionsJson) {
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'question': question['question'],
+        'answers': List<String>.from(question['answers'])
+      };
+      questions.add(QuestionnaireObject.fromJson(addition));
+    }
+    return questions;
+  }
+
+  static List<List<int>> _deserializeMoods(Map<String, dynamic> json) {
+    final List<List<int>> moods = <List<int>>[];
+    final List<List<dynamic>> moodsJson =
+        List<List<dynamic>>.from(json['moods']);
+    for (final List<dynamic> mood in moodsJson) {
+      final List<int> addition = List<int>.from(mood);
+      moods.add(addition);
+    }
+    return moods;
   }
 }

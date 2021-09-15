@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
-import 'package:so_tired/notifications.dart';
+import 'package:so_tired/notifications/notifications.dart';
 import 'package:so_tired/utils.dart';
 import 'package:timezone/data/latest.dart';
 
@@ -20,31 +20,29 @@ class ServiceProvider extends ChangeNotifier {
 
   /// This method initializes [ConfigManager], [DatabaseManager] and
   /// [Notifications] synchronously.
-  Future<void> init(Function onDoneInitializing) async {
+  Future<void> init(Function onDoneInitializing, String basePath) async {
     // initialize config
     // TODO: Add exception handling for invalid config
-    final String filePath =
-        await Utils.getLocalFilePath(_configManager.clientConfigFileName);
-    if (!Utils.doesFileExist(filePath)) {
+    if (!Utils.doesFileExist(
+        '$basePath/${_configManager.clientConfigFileName}')) {
       // TODO: invoke configManager.fetchConfigFromServer()
-      // or
-      _configManager.loadDefaultConfig();
       // ignore: cascade_invocations
-      _configManager.writeConfigToFile(_configManager.clientConfig);
+      _configManager.writeConfigToFile();
     } else {
       _configManager.loadConfigFromJson();
     }
 
     // initialize database
-    await _databaseManager.initDatabase();
+    await _databaseManager
+        .initDatabase('$basePath/${_databaseManager.databasePath}');
 
     // initialize notifications
     notification.initializeSetting();
     initializeTimeZones();
     await _notifications.showScheduleNotification(
-        configManager.clientConfig.studyName,
-        configManager.clientConfig.notificationText,
-        configManager.clientConfig.utcNotificationTimes);
+        configManager.clientConfig!.studyName,
+        configManager.clientConfig!.notificationText,
+        configManager.clientConfig!.utcNotificationTimes);
 
     onDoneInitializing();
   }

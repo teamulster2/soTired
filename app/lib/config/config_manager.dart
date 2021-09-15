@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:so_tired/config/client_config.dart';
@@ -12,19 +13,22 @@ import 'package:tuple/tuple.dart';
 class ConfigManager {
   static final ConfigManager _configManagerInstance =
       ConfigManager._configManager();
-  late final ClientConfig _clientConfig;
   final String _clientConfigFileName = 'client_config.json';
+  ClientConfig? _clientConfig;
 
   /// The private constructor enables the class to create only one instance of
   /// itself.
-  ConfigManager._configManager();
+  ConfigManager._configManager() {
+    loadDefaultConfig();
+    writeConfigToFile();
+  }
 
   /// [ConfigManager] has been implemented using the *Singleton* design
   /// pattern which ensures that only one config is available throughout the
   /// app.
   factory ConfigManager() => _configManagerInstance;
 
-  ClientConfig get clientConfig => _clientConfig;
+  ClientConfig? get clientConfig => _clientConfig;
 
   String get clientConfigFileName => _clientConfigFileName;
 
@@ -64,17 +68,14 @@ class ConfigManager {
   /// This method loads the config from a existing json file.
   /// It utilizes the [Utils] class.
   Future<void> loadConfigFromJson() async {
-    final File configFile =
-        await Utils.getConfigFileObject(_clientConfigFileName);
+    final File configFile = await Utils.getFileObject(_clientConfigFileName);
     final String config = await configFile.readAsString();
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
-    // TODO: discuss exception handling and adjust this part
     try {
       _clientConfig = clientConfigBuilder.buildWithString(config);
     } catch (e) {
       // TODO: add proper exception handling
-      // throw Exception(e);
-      loadDefaultConfig();
+      throw Exception(e);
     }
   }
 
@@ -88,10 +89,10 @@ class ConfigManager {
   /// It takes an instance of type [ClientConfig] as argument and uses the
   /// [Config.toJson()] to generate a json object which can be written to a
   /// file.
-  Future<void> writeConfigToFile(ClientConfig config) async {
-    final Map<String, dynamic> json = config.toJson();
-    final File configFile =
-        await Utils.getConfigFileObject(_clientConfigFileName);
-    configFile.writeAsString('$json');
+  Future<void> writeConfigToFile() async {
+    // TODO: Add exception handling
+    final String json = jsonEncode(_clientConfig!.toJson());
+    final File configFile = await Utils.getFileObject(_clientConfigFileName);
+    await configFile.writeAsString(json);
   }
 }

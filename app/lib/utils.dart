@@ -7,21 +7,24 @@ import 'package:uuid/uuid.dart';
 /// This calls serves as utility class. It contains only static methods which
 /// enables you to use them without instantiating a new object.
 class Utils {
-  /// This method uses the [dart:io] package to generate the local file path
-  /// where files can be stored or read from.
-  /// It takes [String fileName] as parameter and return a [Future<String>].
-  static Future<String> getLocalFilePath(String fileName) async {
+  /// This method returns the basePath where, for example both, client config
+  /// and database boxes are stored.
+  /// It takes no arguments and returns a [Future] of type [String].
+  static Future<String> getLocalBasePath() async {
     final Directory directory = await getApplicationDocumentsDirectory();
-    return Future<String>.value('${directory.path}/$fileName');
+    return Future<String>.value(directory.path);
   }
 
-  /// [getConfigFileObject] takes a [String fileName] as argument and returns
+  /// This method uses the dart:io package to generate the local file path
+  /// where files can be stored or read from.
+  /// It takes [fileName] as parameter and return a [Future] of type [String].
+  static Future<String> getLocalFilePath(String fileName) async =>
+      Future<String>.value('${await getLocalBasePath()}/$fileName');
+
+  /// [getFileObject] takes a [fileName] as argument and returns
   /// an [File] pointing to the given fileName.
-  static Future<File> getConfigFileObject(String fileName) async {
+  static Future<File> getFileObject(String fileName) async {
     final String configFilePath = await getLocalFilePath(fileName);
-    if (!doesFileExist(configFilePath)) {
-      File(configFilePath).createSync();
-    }
     return Future<File>.value(File(configFilePath));
   }
 

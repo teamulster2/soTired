@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
+import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
-import 'package:so_tired/utils.dart';
 
 /// This class is responsible for all matters regarding database interactions.
 /// It holds all boxes (comparable to tables in SQLite) and provides a CRUD API
@@ -13,6 +15,8 @@ import 'package:so_tired/utils.dart';
 class DatabaseManager {
   static DatabaseManager? _databaseManagerInstance =
       DatabaseManager._databaseManager();
+
+  final String _databasePath = 'database';
 
   late final Box<PersonalHighScore> _personalHighScoreBox;
   late final Box<UserLog> _userLogBox;
@@ -24,23 +28,32 @@ class DatabaseManager {
   factory DatabaseManager() =>
       _databaseManagerInstance ?? DatabaseManager._databaseManager();
 
-  Future<void> initDatabase() async {
-    final String databasePath = await Utils.getLocalFilePath('database');
+  String get databasePath => _databasePath;
+
+  Future<void> initDatabase(String databasePath) async {
     Hive.init(databasePath);
 
     // ignore: cascade_invocations
     Hive.registerAdapter(PersonalHighScoreAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(UserAccessMethodAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(UserLogAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(UserStateAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(QuestionnaireResultAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(QuestionnaireAnswersAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(ModuleTypeAdapter());
 
-    _personalHighScoreBox = await Hive.openBox('personalScoresBox');
-    _userLogBox = await Hive.openBox('userLogBox');
-    _userStateBox = await Hive.openBox('userStateBox');
-    _questionnaireResultBox = await Hive.openBox('questionnaireResultBox');
+    _personalHighScoreBox =
+        await Hive.openBox<PersonalHighScore>('personalHighScoreBox');
+    _userLogBox = await Hive.openBox<UserLog>('userLogBox');
+    _userStateBox = await Hive.openBox<UserState>('userStateBox');
+    _questionnaireResultBox =
+        await Hive.openBox<QuestionnaireResult>('questionnaireResultBox');
   }
 
   /// This method provides write access to the database regarding all
@@ -217,6 +230,8 @@ class DatabaseManager {
   /// This method closes the database connection.
   void closeDatabase() {
     Hive.close();
+    // ignore: cascade_invocations
+    Hive.deleteFromDisk();
     _databaseManagerInstance = null;
   }
 }

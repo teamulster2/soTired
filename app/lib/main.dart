@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:so_tired/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
+import 'package:so_tired/utils.dart';
 
 Future<void> main() async => runApp(const MyApp());
 
@@ -34,8 +35,10 @@ class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
 
-    Provider.of<ServiceProvider>(context, listen: false)
-        .init(() => setState(() => _doneInitializing = true));
+    Utils.getLocalBasePath().then((String path) {
+      Provider.of<ServiceProvider>(context, listen: false)
+          .init(() => setState(() => _doneInitializing = true), path);
+    });
   }
 
   @override

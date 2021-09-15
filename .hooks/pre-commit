@@ -11,7 +11,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 if [ -f "$(which flutter)" ]; then
   echo "Check soTired app!"
   cd "${SCRIPT_DIR}"/../ || exit 1
-  PRE_COMMIT_RESULT="$(make fluttercheck)"
+  PRE_COMMIT_RESULT="$(make flutterCheck)"
 
   # Print if check was unsuccessful
   if [ $? != 0 ]; then

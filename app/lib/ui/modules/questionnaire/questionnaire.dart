@@ -26,7 +26,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     final List<QuestionnaireObject> questions =
         Provider.of<ServiceProvider>(context, listen: false)
             .configManager
-            .clientConfig
+            .clientConfig!
             .questions;
 
     return Scaffold(
