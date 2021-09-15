@@ -237,6 +237,7 @@ class ClientConfigBuilder {
         jsonResponse.containsKey('moods');
   }
 
+  /// This method is used to convert [QuestionnaireObject]s from object to JSON.
   static List<Map<String, dynamic>> _serializeQuestionnaireObjects(
       List<QuestionnaireObject> questions) {
     final List<Map<String, dynamic>> questionsJson = <Map<String, dynamic>>[];
@@ -246,6 +247,7 @@ class ClientConfigBuilder {
     return questionsJson;
   }
 
+  /// This method is used to convert [QuestionnaireObject]s from JSON to object.
   static List<QuestionnaireObject> _deserializeQuestionnaireObjects(
       Map<String, dynamic> json) {
     final List<QuestionnaireObject> questions = <QuestionnaireObject>[];
@@ -261,6 +263,7 @@ class ClientConfigBuilder {
     return questions;
   }
 
+  /// This method is used to convert moods from JSON to object.
   static List<List<int>> _deserializeMoods(Map<String, dynamic> json) {
     final List<List<int>> moods = <List<int>>[];
     final List<List<dynamic>> moodsJson =

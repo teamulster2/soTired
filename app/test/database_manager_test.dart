@@ -13,16 +13,16 @@ import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 
 import 'database_manager_test.mocks.dart';
 
 // ignore_for_file: always_specify_types
 
+final DatabaseManager _databaseManager = MockDatabaseManager();
+
 @GenerateMocks([Box, DatabaseManager])
 void main() {
-  final DatabaseManager _databaseManager = MockDatabaseManager();
-
   // DatabaseManager variables
   final Box<PersonalHighScore> _personalHighScoreMockBox = MockBox();
   final Box<UserLog> _userLogMockBox = MockBox();
@@ -32,6 +32,7 @@ void main() {
   final String _uuidPersonalHighScore = Utils.generateUuid();
   final String _uuidUserLog = Utils.generateUuid();
   final String _uuidUserState = Utils.generateUuid();
+  final String _uuidUserState2 = Utils.generateUuid();
   final String _uuidQuestionnaireResult = Utils.generateUuid();
 
   final PersonalHighScore _personalHighScore = PersonalHighScore(
@@ -42,11 +43,44 @@ void main() {
       {
         ModuleType.mentalArithmetic: {'game1': false}
       },
-      DateTime.now());
+      '2021-09-15T16:04:26.870744');
   final UserState _userState =
       UserState(_uuidUserState, 'running', Utils.stringToCodeUnits('🤪'));
+  final UserState _userState2 =
+      UserState(_uuidUserState2, 'working', Utils.stringToCodeUnits('🤪'));
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
       _uuidQuestionnaireResult, {'firstQuestion': QuestionnaireAnswers.second});
+
+  final Map<String, dynamic> assertJson = {
+    'UserLogs': [
+      {
+        'uuid': _uuidUserLog,
+        'accessMethod': UserAccessMethod.notification,
+        'gamesExecuted': {
+          ModuleType.mentalArithmetic: {'game1': false}
+        },
+        'timestamp': '2021-09-15T16:04:26.870744'
+      }
+    ],
+    'UserStates': [
+      {
+        'uuid': _uuidUserState,
+        'currentActivity': 'running',
+        'currentMood': [240, 159, 164, 170]
+      },
+      {
+        'uuid': _uuidUserState2,
+        'currentActivity': 'working',
+        'currentMood': [240, 159, 164, 170]
+      }
+    ],
+    'QuestionnaireResults': [
+      {
+        'uuid': _uuidQuestionnaireResult,
+        'questions': {'firstQuestion': QuestionnaireAnswers.second}
+      }
+    ]
+  };
 
   List<PersonalHighScore> _personalHighScoreList = [];
   List<UserLog> _userLogList = [];
@@ -93,6 +127,9 @@ void main() {
         (_) => Future<void>(() => _userLogMockBox.addAll([_userLog])));
     when(_databaseManager.writeUserStates([_userState])).thenAnswer(
         (_) => Future<void>(() => _userStateMockBox.addAll([_userState])));
+    when(_databaseManager.writeUserStates([_userState, _userState2]))
+        .thenAnswer((_) => Future<void>(
+            () => _userStateMockBox.addAll([_userState, _userState2])));
     when(_databaseManager.writeQuestionnaireResults([_questionnaireResult]))
         .thenAnswer((_) => Future<void>(
             () => _questionnaireResultMockBox.addAll([_questionnaireResult])));
@@ -110,6 +147,11 @@ void main() {
     when(_userStateMockBox.addAll([_userState]))
         .thenAnswer((_) => Future<Iterable<int>>(() {
               _userStateList.addAll([_userState]);
+              return const Iterable<int>.empty();
+            }));
+    when(_userStateMockBox.addAll([_userState, _userState2]))
+        .thenAnswer((_) => Future<Iterable<int>>(() {
+              _userStateList.addAll([_userState, _userState2]);
               return const Iterable<int>.empty();
             }));
     when(_questionnaireResultMockBox.addAll([_questionnaireResult]))
@@ -148,6 +190,9 @@ void main() {
         }
       }
     });
+
+    when(_databaseManager.exportDatabaseForTransfer())
+        .thenAnswer((_) => exportDatabaseForTransfer());
 
     test('boxes should be empty after initialization', () {
       expect(_databaseManager.getAllPersonalHighScores().length, 0);
@@ -199,6 +244,47 @@ void main() {
       expect(_databaseManager.getAllQuestionnaireResults()[0],
           _questionnaireResult);
     });
+
+    test('should return json containing all database entries', () async {
+      await _databaseManager.writePersonalHighScores([_personalHighScore]);
+      await _databaseManager.writeUserLogs([_userLog]);
+      await _databaseManager.writeUserStates([_userState, _userState2]);
+      await _databaseManager.writeQuestionnaireResults([_questionnaireResult]);
+
+      final Map<String, dynamic> exportJson = exportDatabaseForTransfer();
+      expect(exportJson, assertJson);
+    });
   });
   // TODO: Add database tests for exception handling
+}
+
+Map<String, dynamic> exportDatabaseForTransfer() {
+  final Map<String, dynamic> returnMap = <String, dynamic>{};
+  final List<Map<String, dynamic>> userLogs = <Map<String, dynamic>>[];
+  final List<Map<String, dynamic>> userStates = <Map<String, dynamic>>[];
+  final List<Map<String, dynamic>> questionnaireResults =
+      <Map<String, dynamic>>[];
+
+  for (final UserLog? userLog in _databaseManager.getAllUserLogs()) {
+    final Map<String, dynamic>? userLogJson = userLog?.toJson();
+    userLogs.add(userLogJson!);
+  }
+  returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
+
+  for (final UserState? userState in _databaseManager.getAllUserStates()) {
+    final Map<String, dynamic>? userStateJson = userState?.toJson();
+    userStates.add(userStateJson!);
+  }
+  returnMap.addAll(<String, dynamic>{'UserStates': userStates});
+
+  for (final QuestionnaireResult? questionnaireResult
+      in _databaseManager.getAllQuestionnaireResults()) {
+    final Map<String, dynamic>? questionnaireResultJson =
+        questionnaireResult?.toJson();
+    questionnaireResults.add(questionnaireResultJson!);
+  }
+  returnMap
+      .addAll(<String, dynamic>{'QuestionnaireResults': questionnaireResults});
+
+  return returnMap;
 }

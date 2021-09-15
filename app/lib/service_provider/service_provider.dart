@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/notifications/notifications.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 import 'package:timezone/data/latest.dart';
 
 /// This class serves as service provider providing a [ConfigManager],
@@ -25,7 +25,8 @@ class ServiceProvider extends ChangeNotifier {
     // TODO: Add exception handling for invalid config
     if (!Utils.doesFileExist(
         '$basePath/${_configManager.clientConfigFileName}')) {
-      // TODO: invoke configManager.fetchConfigFromServer()
+      // TODO: Add exception handling for server not reachable
+      // TODO: invoke _configManager.fetchConfigFromServer()
       // ignore: cascade_invocations
       _configManager.writeConfigToFile();
     } else {

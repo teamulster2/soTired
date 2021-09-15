@@ -200,29 +200,31 @@ class DatabaseManager {
   /// them into one JSON object ([Map]).
   Map<String, dynamic> exportDatabaseForTransfer() {
     final Map<String, dynamic> returnMap = <String, dynamic>{};
-    final Map<String, dynamic> userLogs = <String, dynamic>{};
-    final Map<String, dynamic> userStates = <String, dynamic>{};
-    final Map<String, dynamic> questionnaireResults = <String, dynamic>{};
+    final List<Map<String, dynamic>> userLogs = <Map<String, dynamic>>[];
+    final List<Map<String, dynamic>> userStates = <Map<String, dynamic>>[];
+    final List<Map<String, dynamic>> questionnaireResults =
+        <Map<String, dynamic>>[];
 
     for (final UserLog? userLog in getAllUserLogs()) {
       final Map<String, dynamic>? userLogJson = userLog?.toJson();
-      userLogs.addAll(userLogJson!);
+      userLogs.add(userLogJson!);
     }
-    returnMap.addAll(userLogs);
+    returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
 
     for (final UserState? userState in getAllUserStates()) {
       final Map<String, dynamic>? userStateJson = userState?.toJson();
-      userStates.addAll(userStateJson!);
+      userStates.add(userStateJson!);
     }
-    returnMap.addAll(userStates);
+    returnMap.addAll(<String, dynamic>{'UserStates': userStates});
 
     for (final QuestionnaireResult? questionnaireResult
         in getAllQuestionnaireResults()) {
       final Map<String, dynamic>? questionnaireResultJson =
           questionnaireResult?.toJson();
-      questionnaireResults.addAll(questionnaireResultJson!);
+      questionnaireResults.add(questionnaireResultJson!);
     }
-    returnMap.addAll(questionnaireResults);
+    returnMap.addAll(
+        <String, dynamic>{'QuestionnaireResults': questionnaireResults});
 
     return returnMap;
   }
@@ -231,7 +233,8 @@ class DatabaseManager {
   void closeDatabase() {
     Hive.close();
     // ignore: cascade_invocations
-    Hive.deleteFromDisk();
+    // NOTE: uncomment this if the database should be deleted every time closing the app
+    // Hive.deleteFromDisk();
     _databaseManagerInstance = null;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 
 part 'user_state.g.dart';
 

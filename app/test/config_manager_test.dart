@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/constants/constants.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 import 'package:tuple/tuple.dart';
 
 // ignore_for_file: always_specify_types

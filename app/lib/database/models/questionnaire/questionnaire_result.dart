@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 
 part 'questionnaire_result.g.dart';
 

@@ -21,7 +21,7 @@ class UserLogAdapter extends TypeAdapter<UserLog> {
       fields[1] as UserAccessMethod?,
       (fields[2] as Map?)?.map((dynamic k, dynamic v) =>
           MapEntry(k as ModuleType, (v as Map).cast<String, dynamic>())),
-      fields[3] as DateTime?,
+      fields[3] as String?,
     );
   }
 

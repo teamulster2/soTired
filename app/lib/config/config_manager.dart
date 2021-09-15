@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/ui/constants/constants.dart' as constants;
-import 'package:so_tired/utils.dart';
 import 'package:tuple/tuple.dart';
+import 'package:so_tired/utils/utils.dart';
 
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
