@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 
 part 'user_state.g.dart';
 
@@ -9,7 +9,7 @@ part 'user_state.g.dart';
 /// into a [String].
 /// The UUID can be generated using the [Utils] class.
 @HiveType(typeId: 2)
-class UserState {
+class UserState extends HiveObject {
   @HiveField(0)
   String? uuid;
 

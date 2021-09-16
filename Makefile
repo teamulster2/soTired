@@ -47,57 +47,57 @@ gotest:
 	done
 
 .PHONY: flutter
-flutter: flutterfmt flutterget fluttercheck flutternewer flutterupgrade flutterbuild flutterrun
+flutter: flutterFmt flutterPubGet flutterCheck flutterNewer flutterPubUpgrade flutterBuild flutterRun
 
-.PHONY: flutterfmt
-flutterfmt:
+.PHONY: flutterFmt
+flutterFmt:
 	# format all files in app
 	flutter format app/
 
-.PHONY: flutterget
-flutterget:
+.PHONY: flutterPubGet
+flutterPubGet:
 	# install dependencies specified in pubspec.yaml
 	cd app/; \
 flutter pub get
 
-.PHONY: fluttercheck
-fluttercheck:
+.PHONY: flutterCheck
+flutterCheck:
 	# check all dart files in app/
 	cd app/; \
 flutter analyze --no-pub
 
-.PHONY: flutternewer
-flutternewer:
+.PHONY: flutterNewer
+flutterNewer:
 	# list outdated files
 	cd app; \
 flutter pub outdated --show-all
 
-.PHONY: flutterupgrade
-flutterupgrade:
+.PHONY: flutterPubUpgrade
+flutterPubUpgrade:
 	# upgrade pubspec dependencies
 	cd app/; \
 flutter pub upgrade --no-offline
 
-.PHONY: flutterbuild
-flutterbuild:
+.PHONY: flutterBuild
+flutterBuild:
 	# build soTired app
 	cd app/; \
 flutter build apk --release
 
-.PHONY: fluttertest
-fluttertest:
+.PHONY: flutterTest
+flutterTest:
 	# Run tests for soTired app
 	cd app/; \
 flutter test
 
-.PHONY: fluttergeneratedatabaseadapter
-fluttergeneratedatabaseadapter:
-	# Generate TypeAdapters for soTired app database
+.PHONY: flutterGenerate
+flutterGenerate:
+	# Generate TypeAdapters / Mocks for soTired app
 	cd app/; \
-flutter packages pub run build_runner build
+flutter packages pub run build_runner build --delete-conflicting-outputs
 
-.PHONY: flutterrun
-flutterrun:
+.PHONY: flutterRun
+flutterRun:
 	# Run soTired app
 	cd app/; \
 flutter run --enable-software-rendering --verbose --verbose-system-logs

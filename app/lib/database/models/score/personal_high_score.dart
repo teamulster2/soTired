@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:so_tired/database/models/module_type.dart';
-import 'package:so_tired/utils.dart';
+import 'package:so_tired/utils/utils.dart';
 
 part 'personal_high_score.g.dart';
 

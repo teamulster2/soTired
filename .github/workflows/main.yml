@@ -35,13 +35,13 @@ jobs:
       - name: Check environment and install dependencies
         run: |
           flutter doctor -v
-          make flutterget
+          make flutterPubGet
       - name: Lint and run tests
         run: |
-          make fluttercheck
-          make fluttertest
+          make flutterCheck
+          make flutterTest
       - name: Build Android app
-        run: make flutterbuild
+        run: make flutterBuild
       - name: Archive Android app release
         uses: actions/upload-artifact@v2
         with:

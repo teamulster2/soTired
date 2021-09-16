@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
-import 'package:tuple/tuple.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig {
   late final String _serverUrl;
-  late final List<Tuple2<int, int>> _utcNotificationTimes;
+  late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
@@ -49,7 +49,7 @@ class ClientConfig {
 
   get notificationText => _notificationText;
 
-  get isReactionGameEnabled => _isSpatialSpanTaskEnabled;
+  get isSpatialSpanTaskEnabled => _isSpatialSpanTaskEnabled;
 
   get isMentalArithmeticEnabled => _isMentalArithmeticEnabled;
 
@@ -86,26 +86,32 @@ class ClientConfig {
 
   /// This method takes all JSON keys from this class and converts them into a
   /// JSON object represented as [Map<String, dynamic>].
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'serverUrl': _serverUrl,
-        'notificationInterval': _utcNotificationTimes,
-        'notificationText': _notificationText,
-        'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
-        'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
-        'isPsychomotorVigilanceTaskEnabled': _isPsychomotorVigilanceTaskEnabled,
-        'isQuestionnaireEnabled': _isQuestionnaireEnabled,
-        'isCurrentActivityEnabled': _isCurrentActivityEnabled,
-        'studyName': _studyName,
-        'isStudy': _isStudy,
-        'questions': _questions,
-        'moods': _moods
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> returnMap = <String, dynamic>{
+      'serverUrl': _serverUrl,
+      'utcNotificationTimes': _utcNotificationTimes,
+      'notificationText': _notificationText,
+      'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
+      'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
+      'isPsychomotorVigilanceTaskEnabled': _isPsychomotorVigilanceTaskEnabled,
+      'isQuestionnaireEnabled': _isQuestionnaireEnabled,
+      'isCurrentActivityEnabled': _isCurrentActivityEnabled,
+      'studyName': _studyName,
+      'isStudy': _isStudy,
+      'questions': _questions,
+      'moods': _moods
+    };
+    returnMap['questions'] =
+        ClientConfigBuilder._serializeQuestionnaireObjects(_questions);
+
+    return returnMap;
+  }
 }
 
 /// This class serves as Builder class for [ClientConfig].
 class ClientConfigBuilder {
   late final String _serverUrl;
-  late final List<Tuple2<int, int>> _utcNotificationTimes;
+  late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
@@ -126,7 +132,7 @@ class ClientConfigBuilder {
 
   set serverUrl(String url) => _serverUrl = url;
 
-  set utcNotificationTimes(List<Tuple2<int, int>> notificationTimes) =>
+  set utcNotificationTimes(List<String> notificationTimes) =>
       _utcNotificationTimes = notificationTimes;
 
   set notificationText(String text) => _notificationText = text;
@@ -162,8 +168,9 @@ class ClientConfigBuilder {
     try {
       clientConfig = ClientConfig._clientConfig(this);
     } catch (e) {
-      // TODO: add customized exception
-      throw Exception('A new ClientConfig instance can not be created.\n\n$e');
+      throw ClientConfigNotInitializedException(
+          'A new ClientConfig instance can not be created.\n\n'
+          'Initial error message:\n$e');
     }
     return clientConfig;
   }
@@ -171,37 +178,132 @@ class ClientConfigBuilder {
   /// Build a [ClientConfig] instance by passing a [String]
   /// containing valid JSON, e.g. taken from a json file.
   ClientConfig buildWithString(String jsonString) {
-    if (!_isClientConfigJsonValid(jsonString)) {
-      // TODO: add customized exception
-      throw Exception('The client config json is invalid. Make sure '
-          'to fix your config and try again.');
+    late final Map<String, dynamic> clientJson;
+    try {
+      _isClientConfigJsonValid(jsonString);
+
+      clientJson = jsonDecode(jsonString);
+      clientJson['utcNotificationTimes'] =
+          _deserializeUtcNotificationTimes(clientJson);
+      clientJson['questions'] = _deserializeQuestionnaireObjects(clientJson);
+      clientJson['moods'] = _deserializeMoods(clientJson);
+    } catch (e) {
+      rethrow;
     }
-    final Map<String, dynamic> clientJson = jsonDecode(jsonString);
+
     return ClientConfig._fromJson(clientJson);
   }
 
   /// This method takes a [String] and checks its
   /// compatibility to the [ClientConfig] class.
-  bool _isClientConfigJsonValid(String clientConfigJsonString) {
+  void _isClientConfigJsonValid(String clientConfigJsonString) {
     late final Map<String, dynamic> jsonResponse;
     try {
       jsonResponse = jsonDecode(clientConfigJsonString);
     } catch (e) {
-      return false;
+      throw MalformedJsonException(
+          'Your json string cannot be converted into a object. '
+          'Make sure it is properly formatted!\n\n'
+          'Initial error message:\n$e');
     }
 
     // TODO: check specific keys when they're defined, e.g. is URL valid, ...
-    return jsonResponse.containsKey('serverUrl') &&
-        jsonResponse.containsKey('utcNotificationTimes') &&
-        jsonResponse.containsKey('notificationText') &&
-        jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
-        jsonResponse.containsKey('isMentalArithmeticEnabled') &&
-        jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
-        jsonResponse.containsKey('isQuestionnaireEnabled') &&
-        jsonResponse.containsKey('isCurrentActivityEnabled') &&
-        jsonResponse.containsKey('studyName') &&
-        jsonResponse.containsKey('isStudy') &&
-        jsonResponse.containsKey('questions') &&
-        jsonResponse.containsKey('moods');
+    try {
+      jsonResponse.containsKey('serverUrl') &&
+          jsonResponse.containsKey('utcNotificationTimes') &&
+          jsonResponse.containsKey('notificationText') &&
+          jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
+          jsonResponse.containsKey('isMentalArithmeticEnabled') &&
+          jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
+          jsonResponse.containsKey('isQuestionnaireEnabled') &&
+          jsonResponse.containsKey('isCurrentActivityEnabled') &&
+          jsonResponse.containsKey('studyName') &&
+          jsonResponse.containsKey('isStudy') &&
+          jsonResponse.containsKey('questions') &&
+          jsonResponse.containsKey('moods');
+    } catch (e) {
+      throw MalformedJsonException(
+          'The jsonResponse does not contain all necessary keys to '
+          'instantiate a new client config.\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      jsonResponse['questions'] =
+          _deserializeQuestionnaireObjects(jsonResponse);
+    } catch (e) {
+      throw MalformedQuestionnaireObjectException(
+          'QuestionnaireObjects have not been deserialized properly. '
+          'Make sure to identify the List type or invoke '
+          '_deserializeQuestionnaireObjects!\n\n'
+          '$jsonResponse\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      jsonResponse['moods'] = _deserializeMoods(jsonResponse);
+    } catch (e) {
+      throw MalformedMoodsException(
+          'Moods have not been deserialized properly. '
+          'Make sure to identify the List type or invoke _deserializeMoods!\n\n'
+          '$jsonResponse\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      jsonResponse['utcNotificationTimes'] =
+          _deserializeUtcNotificationTimes(jsonResponse);
+    } catch (e) {
+      throw MalformedUtcNotificationTimesException(
+          'utcNotificationTimes have not been deserialized properly. '
+          'Make sure to identify the List type or invoke '
+          '_deserializeUtcNotificationTimes!\n\n'
+          '$jsonResponse\n\n'
+          'Initial error message:\n$e');
+    }
   }
+
+  /// This method is used to convert [QuestionnaireObject]s from object to JSON.
+  static List<Map<String, dynamic>> _serializeQuestionnaireObjects(
+      List<QuestionnaireObject> questions) {
+    final List<Map<String, dynamic>> questionsJson = <Map<String, dynamic>>[];
+    for (final QuestionnaireObject question in questions) {
+      questionsJson.add(question.toJson());
+    }
+    return questionsJson;
+  }
+
+  /// This method is used to convert [QuestionnaireObject]s from JSON to object.
+  static List<QuestionnaireObject> _deserializeQuestionnaireObjects(
+      Map<String, dynamic> json) {
+    final List<QuestionnaireObject> questions = <QuestionnaireObject>[];
+    final List<Map<String, dynamic>> questionsJson =
+        List<Map<String, dynamic>>.from(json['questions']);
+    for (final Map<String, dynamic> question in questionsJson) {
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'question': question['question'],
+        'answers': List<String>.from(question['answers'])
+      };
+      questions.add(QuestionnaireObject.fromJson(addition));
+    }
+    return questions;
+  }
+
+  /// This method is used to convert moods from JSON to object.
+  static List<List<int>> _deserializeMoods(Map<String, dynamic> json) {
+    final List<List<int>> moods = <List<int>>[];
+    final List<List<dynamic>> moodsJson =
+        List<List<dynamic>>.from(json['moods']);
+    for (final List<dynamic> mood in moodsJson) {
+      final List<int> addition = List<int>.from(mood);
+      moods.add(addition);
+    }
+    return moods;
+  }
+
+  /// This method is used to convert notificationTimes from JSON to [List]
+  /// of type [String].
+  static List<String> _deserializeUtcNotificationTimes(
+          Map<String, dynamic> json) =>
+      List<String>.from(json['utcNotificationTimes']);
 }
