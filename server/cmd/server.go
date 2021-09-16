@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type JSONConfig struct {
+type jSONConfig struct {
 	ServerURL                         string `json:"serverUrl"`
 	NotificationInterval              int    `json:"notificationInterval"`
 	NotificationText                  string `json:"notificationText"`
@@ -24,10 +24,10 @@ type JSONConfig struct {
 	IsQuestionnaireEnabled            bool   `json:"isQuestionnaireEnabled"`
 	IsCurrentActivityEnabled          bool   `json:"isCurrentActivityEnabled"`
 	StudyName                         string `json:"studyName"`
-	Questionnaire                     []QuestionWithAnswer
+	Questionnaire                     []questionWithAnswer
 }
 
-type QuestionWithAnswer struct {
+type questionWithAnswer struct {
 	Question string   `json:"question"`
 	Answers  []string `json:"answers"`
 }
@@ -70,7 +70,7 @@ func config(w http.ResponseWriter, r *http.Request) {
 		panic("Failed to connect database")
 	}
 	db.AutoMigrate(&Study{}, &Question{}, &Answer{})
-	var jsonConfig JSONConfig
+	var jsonConfig jSONConfig
 	err = json.Unmarshal(content, &jsonConfig)
 	if err != nil {
 		log.Fatal("Error during unmarshaling config data: ", err)
