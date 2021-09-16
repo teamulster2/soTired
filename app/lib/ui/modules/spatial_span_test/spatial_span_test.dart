@@ -1,11 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/score/personal_high_score.dart';
+import 'package:so_tired/database/models/user/user_access_method.dart';
+import 'package:so_tired/database/models/user/user_log.dart';
+import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_box.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_progress.dart';
+import 'package:so_tired/utils/utils.dart';
 
 class SpatialSpanTest extends StatefulWidget {
   const SpatialSpanTest(
@@ -117,6 +124,27 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                                 builder: (BuildContext context) =>
                                     const Home()));*/
                         widget.setLevel(gameEngine.level.value - 1);
+
+                        final Map<ModuleType, Map<String, dynamic>> gameValue =
+                            <ModuleType, Map<String, dynamic>>{
+                          ModuleType.spatialSpanTask: <String, dynamic>{
+                            '': gameEngine.level.value - 1
+                          }
+                        };
+                        Provider.of<ServiceProvider>(context, listen: false)
+                            .databaseManager
+                            .writeUserLogs(<UserLog>[
+                          UserLog(Utils.generateUuid(), UserAccessMethod.regularAppStart,
+                              gameValue, DateTime.now().toString())
+                        ]);
+
+                        Provider.of<ServiceProvider>(context, listen: false)
+                            .databaseManager
+                            .writePersonalHighScores(<PersonalHighScore>[
+                          PersonalHighScore(Utils.generateUuid(), gameEngine.level.value - 1,
+                              ModuleType.spatialSpanTask)
+                        ]);
+
                         widget.onFinished();
                       }
                     },

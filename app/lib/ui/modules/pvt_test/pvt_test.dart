@@ -2,9 +2,16 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/score/personal_high_score.dart';
+import 'package:so_tired/database/models/user/user_access_method.dart';
+import 'package:so_tired/database/models/user/user_log.dart';
+import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_diff.dart';
 import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_progress.dart';
 import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_square.dart';
+import 'package:so_tired/utils/utils.dart';
 
 class PVTTest extends StatefulWidget {
   const PVTTest({required this.onFinished, required this.setDiff, Key? key})
@@ -98,6 +105,26 @@ class _PVTTestState extends State<PVTTest> {
         boxAppears.value = false;
         timer.cancel();
         widget.setDiff(calculateAverageDiff().round());
+
+        final Map<ModuleType, Map<String, dynamic>> gameValue =
+        <ModuleType, Map<String, dynamic>>{
+          ModuleType.spatialSpanTask: <String, dynamic>{
+            '': diffs
+          }
+        };
+        Provider.of<ServiceProvider>(context, listen: false)
+            .databaseManager
+            .writeUserLogs(<UserLog>[
+          UserLog(Utils.generateUuid(), UserAccessMethod.regularAppStart,
+              gameValue, DateTime.now().toString())
+        ]);
+
+        Provider.of<ServiceProvider>(context, listen: false)
+            .databaseManager
+            .writePersonalHighScores(<PersonalHighScore>[
+          PersonalHighScore(Utils.generateUuid(), calculateAverageDiff().round(),
+              ModuleType.spatialSpanTask)
+        ]);
         widget.onFinished();
       }
     });
