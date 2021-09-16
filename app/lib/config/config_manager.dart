@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:so_tired/config/client_config.dart';
-import 'package:so_tired/ui/constants/constants.dart' as constants;
+import 'package:so_tired/exceptions/exceptions.dart';
+import 'package:so_tired/ui/constants/constants.dart';
 import 'package:tuple/tuple.dart';
 import 'package:so_tired/utils/utils.dart';
 
@@ -37,7 +38,6 @@ class ConfigManager {
     // TODO: adjust default server url based on the default server config
     // TODO: specify appropriate notification text
     // TODO: specify real study name
-    // TODO: define serious / useful questions
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
       ..serverUrl = 'http://localhost'
       ..utcNotificationTimes = <Tuple2<int, int>>[
@@ -54,7 +54,7 @@ class ConfigManager {
       ..isCurrentActivityEnabled = true
       ..studyName = 'study1'
       ..isStudy = true
-      ..questions = constants.questions
+      ..questions = questions
       ..moods = <List<int>>[
         <int>[...Utils.stringToCodeUnits('😄')],
         <int>[...Utils.stringToCodeUnits('🤩')],
@@ -74,8 +74,7 @@ class ConfigManager {
     try {
       _clientConfig = clientConfigBuilder.buildWithString(config);
     } catch (e) {
-      // TODO: add proper exception handling
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -90,8 +89,15 @@ class ConfigManager {
   /// [Config.toJson()] to generate a json object which can be written to a
   /// file.
   Future<void> writeConfigToFile() async {
-    // TODO: Add exception handling
-    final String json = jsonEncode(_clientConfig!.toJson());
+    String json = '';
+    try {
+      json = jsonEncode(_clientConfig!.toJson());
+    } catch (e) {
+      throw ClientConfigNotInitializedException(
+          'There is something wrong with your client config instance. '
+          'Make sure it has been properly initialized!\n\n'
+          'Initial error message:\n$e');
+    }
     final File configFile = await Utils.getFileObject(_clientConfigFileName);
     await configFile.writeAsString(json);
   }

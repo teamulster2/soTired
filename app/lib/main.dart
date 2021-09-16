@@ -36,8 +36,12 @@ class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
     WidgetsBinding.instance?.addObserver(this);
 
     Utils.getLocalBasePath().then((String path) {
-      Provider.of<ServiceProvider>(context, listen: false)
-          .init(() => setState(() => _doneInitializing = true), path);
+      try {
+        Provider.of<ServiceProvider>(context, listen: false)
+            .init(() => setState(() => _doneInitializing = true), path);
+      } catch (e) {
+        // TODO: invoke exception handling app popup window
+      }
     });
   }
 

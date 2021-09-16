@@ -13,6 +13,7 @@ import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/utils/utils.dart';
 
 import 'database_manager_test.mocks.dart';
@@ -162,43 +163,177 @@ void main() {
 
     when(_databaseManager.getPersonalHighScoreById(_uuidPersonalHighScore))
         .thenAnswer((_) {
+      if (_personalHighScoreList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'PersonalHighScoreBox does not contain entries. '
+            'Go, store some to disk!');
+      }
+
+      PersonalHighScore? value;
       for (final PersonalHighScore score in _personalHighScoreList) {
         if (score.uuid == _uuidPersonalHighScore) {
-          return score;
+          value = score;
         }
       }
+      if (value == null) {
+        throw HiveBoxNullValueException(
+            'The provided uuid ($_uuidPersonalHighScore) does not refer '
+            'to a value in _personalHighScoreBox.');
+      }
+
+      return value;
     });
     when(_databaseManager.getUserLogById(_uuidUserLog)).thenAnswer((_) {
+      if (_userLogList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserLogBox does not contain entries. Go, store some to disk!');
+      }
+
+      UserLog? value;
       for (final UserLog log in _userLogList) {
         if (log.uuid == _uuidUserLog) {
-          return log;
+          value = log;
         }
       }
+      if (value == null) {
+        throw HiveBoxNullValueException(
+            'The provided uuid ($_uuidUserLog) does not refer '
+            'to a value in _userLogBox.');
+      }
+
+      return value;
     });
     when(_databaseManager.getUserStateById(_uuidUserState)).thenAnswer((_) {
+      if (_userStateList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserStateBox does not contain entries. Go, store some to disk!');
+      }
+
+      UserState? value;
       for (final UserState state in _userStateList) {
         if (state.uuid == _uuidUserState) {
-          return state;
+          value = state;
         }
+        // NOTE: add if statement for _uuidUserState2 if necessary
       }
+      if (value == null) {
+        throw HiveBoxNullValueException(
+            'The provided uuid ($_uuidUserState) does not refer '
+            'to a value in _userStateBox.');
+      }
+
+      return value;
     });
     when(_databaseManager.getQuestionnaireResultById(_uuidQuestionnaireResult))
         .thenAnswer((_) {
+      if (_questionnaireResultList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'QuestionnaireResultBox does not contain entries. '
+            'Go, store some to disk!');
+      }
+
+      QuestionnaireResult? value;
       for (final QuestionnaireResult result in _questionnaireResultList) {
         if (result.uuid == _uuidQuestionnaireResult) {
-          return result;
+          value = result;
         }
       }
+      if (value == null) {
+        throw HiveBoxNullValueException(
+            'The provided uuid ($_uuidQuestionnaireResult) does not refer '
+            'to a value in _questionnaireResultBox.');
+      }
+
+      return value;
+    });
+    when(_databaseManager.getPersonalHighScoreById('')).thenAnswer((_) {
+      if (_personalHighScoreList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'PersonalHighScoreBox does not contain entries. '
+            'Go, store some to disk!');
+      }
+
+      PersonalHighScore? value;
+      for (final PersonalHighScore score in _personalHighScoreList) {
+        if (score.uuid == _uuidPersonalHighScore) {
+          value = score;
+        }
+      }
+      if (value == null) {
+        throw HiveBoxNullValueException('The provided uuid () does not refer '
+            'to a value in _personalHighScoreBox.');
+      }
+
+      return value;
+    });
+    when(_databaseManager.getUserLogById('')).thenAnswer((_) {
+      if (_userLogList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserLogBox does not contain entries. Go, store some to disk!');
+      }
+
+      UserLog? value;
+      for (final UserLog log in _userLogList) {
+        if (log.uuid == _uuidUserLog) {
+          value = log;
+        }
+      }
+      if (value == null) {
+        throw HiveBoxNullValueException('The provided uuid () does not refer '
+            'to a value in _userLogBox.');
+      }
+
+      return value;
+    });
+    when(_databaseManager.getUserStateById('')).thenAnswer((_) {
+      if (_userStateList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserStateBox does not contain entries. Go, store some to disk!');
+      }
+
+      UserState? value;
+      for (final UserState state in _userStateList) {
+        if (state.uuid == _uuidUserState) {
+          value = state;
+        }
+        // NOTE: add if statement for _uuidUserState2 if necessary
+      }
+      if (value == null) {
+        throw HiveBoxNullValueException('The provided uuid () does not refer '
+            'to a value in _userStateBox.');
+      }
+
+      return value;
+    });
+    when(_databaseManager.getQuestionnaireResultById('')).thenAnswer((_) {
+      if (_questionnaireResultList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'QuestionnaireResultBox does not contain entries. '
+            'Go, store some to disk!');
+      }
+
+      QuestionnaireResult? value;
+      for (final QuestionnaireResult result in _questionnaireResultList) {
+        if (result.uuid == _uuidQuestionnaireResult) {
+          value = result;
+        }
+      }
+      if (value == null) {
+        throw HiveBoxNullValueException('The provided uuid () does not refer '
+            'to a value in _questionnaireResultBox.');
+      }
+
+      return value;
     });
 
     when(_databaseManager.exportDatabaseForTransfer())
         .thenAnswer((_) => exportDatabaseForTransfer());
 
     test('boxes should be empty after initialization', () {
-      expect(_databaseManager.getAllPersonalHighScores().length, 0);
-      expect(_databaseManager.getAllUserLogs().length, 0);
-      expect(_databaseManager.getAllUserStates().length, 0);
-      expect(_databaseManager.getAllQuestionnaireResults().length, 0);
+      throwsA(_databaseManager.getAllPersonalHighScores().length);
+      throwsA(_databaseManager.getAllUserLogs().length);
+      throwsA(_databaseManager.getAllUserStates().length);
+      throwsA(_databaseManager.getAllQuestionnaireResults().length);
     });
 
     test('objects should be stored in database after write operation',
@@ -231,6 +366,13 @@ void main() {
           _questionnaireResult);
     });
 
+    test('null values should not be returned by get...ById', () {
+      throwsA(() => _databaseManager.getPersonalHighScoreById(''));
+      throwsA(() => _databaseManager.getUserLogById(''));
+      throwsA(() => _databaseManager.getUserStateById(''));
+      throwsA(() => _databaseManager.getQuestionnaireResultById(''));
+    });
+
     test('all objects should be available', () {
       _personalHighScoreList.add(_personalHighScore);
       _userLogList.add(_userLog);
@@ -254,8 +396,13 @@ void main() {
       final Map<String, dynamic> exportJson = exportDatabaseForTransfer();
       expect(exportJson, assertJson);
     });
+
+    test('empty database should throw Exception when asked for export', () {
+      throwsA(exportDatabaseForTransfer());
+    });
+
+    // TODO: Mock and add further tests for database
   });
-  // TODO: Add database tests for exception handling
 }
 
 Map<String, dynamic> exportDatabaseForTransfer() {
@@ -265,26 +412,41 @@ Map<String, dynamic> exportDatabaseForTransfer() {
   final List<Map<String, dynamic>> questionnaireResults =
       <Map<String, dynamic>>[];
 
-  for (final UserLog? userLog in _databaseManager.getAllUserLogs()) {
-    final Map<String, dynamic>? userLogJson = userLog?.toJson();
-    userLogs.add(userLogJson!);
+  try {
+    for (final UserLog? userLog in _databaseManager.getAllUserLogs()) {
+      final Map<String, dynamic>? userLogJson = userLog?.toJson();
+      userLogs.add(userLogJson!);
+    }
+    returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
+  } catch (e) {
+    rethrow;
   }
-  returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
 
-  for (final UserState? userState in _databaseManager.getAllUserStates()) {
-    final Map<String, dynamic>? userStateJson = userState?.toJson();
-    userStates.add(userStateJson!);
+  try {
+    for (final UserState? userState in _databaseManager.getAllUserStates()) {
+      final Map<String, dynamic>? userStateJson = userState?.toJson();
+      userStates.add(userStateJson!);
+    }
+    returnMap.addAll(<String, dynamic>{'UserStates': userStates});
+  } catch (e) {
+    rethrow;
   }
-  returnMap.addAll(<String, dynamic>{'UserStates': userStates});
 
-  for (final QuestionnaireResult? questionnaireResult
-      in _databaseManager.getAllQuestionnaireResults()) {
-    final Map<String, dynamic>? questionnaireResultJson =
-        questionnaireResult?.toJson();
-    questionnaireResults.add(questionnaireResultJson!);
+  try {
+    for (final QuestionnaireResult? questionnaireResult
+        in _databaseManager.getAllQuestionnaireResults()) {
+      final Map<String, dynamic>? questionnaireResultJson =
+          questionnaireResult?.toJson();
+      questionnaireResults.add(questionnaireResultJson!);
+    }
+    returnMap.addAll(
+        <String, dynamic>{'QuestionnaireResults': questionnaireResults});
+  } catch (e) {
+    rethrow;
   }
-  returnMap
-      .addAll(<String, dynamic>{'QuestionnaireResults': questionnaireResults});
 
+  if (returnMap.isEmpty) {
+    throw EmptyHiveBoxException('Nothing to return! All boxes are empty!');
+  }
   return returnMap;
 }

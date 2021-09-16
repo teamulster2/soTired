@@ -22,15 +22,18 @@ class ServiceProvider extends ChangeNotifier {
   /// [Notifications] synchronously.
   Future<void> init(Function onDoneInitializing, String basePath) async {
     // initialize config
-    // TODO: Add exception handling for invalid config
-    if (!Utils.doesFileExist(
-        '$basePath/${_configManager.clientConfigFileName}')) {
-      // TODO: Add exception handling for server not reachable
-      // TODO: invoke _configManager.fetchConfigFromServer()
-      // ignore: cascade_invocations
-      _configManager.writeConfigToFile();
-    } else {
-      _configManager.loadConfigFromJson();
+    try {
+      if (!Utils.doesFileExist(
+          '$basePath/${_configManager.clientConfigFileName}')) {
+        // TODO: Add exception handling for server not reachable
+        // TODO: invoke _configManager.fetchConfigFromServer()
+        // ignore: cascade_invocations
+        _configManager.writeConfigToFile();
+      } else {
+        _configManager.loadConfigFromJson();
+      }
+    } catch (e) {
+      rethrow;
     }
 
     // initialize database

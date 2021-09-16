@@ -112,7 +112,34 @@ void main() {
     });
 
     // TODO: Test fetchConfigFromServer
-    // TODO: Add config tests for exception handling
+
+    test('empty object should throw exception', () async {
+      final File fileObject =
+          await Utils.getFileObject(_configManager!.clientConfigFileName);
+      await fileObject.writeAsString('');
+
+      throwsA(() async => _configManager!.loadConfigFromJson());
+    });
+
+    test('should throw MalformedQuestionnaireObjectException', () async {
+      final File fileObject =
+          await Utils.getFileObject(_configManager!.clientConfigFileName);
+      customAssertObject['questions'] = '';
+      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      await fileObject.writeAsString(customAssertObjectJson);
+
+      throwsA(() async => _configManager!.loadConfigFromJson());
+    });
+
+    test('should throw MalformedMoodsException', () async {
+      final File fileObject =
+          await Utils.getFileObject(_configManager!.clientConfigFileName);
+      customAssertObject['moods'] = '';
+      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      await fileObject.writeAsString(customAssertObjectJson);
+
+      throwsA(() async => _configManager!.loadConfigFromJson());
+    });
   });
 }
 

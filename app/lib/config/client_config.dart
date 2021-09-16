@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 import 'package:tuple/tuple.dart';
 
@@ -168,8 +169,9 @@ class ClientConfigBuilder {
     try {
       clientConfig = ClientConfig._clientConfig(this);
     } catch (e) {
-      // TODO: add customized exception
-      throw Exception('A new ClientConfig instance can not be created.\n\n$e');
+      throw ClientConfigNotInitializedException(
+          'A new ClientConfig instance can not be created.\n\n'
+          'Initial error message:\n$e');
     }
     return clientConfig;
   }
@@ -177,64 +179,75 @@ class ClientConfigBuilder {
   /// Build a [ClientConfig] instance by passing a [String]
   /// containing valid JSON, e.g. taken from a json file.
   ClientConfig buildWithString(String jsonString) {
+    late final Map<String, dynamic> clientJson;
     try {
-      if (!_isClientConfigJsonValid(jsonString)) {
-        // TODO: add customized exception
-        throw Exception('The client config json is invalid. Make sure '
-            'to fix your config and try again.');
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-    final Map<String, dynamic> clientJson = jsonDecode(jsonString);
+      _isClientConfigJsonValid(jsonString);
 
-    clientJson['questions'] = _deserializeQuestionnaireObjects(clientJson);
-    clientJson['moods'] = _deserializeMoods(clientJson);
+      clientJson = jsonDecode(jsonString);
+      clientJson['questions'] = _deserializeQuestionnaireObjects(clientJson);
+      clientJson['moods'] = _deserializeMoods(clientJson);
+    } catch (e) {
+      rethrow;
+    }
 
     return ClientConfig._fromJson(clientJson);
   }
 
   /// This method takes a [String] and checks its
   /// compatibility to the [ClientConfig] class.
-  bool _isClientConfigJsonValid(String clientConfigJsonString) {
+  void _isClientConfigJsonValid(String clientConfigJsonString) {
     late final Map<String, dynamic> jsonResponse;
     try {
       jsonResponse = jsonDecode(clientConfigJsonString);
     } catch (e) {
-      // TODO: create MalformedJsonException
-      return false;
+      throw MalformedJsonException(
+          'Your json string cannot be converted into a object. '
+          'Make sure it is properly formatted!\n\n'
+          'Initial error message:\n$e');
     }
 
-    // TODO: Add this when reworking exception handling
-    // late final List<Map<String, dynamic>> jsonResponseQuestions;
-    // try {
-    //   jsonResponseQuestions = jsonResponse['questions'];
-    // } catch (e) {
-    //   // TODO: create MalformedQuestionnaireObjectException
-    //   return false;
-    // }
-    //
-    // late final List<List<int>> jsonResponseMoods;
-    // try {
-    //   jsonResponseMoods = jsonResponse['moods'];
-    // } catch (e) {
-    //   // TODO: create MalformedQuestionnaireObjectException
-    //   return false;
-    // }
-
     // TODO: check specific keys when they're defined, e.g. is URL valid, ...
-    return jsonResponse.containsKey('serverUrl') &&
-        jsonResponse.containsKey('utcNotificationTimes') &&
-        jsonResponse.containsKey('notificationText') &&
-        jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
-        jsonResponse.containsKey('isMentalArithmeticEnabled') &&
-        jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
-        jsonResponse.containsKey('isQuestionnaireEnabled') &&
-        jsonResponse.containsKey('isCurrentActivityEnabled') &&
-        jsonResponse.containsKey('studyName') &&
-        jsonResponse.containsKey('isStudy') &&
-        jsonResponse.containsKey('questions') &&
-        jsonResponse.containsKey('moods');
+    try {
+      jsonResponse.containsKey('serverUrl') &&
+          jsonResponse.containsKey('utcNotificationTimes') &&
+          jsonResponse.containsKey('notificationText') &&
+          jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
+          jsonResponse.containsKey('isMentalArithmeticEnabled') &&
+          jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
+          jsonResponse.containsKey('isQuestionnaireEnabled') &&
+          jsonResponse.containsKey('isCurrentActivityEnabled') &&
+          jsonResponse.containsKey('studyName') &&
+          jsonResponse.containsKey('isStudy') &&
+          jsonResponse.containsKey('questions') &&
+          jsonResponse.containsKey('moods');
+    } catch (e) {
+      throw MalformedJsonException(
+          'The jsonResponse does not contain all necessary keys to '
+          'instantiate a new client config.\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      jsonResponse['questions'] =
+          _deserializeQuestionnaireObjects(jsonResponse);
+    } catch (e) {
+      throw MalformedQuestionnaireObjectException(
+          'QuestionnaireObjects have not been deserialized properly. '
+          'Make sure to identify the List type or invoke '
+          '_deserializeQuestionnaireObjects!\n\n'
+          '$jsonResponse\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      jsonResponse['moods'] = _deserializeMoods(jsonResponse);
+    } catch (e) {
+      throw MalformedMoodsException(
+          'Moods have not been deserialized properly. '
+          'Make sure to identify the List type or invoke _deserializeMoods!\n\n'
+          '$jsonResponse\n\n'
+          'Initial error message:\n$e');
+    }
   }
 
   /// This method is used to convert [QuestionnaireObject]s from object to JSON.

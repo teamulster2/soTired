@@ -8,6 +8,7 @@ import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 
 /// This class is responsible for all matters regarding database interactions.
 /// It holds all boxes (comparable to tables in SQLite) and provides a CRUD API
@@ -81,56 +82,120 @@ class DatabaseManager {
   /// It is responsible for the [PersonalHighScore] hive box.
   /// It takes an uuid as argument and returns a single [PersonalHighScore]
   /// object.
-  PersonalHighScore? getPersonalHighScoreById(String uuid) {
+  PersonalHighScore getPersonalHighScoreById(String uuid) {
+    if (_personalHighScoreBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'PersonalHighScoreBox does not contain entries. '
+          'Go, store some to disk!');
+    }
+
+    PersonalHighScore? value;
     for (final PersonalHighScore score in _personalHighScoreBox.values) {
       if (score.uuid == uuid) {
-        return score;
+        value = score;
       }
     }
+    if (value == null) {
+      throw HiveBoxNullValueException(
+          'The provided uuid ($uuid) does not refer '
+          'to a value in _personalHighScoreBox.');
+    }
+
+    return value;
   }
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [UserLog] hive box.
   /// It takes an uuid as argument and returns a single [UserLog] object.
-  UserLog? getUserLogById(String uuid) {
+  UserLog getUserLogById(String uuid) {
+    if (_userLogBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'UserLogBox does not contain entries. Go, store some to disk!');
+    }
+
+    UserLog? value;
     for (final UserLog log in _userLogBox.values) {
       if (log.uuid == uuid) {
-        return log;
+        value = log;
       }
     }
+    if (value == null) {
+      throw HiveBoxNullValueException(
+          'The provided uuid ($uuid) does not refer '
+          'to a value in _userLogBox.');
+    }
+
+    return value;
   }
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [UserState] hive box.
   /// It takes an uuid as argument and returns a single [UserState]
   /// object.
-  UserState? getUserStateById(String uuid) {
+  UserState getUserStateById(String uuid) {
+    if (_userStateBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'UserStateBox does not contain entries. Go, store some to disk!');
+    }
+
+    UserState? value;
     for (final UserState state in _userStateBox.values) {
       if (state.uuid == uuid) {
-        return state;
+        value = state;
       }
     }
+    if (value == null) {
+      throw HiveBoxNullValueException(
+          'The provided uuid ($uuid) does not refer '
+          'to a value in _userStateBox.');
+    }
+
+    return value;
   }
 
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [QuestionnaireResult] hive box.
   /// It takes an uuid as argument and returns a single [QuestionnaireResult]
   /// object.
-  QuestionnaireResult? getQuestionnaireResultById(String uuid) {
+  QuestionnaireResult getQuestionnaireResultById(String uuid) {
+    if (_questionnaireResultBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'QuestionnaireResultBox does not contain entries. '
+          'Go, store some to disk!');
+    }
+
+    QuestionnaireResult? value;
     for (final QuestionnaireResult result in _questionnaireResultBox.values) {
       if (result.uuid == uuid) {
-        return result;
+        value = result;
       }
     }
+    if (value == null) {
+      throw HiveBoxNullValueException(
+          'The provided uuid ($uuid) does not refer '
+          'to a value in _questionnaireResultBox.');
+    }
+
+    return value;
   }
 
   /// This method returns all entries from the [PersonalHighScore] box.
   /// It is null-aware. Therefore, the returned List is of type
   /// [PersonalScore?].
-  List<PersonalHighScore?> getAllPersonalHighScores() {
-    final List<PersonalHighScore?> returnList = <PersonalHighScore?>[];
+  List<PersonalHighScore> getAllPersonalHighScores() {
+    if (_personalHighScoreBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'PersonalHighScoreBox does not contain entries. Go, store some to disk!');
+    }
+    final List<PersonalHighScore> returnList = <PersonalHighScore>[];
     for (int i = 0; i < _personalHighScoreBox.length; i++) {
-      returnList.add(_personalHighScoreBox.getAt(i));
+      final PersonalHighScore? score = _personalHighScoreBox.getAt(i);
+      if (score == null) {
+        throw HiveBoxNullValueException(
+            '_personalHighScoreBox contains null values. '
+            'Reset the database to solve this issue!');
+      }
+      returnList.add(score);
     }
     return returnList;
   }
@@ -139,6 +204,10 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [UserLog?].
   List<UserLog?> getAllUserLogs() {
+    if (_userLogBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'UserLogBox does not contain entries. Go, store some to disk!');
+    }
     final List<UserLog?> returnList = <UserLog?>[];
     for (int i = 0; i < _userLogBox.length; i++) {
       returnList.add(_userLogBox.getAt(i));
@@ -150,6 +219,10 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [CurrentActivity?].
   List<UserState?> getAllUserStates() {
+    if (_userStateBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'UserStateBox does not contain entries. Go, store some to disk!');
+    }
     final List<UserState?> returnList = <UserState?>[];
     for (int i = 0; i < _userStateBox.length; i++) {
       returnList.add(_userStateBox.getAt(i));
@@ -161,6 +234,11 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [QuestionnaireResult?].
   List<QuestionnaireResult?> getAllQuestionnaireResults() {
+    if (_questionnaireResultBox.length == 0) {
+      throw EmptyHiveBoxException(
+          'QuestionnaireResultBox does not contain entries. '
+          'Go, store some to disk!');
+    }
     final List<QuestionnaireResult?> returnList = <QuestionnaireResult?>[];
     for (int i = 0; i < _questionnaireResultBox.length; i++) {
       returnList.add(_questionnaireResultBox.getAt(i));
@@ -205,27 +283,42 @@ class DatabaseManager {
     final List<Map<String, dynamic>> questionnaireResults =
         <Map<String, dynamic>>[];
 
-    for (final UserLog? userLog in getAllUserLogs()) {
-      final Map<String, dynamic>? userLogJson = userLog?.toJson();
-      userLogs.add(userLogJson!);
+    try {
+      for (final UserLog? userLog in getAllUserLogs()) {
+        final Map<String, dynamic>? userLogJson = userLog?.toJson();
+        userLogs.add(userLogJson!);
+      }
+      returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
+    } catch (e) {
+      rethrow;
     }
-    returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
 
-    for (final UserState? userState in getAllUserStates()) {
-      final Map<String, dynamic>? userStateJson = userState?.toJson();
-      userStates.add(userStateJson!);
+    try {
+      for (final UserState? userState in getAllUserStates()) {
+        final Map<String, dynamic>? userStateJson = userState?.toJson();
+        userStates.add(userStateJson!);
+      }
+      returnMap.addAll(<String, dynamic>{'UserStates': userStates});
+    } catch (e) {
+      rethrow;
     }
-    returnMap.addAll(<String, dynamic>{'UserStates': userStates});
 
-    for (final QuestionnaireResult? questionnaireResult
-        in getAllQuestionnaireResults()) {
-      final Map<String, dynamic>? questionnaireResultJson =
-          questionnaireResult?.toJson();
-      questionnaireResults.add(questionnaireResultJson!);
+    try {
+      for (final QuestionnaireResult? questionnaireResult
+          in getAllQuestionnaireResults()) {
+        final Map<String, dynamic>? questionnaireResultJson =
+            questionnaireResult?.toJson();
+        questionnaireResults.add(questionnaireResultJson!);
+      }
+      returnMap.addAll(
+          <String, dynamic>{'QuestionnaireResults': questionnaireResults});
+    } catch (e) {
+      rethrow;
     }
-    returnMap.addAll(
-        <String, dynamic>{'QuestionnaireResults': questionnaireResults});
 
+    if (returnMap.isEmpty) {
+      throw EmptyHiveBoxException('Nothing to return! All boxes are empty!');
+    }
     return returnMap;
   }
 
