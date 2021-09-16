@@ -18,6 +18,11 @@ class MalformedMoodsException implements Exception {
   MalformedMoodsException(this.msg);
 }
 
+class MalformedUtcNotificationTimesException implements Exception {
+  final String msg;
+  MalformedUtcNotificationTimesException(this.msg);
+}
+
 class EmptyHiveBoxException implements Exception {
   final String msg;
   EmptyHiveBoxException(this.msg);
@@ -26,4 +31,9 @@ class EmptyHiveBoxException implements Exception {
 class HiveBoxNullValueException implements Exception {
   final String msg;
   HiveBoxNullValueException(this.msg);
+}
+
+class NotificationTimeInvalidException implements Exception {
+  final String msg;
+  NotificationTimeInvalidException(this.msg);
 }

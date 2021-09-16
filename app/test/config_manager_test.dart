@@ -7,7 +7,6 @@ import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/constants/constants.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 import 'package:so_tired/utils/utils.dart';
-import 'package:tuple/tuple.dart';
 
 // ignore_for_file: always_specify_types
 // ignore_for_file: cascade_invocations
@@ -16,11 +15,11 @@ ConfigManager? _configManager = ConfigManager();
 
 final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
   'serverUrl': 'http://localhost',
-  'utcNotificationTimes': <Tuple2<int, int>>[
-    // (hour, minutes) use UTC time
-    const Tuple2<int, int>(8, 15),
-    const Tuple2<int, int>(12, 30),
-    const Tuple2<int, int>(15, 00),
+  'utcNotificationTimes': <String>[
+    // (hour:minutes) use UTC time
+    '08:15',
+    '12:30',
+    '15:00'
   ],
   'notificationText': "Hi, You've been notified! Open the app now!",
   'isSpatialSpanTaskEnabled': true,
@@ -41,7 +40,12 @@ final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
 
 final Map<String, dynamic> customAssertObject = <String, dynamic>{
   'serverUrl': 'http://0.0.0.0',
-  'notificationInterval': 60 * 3,
+  'utcNotificationTimes': <String>[
+    // (hour:minutes) use UTC time
+    '08:15',
+    '12:30',
+    '15:00'
+  ],
   'notificationText': "Hi, You've been notified! Open the app now!",
   'isSpatialSpanTaskEnabled': true,
   'isMentalArithmeticEnabled': false,
@@ -79,12 +83,12 @@ void main() {
       });
     });
 
-    setUp(() {
+    setUp(() async {
       _configManager = null;
       _configManager = ConfigManager();
     });
 
-    test('default config should be available after loading it', () {
+    test('default config should be available after loading it', () async {
       _configManager!.loadDefaultConfig();
       expect(_configManager!.clientConfig!.toJson(), defaultAssertObject);
     });

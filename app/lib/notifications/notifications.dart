@@ -1,6 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:timezone/timezone.dart';
-import 'package:tuple/tuple.dart';
 
 class Notifications {
   FlutterLocalNotificationsPlugin notificationsPlugin =
@@ -8,8 +8,8 @@ class Notifications {
 
   TZDateTime _nextTime(int day, int hour, int minute) {
     final TZDateTime now = TZDateTime.now(local);
-    TZDateTime scheduledDate = TZDateTime(
-        local, now.year, now.month, now.day + day, hour, minute);
+    TZDateTime scheduledDate =
+        TZDateTime(local, now.year, now.month, now.day + day, hour, minute);
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
@@ -21,27 +21,34 @@ class Notifications {
   /// Note: The time is given in the UTC format as an tuple.
   /// The *[headLine]* will be showed on top in the push notification.
   /// The *[body]* is the main msg. do you will send.
-  Future<void> showScheduleNotification(String headLine, String body,
-      List<Tuple2<int, int>> utcNotificationTimes) async {
+  Future<void> showScheduleNotification(
+      String headLine, String body, List<String> utcNotificationTimes) async {
     int _day = 0;
 
     while (_day <= 3) {
       //notifications for the next 3 days will be added
-      for (int i = 0; i < utcNotificationTimes.length; i++) {
-        await notificationsPlugin.zonedSchedule(
-            i,
-            headLine,
-            body,
-            _nextTime(_day, utcNotificationTimes[i].item1,
-                utcNotificationTimes[i].item2),
-            const NotificationDetails(
-              android: AndroidNotificationDetails(
-                  'channel id', 'channel name', 'channel description'),
-            ),
-            androidAllowWhileIdle: true,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
-            matchDateTimeComponents: DateTimeComponents.time);
+      for (final String time in utcNotificationTimes) {
+        try {
+          _isNotificationTimeValid(time);
+          final List<String> splitTime = time.split(':');
+          final int hours = int.parse(splitTime[0], radix: 10);
+          final int minutes = int.parse(splitTime[1], radix: 10);
+          await notificationsPlugin.zonedSchedule(
+              utcNotificationTimes.indexOf(time),
+              headLine,
+              body,
+              _nextTime(_day, hours, minutes),
+              const NotificationDetails(
+                android: AndroidNotificationDetails(
+                    'channel id', 'channel name', 'channel description'),
+              ),
+              androidAllowWhileIdle: true,
+              uiLocalNotificationDateInterpretation:
+                  UILocalNotificationDateInterpretation.absoluteTime,
+              matchDateTimeComponents: DateTimeComponents.time);
+        } catch (e) {
+          rethrow;
+        }
       }
       _day++;
     }
@@ -106,5 +113,13 @@ class Notifications {
     const InitializationSettings initializeSetting =
         InitializationSettings(android: initializeAndroid);
     await notificationsPlugin.initialize(initializeSetting);
+  }
+
+  void _isNotificationTimeValid(String time) {
+    if (time.length != 5 || !time.contains(':') && !(time.indexOf(':') == 2)) {
+      throw NotificationTimeInvalidException(
+          'This notification time format is invalid and can not be processed.\n'
+          'Current time variable: $time');
+    }
   }
 }

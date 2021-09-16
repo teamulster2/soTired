@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/constants/constants.dart';
-import 'package:tuple/tuple.dart';
 import 'package:so_tired/utils/utils.dart';
 
 /// This class is the main part of configs.
@@ -40,11 +39,11 @@ class ConfigManager {
     // TODO: specify real study name
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
       ..serverUrl = 'http://localhost'
-      ..utcNotificationTimes = <Tuple2<int, int>>[
-        // (hour, minutes) use UTC time
-        const Tuple2<int, int>(8, 15),
-        const Tuple2<int, int>(12, 30),
-        const Tuple2<int, int>(15, 00),
+      ..utcNotificationTimes = <String>[
+        // (hour:minutes) use UTC time
+        '08:15',
+        '12:30',
+        '15:00'
       ]
       ..notificationText = "Hi, You've been notified! Open the app now!"
       ..isSpatialSpanTaskEnabled = true

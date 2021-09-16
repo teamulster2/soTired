@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
-import 'package:tuple/tuple.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig {
   late final String _serverUrl;
-  late final List<Tuple2<int, int>> _utcNotificationTimes;
+  late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
@@ -90,7 +89,7 @@ class ClientConfig {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> returnMap = <String, dynamic>{
       'serverUrl': _serverUrl,
-      'notificationInterval': _utcNotificationTimes,
+      'utcNotificationTimes': _utcNotificationTimes,
       'notificationText': _notificationText,
       'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
       'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
@@ -112,7 +111,7 @@ class ClientConfig {
 /// This class serves as Builder class for [ClientConfig].
 class ClientConfigBuilder {
   late final String _serverUrl;
-  late final List<Tuple2<int, int>> _utcNotificationTimes;
+  late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
   // TODO: extend enabled features / settings in STEP II and STEP III
@@ -133,7 +132,7 @@ class ClientConfigBuilder {
 
   set serverUrl(String url) => _serverUrl = url;
 
-  set utcNotificationTimes(List<Tuple2<int, int>> notificationTimes) =>
+  set utcNotificationTimes(List<String> notificationTimes) =>
       _utcNotificationTimes = notificationTimes;
 
   set notificationText(String text) => _notificationText = text;
@@ -184,6 +183,8 @@ class ClientConfigBuilder {
       _isClientConfigJsonValid(jsonString);
 
       clientJson = jsonDecode(jsonString);
+      clientJson['utcNotificationTimes'] =
+          _deserializeUtcNotificationTimes(clientJson);
       clientJson['questions'] = _deserializeQuestionnaireObjects(clientJson);
       clientJson['moods'] = _deserializeMoods(clientJson);
     } catch (e) {
@@ -248,6 +249,18 @@ class ClientConfigBuilder {
           '$jsonResponse\n\n'
           'Initial error message:\n$e');
     }
+
+    try {
+      jsonResponse['utcNotificationTimes'] =
+          _deserializeUtcNotificationTimes(jsonResponse);
+    } catch (e) {
+      throw MalformedUtcNotificationTimesException(
+          'utcNotificationTimes have not been deserialized properly. '
+          'Make sure to identify the List type or invoke '
+          '_deserializeUtcNotificationTimes!\n\n'
+          '$jsonResponse\n\n'
+          'Initial error message:\n$e');
+    }
   }
 
   /// This method is used to convert [QuestionnaireObject]s from object to JSON.
@@ -287,4 +300,10 @@ class ClientConfigBuilder {
     }
     return moods;
   }
+
+  /// This method is used to convert notificationTimes from JSON to [List]
+  /// of type [String].
+  static List<String> _deserializeUtcNotificationTimes(
+          Map<String, dynamic> json) =>
+      List<String>.from(json['utcNotificationTimes']);
 }
