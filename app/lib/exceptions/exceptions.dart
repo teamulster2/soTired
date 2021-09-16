@@ -13,11 +13,6 @@ class MalformedQuestionnaireObjectException implements Exception {
   MalformedQuestionnaireObjectException(this.msg);
 }
 
-class MalformedMoodsException implements Exception {
-  final String msg;
-  MalformedMoodsException(this.msg);
-}
-
 class MalformedUtcNotificationTimesException implements Exception {
   final String msg;
   MalformedUtcNotificationTimesException(this.msg);

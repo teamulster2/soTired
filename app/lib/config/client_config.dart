@@ -21,8 +21,6 @@ class ClientConfig {
 
   late final List<QuestionnaireObject> _questions;
 
-  late final List<List<int>> _moods;
-
   ClientConfig._clientConfig(ClientConfigBuilder clientConfigBuilder) {
     _serverUrl = clientConfigBuilder._serverUrl;
     _utcNotificationTimes = clientConfigBuilder._utcNotificationTimes;
@@ -39,8 +37,6 @@ class ClientConfig {
     _isStudy = clientConfigBuilder._isStudy;
 
     _questions = clientConfigBuilder._questions;
-
-    _moods = clientConfigBuilder._moods;
   }
 
   get serverUrl => _serverUrl;
@@ -65,8 +61,6 @@ class ClientConfig {
 
   get questions => _questions;
 
-  get moods => _moods;
-
   /// A private constructor which takes a [Map<String, dynamic> json] and
   /// assigns all keys to their counterpart.
   ClientConfig._fromJson(Map<String, dynamic> json)
@@ -81,8 +75,7 @@ class ClientConfig {
         _isCurrentActivityEnabled = json['isCurrentActivityEnabled'],
         _studyName = json['studyName'],
         _isStudy = json['isStudy'],
-        _questions = json['questions'],
-        _moods = json['moods'];
+        _questions = json['questions'];
 
   /// This method takes all JSON keys from this class and converts them into a
   /// JSON object represented as [Map<String, dynamic>].
@@ -98,8 +91,7 @@ class ClientConfig {
       'isCurrentActivityEnabled': _isCurrentActivityEnabled,
       'studyName': _studyName,
       'isStudy': _isStudy,
-      'questions': _questions,
-      'moods': _moods
+      'questions': _questions
     };
     returnMap['questions'] =
         ClientConfigBuilder._serializeQuestionnaireObjects(_questions);
@@ -124,8 +116,6 @@ class ClientConfigBuilder {
   late final bool _isStudy;
 
   late final List<QuestionnaireObject> _questions;
-
-  late final List<List<int>> _moods;
 
   ClientConfigBuilder();
 
@@ -158,8 +148,6 @@ class ClientConfigBuilder {
 
   set questions(List<QuestionnaireObject> questions) => _questions = questions;
 
-  set moods(List<List<int>> moods) => _moods = moods;
-
   /// Build a [ClientConfig] instance after specifying all mandatory keys
   /// manually.
   ClientConfig build() {
@@ -185,7 +173,6 @@ class ClientConfigBuilder {
       clientJson['utcNotificationTimes'] =
           _deserializeUtcNotificationTimes(clientJson);
       clientJson['questions'] = _deserializeQuestionnaireObjects(clientJson);
-      clientJson['moods'] = _deserializeMoods(clientJson);
     } catch (e) {
       rethrow;
     }
@@ -217,8 +204,7 @@ class ClientConfigBuilder {
           jsonResponse.containsKey('isCurrentActivityEnabled') &&
           jsonResponse.containsKey('studyName') &&
           jsonResponse.containsKey('isStudy') &&
-          jsonResponse.containsKey('questions') &&
-          jsonResponse.containsKey('moods');
+          jsonResponse.containsKey('questions');
     } catch (e) {
       throw MalformedJsonException(
           'The jsonResponse does not contain all necessary keys to '
@@ -243,16 +229,6 @@ class ClientConfigBuilder {
           'QuestionnaireObjects have not been deserialized properly. '
           'Make sure to identify the List type or invoke '
           '_deserializeQuestionnaireObjects!\n\n'
-          '$jsonResponse\n\n'
-          'Initial error message:\n$e');
-    }
-
-    try {
-      jsonResponse['moods'] = _deserializeMoods(jsonResponse);
-    } catch (e) {
-      throw MalformedMoodsException(
-          'Moods have not been deserialized properly. '
-          'Make sure to identify the List type or invoke _deserializeMoods!\n\n'
           '$jsonResponse\n\n'
           'Initial error message:\n$e');
     }
@@ -308,18 +284,6 @@ class ClientConfigBuilder {
       questions.add(QuestionnaireObject.fromJson(addition));
     }
     return questions;
-  }
-
-  /// This method is used to convert moods from JSON to object.
-  static List<List<int>> _deserializeMoods(Map<String, dynamic> json) {
-    final List<List<int>> moods = <List<int>>[];
-    final List<List<dynamic>> moodsJson =
-        List<List<dynamic>>.from(json['moods']);
-    for (final List<dynamic> mood in moodsJson) {
-      final List<int> addition = List<int>.from(mood);
-      moods.add(addition);
-    }
-    return moods;
   }
 
   /// This method is used to convert notificationTimes from JSON to [List]
