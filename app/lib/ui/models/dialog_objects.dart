@@ -20,6 +20,7 @@ class ProgressDialogObject {
   VoidCallback onOk;
   VoidCallback onCancel;
   bool onOkPush;
+  bool showCancel;
 
   ProgressDialogObject(
       {required this.title,
@@ -27,5 +28,6 @@ class ProgressDialogObject {
       required this.progress,
       required this.onOk,
       required this.onCancel,
-      required this.onOkPush});
+      required this.onOkPush,
+      required this.showCancel});
 }

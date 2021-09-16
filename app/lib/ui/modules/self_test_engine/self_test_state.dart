@@ -22,7 +22,8 @@ class StartSelfTestState extends SelfTestState {
         },
         onCancel: () {},
         onOkPush: false,
-        progress: 'Step 1 of 3'));
+        progress: 'Step 1 of 3',
+        showCancel: true));
   }
 }
 
@@ -31,14 +32,15 @@ class SelfAssessmentState extends SelfTestState {
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you for answering the questions. Now you will be forwarded to a pvt test',
+            'Thank you for answering the questions. Now you will be forwarded to a psychomotor vigilance task.',
         content: 'When you want to leave the self test press Cancel',
         progress: 'Step 2 of 3',
         onOk: () {
           engine.transitionTo(PVTState());
         },
         onOkPush: false,
-        onCancel: () {}));
+        onCancel: () {},
+        showCancel: true));
   }
 }
 
@@ -47,7 +49,7 @@ class SpatialSpanTaskState extends SelfTestState {
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you for doing the spatial span task. You will now return to the home page.',
+            'Thank you for doing the self test. You will now return to the home page.',
         content: 'Your results:\n\nActivity: ' +
             engine.currentActivity +
             '\nEmotional state: ' +
@@ -59,7 +61,8 @@ class SpatialSpanTaskState extends SelfTestState {
         progress: 'Finished.',
         onOk: () {},
         onOkPush: true,
-        onCancel: () {}));
+        onCancel: () {},
+        showCancel: false));
   }
 }
 
@@ -68,13 +71,14 @@ class PVTState extends SelfTestState {
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you for doing the pvt test. Now you will be forwarded to a spatial span test',
+            'Thank you for doing the psychomotor vigilance task. Now you will be forwarded to a spatial span task.',
         content: 'When you want to leave the self test press Cancel',
         progress: 'Step 3 of 3',
         onOk: () {
           engine.transitionTo(SpatialSpanTaskState());
         },
         onOkPush: false,
-        onCancel: () {}));
+        onCancel: () {},
+        showCancel: true));
   }
 }
