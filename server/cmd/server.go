@@ -14,6 +14,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// The data flow on the server can be described in 4 steps:
+// - the server reads the json file, parses the data from json format to go structs (jSONConfig and jSONQuestionWithAnswers)
+// - db table instances (study, question, answer) are created with the information contained in the structs (validation of the config file)
+// - the db entries are taken from the db tables and the information is put together in on go struct (studyData)
+// - the struct data is transformed into a string and send to the client
+
 type jSONConfig struct {
 	ServerURL                         string `json:"serverUrl"`
 	NotificationInterval              int    `json:"notificationInterval"`
@@ -24,17 +30,23 @@ type jSONConfig struct {
 	IsQuestionnaireEnabled            bool   `json:"isQuestionnaireEnabled"`
 	IsCurrentActivityEnabled          bool   `json:"isCurrentActivityEnabled"`
 	StudyName                         string `json:"studyName"`
-	Questionnaire                     []questionWithAnswer
+	Questionnaire                     []jSONQuestionWithAnswers
 }
 
-type questionWithAnswer struct {
+type jSONQuestionWithAnswers struct {
 	Question string   `json:"question"`
 	Answers  []string `json:"answers"`
 }
 
 type studyData struct {
-	Study   Study
-	IsStudy bool
+	Study         Study
+	IsStudy       bool
+	Questionnaire []questionWithAnswers
+}
+
+type questionWithAnswers struct {
+	Question Question
+	Answers  []Answer
 }
 
 func serveRun(cmd *cobra.Command, args []string) {
@@ -60,24 +72,22 @@ func root(w http.ResponseWriter, r *http.Request) {
 func config(w http.ResponseWriter, r *http.Request) {
 	io.ReadAll(r.Body)
 
-	// Create study entry in db from  config data
 	content, err := ioutil.ReadFile("server/config.json")
 	if err != nil {
 		log.Fatal("Error when opening config file: ", err)
 	}
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	if err != nil {
-		panic("Failed to connect database")
-	}
-	db.AutoMigrate(&Study{}, &Question{}, &Answer{})
 	var jsonConfig jSONConfig
 	err = json.Unmarshal(content, &jsonConfig)
 	if err != nil {
 		log.Fatal("Error during unmarshaling config data: ", err)
 	}
-	jsonConfigBytes, _ := json.MarshalIndent(jsonConfig, "", "    ")
-	fmt.Printf("Unmarshaled successfully: %s\n", jsonConfigBytes)
-	db.Create(&Study{
+
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect database")
+	}
+	db.AutoMigrate(&Study{}, &Question{}, &Answer{})
+	study := Study{
 		ServerURL:                         jsonConfig.ServerURL,
 		StudyName:                         jsonConfig.StudyName,
 		NotificationInterval:              jsonConfig.NotificationInterval,
@@ -87,21 +97,34 @@ func config(w http.ResponseWriter, r *http.Request) {
 		IsReactionGameEnabled:             jsonConfig.IsReactionGameEnabled,
 		IsQuestionnaireEnabled:            jsonConfig.IsQuestionnaireEnabled,
 		IsCurrentActivityEnabled:          jsonConfig.IsCurrentActivityEnabled,
-	})
-
-	// var questionnaireData []byte = configData["questionaire"]
-
-	// Read study entry from db, create json and send to client
-	var studyFromDB Study
-	db.First(&studyFromDB, "study_name = ?", jsonConfig.StudyName)
-	if &studyFromDB == nil {
-		log.Fatal("Failed to retrieve study data from db")
-		return
 	}
+	db.Create(&study)
+
+	questionnaire := make([]questionWithAnswers, 0, len(jsonConfig.Questionnaire))
+	for _, jsonQuestionWithAnswers := range jsonConfig.Questionnaire {
+		question := Question{
+			StudyID:      study.ID,
+			QuestionText: jsonQuestionWithAnswers.Question,
+		}
+		db.Create(&question)
+		for _, answer := range jsonQuestionWithAnswers.Answers {
+			answer := Answer{
+				QuestionID: question.ID,
+				AnswerText: answer,
+			}
+			db.Create(&answer)
+		}
+		var answers []Answer
+		db.Where("question_id = ?", question.ID).Find(&answers)
+		questionnaire = append(questionnaire, questionWithAnswers{Answers: answers, Question: question})
+	}
+
 	studyData := &studyData{
-		Study:   studyFromDB,
-		IsStudy: true,
+		Study:         study,
+		IsStudy:       true,
+		Questionnaire: questionnaire,
 	}
+
 	studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")
 	if err != nil {
 		log.Fatal("Error during marsheling study data: ", err)
