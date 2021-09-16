@@ -7,11 +7,10 @@ import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/utils/utils.dart';
 
-Future<void> main() async => runApp(const MyApp());
+Future<void> main() async => runApp(const SoTiredApp());
 
-// TODO: Rename classes appropriately
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class SoTiredApp extends StatelessWidget {
+  const SoTiredApp({Key? key}) : super(key: key);
 
   @override
   // ignore: always_specify_types
@@ -21,19 +20,19 @@ class MyApp extends StatelessWidget {
     // ignore: always_specify_types, NOTE: endless loop when specifying
     return ChangeNotifierProvider(
       create: (BuildContext context) => ServiceProvider(),
-      child: const MyAppContent(),
+      child: const SoTiredAppContent(),
     );
   }
 }
 
-class MyAppContent extends StatefulWidget {
-  const MyAppContent({Key? key}) : super(key: key);
+class SoTiredAppContent extends StatefulWidget {
+  const SoTiredAppContent({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => MyAppState();
+  State<StatefulWidget> createState() => SoTiredAppState();
 }
 
-class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
+class SoTiredAppState extends State<SoTiredAppContent> with WidgetsBindingObserver {
   bool _doneInitializing = false;
 
   @override
