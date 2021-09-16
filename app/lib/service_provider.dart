@@ -3,7 +3,7 @@ import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/notifications.dart';
 import 'package:so_tired/utils.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest.dart';
 
 /// This class serves as service provider providing a [ConfigManager],
 /// [DatabaseManager] and a [Notifications] instance.
@@ -40,11 +40,11 @@ class ServiceProvider extends ChangeNotifier {
 
     // initialize notifications
     notification.initializeSetting();
-    tz.initializeTimeZones();
+    initializeTimeZones();
     await _notifications.showScheduleNotification(
-        configManager.clientConfig.notificationInterval,
         configManager.clientConfig.studyName,
-        configManager.clientConfig.notificationText);
+        configManager.clientConfig.notificationText,
+        configManager.clientConfig.utcNotificationTimes);
 
     onDoneInitializing();
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/ui/constants/constants.dart' as constants;
 import 'package:so_tired/utils.dart';
+import 'package:tuple/tuple.dart';
 
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
@@ -35,7 +36,12 @@ class ConfigManager {
     // TODO: define serious / useful questions
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
       ..serverUrl = 'http://localhost'
-      ..notificationInterval = 3 * 60 //minutes
+      ..utcNotificationTimes = <Tuple2<int, int>>[
+        // (hour, minutes) use UTC time
+        const Tuple2<int, int>(8, 15),
+        const Tuple2<int, int>(12, 30),
+        const Tuple2<int, int>(15, 00),
+      ]
       ..notificationText = "Hi, You've been notified! Open the app now!"
       ..isSpatialSpanTaskEnabled = true
       ..isMentalArithmeticEnabled = true
