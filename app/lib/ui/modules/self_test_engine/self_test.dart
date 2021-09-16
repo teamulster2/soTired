@@ -118,16 +118,19 @@ class _SelfTestState extends State<SelfTest> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        TextButton(
-                          child: const Text('Cancel'),
-                          onPressed: () {
-                            pdo.onCancel();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute<BuildContext>(
-                                    builder: (BuildContext context) =>
-                                        const Home()));
-                          },
+                        Visibility(
+                          visible: pdo.showCancel,
+                          child: TextButton(
+                            child: const Text('Cancel'),
+                            onPressed: () {
+                              pdo.onCancel();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute<BuildContext>(
+                                      builder: (BuildContext context) =>
+                                          const Home()));
+                            },
+                          ),
                         ),
                         TextButton(
                           child: const Text('Ok'),
