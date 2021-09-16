@@ -44,62 +44,59 @@ func fillDatabase() (*gorm.DB, error) {
 	db, path := setUpTmpDB()
 	defer os.RemoveAll(path)
 
-	db.Create(&Study{
-		StudyName: "study1",
-	})
-	var study1 Study
-	db.Take(&study1)
+	studyList := []Study{{}, {}}
+	db.Create(&studyList)
 
-	db.Create(&Question{
-		StudyID:      study1.ID,
-		QuestionText: "quest1",
-	})
-	var quest1 Question
-	db.Take(&quest1)
+	questionList := []Question{{StudyID: studyList[0].ID}, {StudyID: studyList[1].ID}}
+	db.Create(&questionList)
 
-	db.Create(&Answer{
-		QuestionID: quest1.ID,
-		AnswerText: "answer1",
-	})
-	var answer1 Answer
-	db.Take(&answer1)
+	answerList := []Answer{{QuestionID: questionList[0].ID}, {QuestionID: questionList[1].ID}}
+	db.Create(&answerList)
 
-	db.Create(&User{
-		StudyID: study1.ID,
-	})
-	var user1 User
-	db.Take(&user1)
+	userList := []User{{StudyID: studyList[0].ID}, {StudyID: studyList[1].ID}}
+	db.Create(&userList)
 
-	db.Create(&QuestionnaireLog{
-		UserID: user1.ID,
-	})
-	var log1 QuestionnaireLog
-	db.Take(&log1)
+	questionnaireLogList := []QuestionnaireLog{{UserID: userList[0].ID}, {UserID: userList[1].ID}}
+	db.Create(&questionnaireLogList)
 
-	db.Create(&QuestionnaireResult{
-		QuestionnaireLogID: log1.ID,
-		QuestionID:         quest1.ID,
-		AnswerID:           answer1.ID,
-	})
+	questionnaireResultList := []QuestionnaireResult{
+		{
+			QuestionnaireLogID: questionnaireLogList[0].ID,
+			AnswerID:           answerList[0].ID,
+			QuestionID:         questionList[0].ID,
+		},
+		{
+			QuestionnaireLogID: questionnaireLogList[1].ID,
+			AnswerID:           answerList[1].ID,
+			QuestionID:         questionList[1].ID,
+		},
+	}
+	db.Create(&questionnaireResultList)
 
-	db.Create(&SSTResult{})
-	var sst1 SSTResult
-	db.Take(&sst1)
+	sstResultList := []SSTResult{{}, {}}
+	db.Create(&sstResultList)
 
-	db.Create(&PVTResult{})
-	var pvt1 PVTResult
-	db.Take(&pvt1)
+	pvtResultList := []PVTResult{{}, {}}
+	db.Create(&pvtResultList)
 
-	db.Create(&ReationGameResult{})
-	var rgResult ReationGameResult
-	db.Take(&rgResult)
+	reactionGameResultList := []ReationGameResult{{}, {}}
+	db.Create(&reactionGameResultList)
 
-	db.Create(&UserLog{
-		UserID:              user1.ID,
-		SSTResultID:         sst1.ID,
-		PVTResultID:         pvt1.ID,
-		ReationGameResultID: rgResult.ID,
-	})
+	userLogList := []UserLog{
+		{
+			UserID:              userList[0].ID,
+			SSTResultID:         sstResultList[0].ID,
+			PVTResultID:         pvtResultList[0].ID,
+			ReationGameResultID: reactionGameResultList[0].ID,
+		},
+		{
+			UserID:              userList[1].ID,
+			SSTResultID:         sstResultList[1].ID,
+			PVTResultID:         pvtResultList[1].ID,
+			ReationGameResultID: reactionGameResultList[1].ID,
+		},
+	}
+	db.Create(&userLogList)
 
 	return db, nil
 }
