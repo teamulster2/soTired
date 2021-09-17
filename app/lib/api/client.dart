@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 
 Future<String> loadConfig(String url) async {
-  final http.Response response = await http.post(
+  final Response response = await post(
     Uri.parse(url + '/config'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -21,9 +22,10 @@ Future<String> loadConfig(String url) async {
   }
 }
 
-Future<void> sendData(String url, Map<String, dynamic> database) async {
-  final String jsonDatabase = jsonEncode(database);
-  final http.Response response = await http.post(
+Future<void> sendData(String url) async {
+  final String jsonDatabase =
+      jsonEncode(DatabaseManager().exportDatabaseForTransfer());
+  final Response response = await post(
     Uri.parse(url + '/data'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

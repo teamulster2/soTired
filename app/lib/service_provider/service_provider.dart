@@ -38,6 +38,7 @@ class ServiceProvider extends ChangeNotifier {
               .fetchConfigFromServer('http://192.168.179.125:50000');
         } on Exception {
           _configManager.loadDefaultConfig();
+          rethrow;
         }
         _configManager.writeConfigToFile();
       } else {
