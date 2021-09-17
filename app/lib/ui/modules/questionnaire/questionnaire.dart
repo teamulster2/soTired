@@ -45,30 +45,36 @@ class _QuestionnaireState extends State<Questionnaire> {
         ),
         drawer: const NavigationDrawer(),
         body: Container(
-            color: Theme.of(context).backgroundColor,
-            child: Column(
-              children: <Widget>[
-                Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: ValueListenableBuilder<int>(
-                        valueListenable: currentQuestion,
-                        builder: (BuildContext context, Object? value,
-                                Widget? child) =>
-                            Column(children: <Widget>[
-                              addQuestionnaireProgress(questions.length),
-                              const SizedBox(height: 20),
-                              QuestionnaireQuestion(
-                                  question: questions[currentQuestion.value]
-                                      .question),
-                              const SizedBox(height: 50),
-                              for (int i = 0; i < 4; i++)
+          color: Theme.of(context).backgroundColor,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Container(
+                color: Theme.of(context).backgroundColor,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ValueListenableBuilder<int>(
+                            valueListenable: currentQuestion,
+                            builder: (BuildContext context, Object? value,
+                                    Widget? child) =>
                                 Column(children: <Widget>[
-                                  addQuestionnaireAnswer(i, questions),
-                                  const SizedBox(height: 20)
-                                ])
-                            ])))
-              ],
-            )));
+                                  addQuestionnaireProgress(questions.length),
+                                  const SizedBox(height: 20),
+                                  QuestionnaireQuestion(
+                                      question: questions[currentQuestion.value]
+                                          .question),
+                                  const SizedBox(height: 50),
+                                  for (int i = 0; i < 4; i++)
+                                    Column(children: <Widget>[
+                                      addQuestionnaireAnswer(i, questions),
+                                      const SizedBox(height: 20)
+                                    ])
+                                ])))
+                  ],
+                )),
+          ),
+        ));
   }
 
   /// This methods returns the [QuestionnaireProgress] widget with the number of questions and the current question number.
