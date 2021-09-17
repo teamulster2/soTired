@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"errors"
 	"gorm.io/gorm"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -11,13 +14,50 @@ type Study struct {
 	ID                                int
 	ServerURL                         string
 	StudyName                         string
-	NotificationInterval              int
 	NotificationText                  string
 	IsSpartalTaskEnabled              bool
 	IsPsychomotorVigilanceTaskEnabled bool
 	IsReactionGameEnabled             bool
 	IsQuestionnaireEnabled            bool
 	IsCurrentActivityEnabled          bool
+}
+
+// NotificationTime holds the times when the user gets a app notification
+type NotificationTime struct {
+	ID      int
+	StudyID int
+	Time    string
+}
+
+// BeforeCreate is a hook to validate the Time field entry
+func (n *NotificationTime) BeforeCreate(tx *gorm.DB) (err error) {
+	if !n.isValid() {
+		err = errors.New("can't save invalid data")
+	}
+	return
+}
+
+func (n *NotificationTime) isValid() bool {
+	parts := strings.Split(n.Time, ":")
+	if len(parts) != 2 {
+		return false
+	}
+	if len(parts[0]) < 2 || len(parts[1]) < 2 {
+		return false
+	}
+	var h, m int64
+	var err error
+	if h, err = strconv.ParseInt(parts[0], 10, 64); err != nil {
+		return false
+	}
+	if m, err = strconv.ParseInt(parts[1], 10, 64); err != nil {
+		return false
+	}
+	if h >= 24 || h < 0 || m >= 60 || m < 0 {
+		return false
+	}
+	return true
+
 }
 
 // User binds the data from one user
@@ -122,7 +162,7 @@ type QuestionnaireResult struct {
 	QuestionnaireLogID int
 }
 
-// Question holds the question text and a reference to the corresponding study.
+// Question holds the question text and a reference to the corresponding tudy.
 type Question struct {
 	gorm.Model
 	ID           int
