@@ -9,7 +9,6 @@ import 'package:so_tired/utils/utils.dart';
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
 /// contains the default config.
-// TODO: adjust config load / write methods when implementing settings in STEP III
 class ConfigManager {
   static final ConfigManager _configManagerInstance =
       ConfigManager._configManager();
@@ -34,24 +33,21 @@ class ConfigManager {
 
   /// This method contains the default config and restores it on demand.
   void loadDefaultConfig() {
-    // TODO: adjust default server url based on the default server config
-    // TODO: specify appropriate notification text
-    // TODO: specify real study name
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
-      ..serverUrl = 'http://localhost'
+      ..serverUrl = 'http://localhost:50000/'
       ..utcNotificationTimes = <String>[
         // (hour:minutes) use UTC time
         '08:15',
         '12:30',
         '15:00'
       ]
-      ..notificationText = "Hi, You've been notified! Open the app now!"
+      ..notificationText = "Are you 'soTired'? Let's find out!"
       ..isSpatialSpanTaskEnabled = true
       ..isMentalArithmeticEnabled = true
       ..isPsychomotorVigilanceTaskEnabled = true
       ..isQuestionnaireEnabled = true
       ..isCurrentActivityEnabled = true
-      ..studyName = 'study1'
+      ..studyName = 'Default Study'
       ..isStudy = true
       ..questions = questions
       ..moods = <List<int>>[

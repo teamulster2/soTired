@@ -33,7 +33,7 @@ class HiveBoxNullValueException implements Exception {
   HiveBoxNullValueException(this.msg);
 }
 
-class NotificationTimeInvalidException implements Exception {
+class MalformedServerUrlException implements Exception {
   final String msg;
-  NotificationTimeInvalidException(this.msg);
+  MalformedServerUrlException(this.msg);
 }

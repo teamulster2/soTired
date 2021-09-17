@@ -32,7 +32,8 @@ class SoTiredAppContent extends StatefulWidget {
   State<StatefulWidget> createState() => SoTiredAppState();
 }
 
-class SoTiredAppState extends State<SoTiredAppContent> with WidgetsBindingObserver {
+class SoTiredAppState extends State<SoTiredAppContent>
+    with WidgetsBindingObserver {
   bool _doneInitializing = false;
 
   @override

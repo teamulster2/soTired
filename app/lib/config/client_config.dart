@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 
@@ -9,7 +10,6 @@ class ClientConfig {
   late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
-  // TODO: extend enabled features / settings in STEP II and STEP III
   late final bool _isSpatialSpanTaskEnabled;
   late final bool _isMentalArithmeticEnabled;
   late final bool _isPsychomotorVigilanceTaskEnabled;
@@ -114,7 +114,6 @@ class ClientConfigBuilder {
   late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
-  // TODO: extend enabled features / settings in STEP II and STEP III
   late final bool _isSpatialSpanTaskEnabled;
   late final bool _isMentalArithmeticEnabled;
   late final bool _isPsychomotorVigilanceTaskEnabled;
@@ -207,7 +206,6 @@ class ClientConfigBuilder {
           'Initial error message:\n$e');
     }
 
-    // TODO: check specific keys when they're defined, e.g. is URL valid, ...
     try {
       jsonResponse.containsKey('serverUrl') &&
           jsonResponse.containsKey('utcNotificationTimes') &&
@@ -225,6 +223,15 @@ class ClientConfigBuilder {
       throw MalformedJsonException(
           'The jsonResponse does not contain all necessary keys to '
           'instantiate a new client config.\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      Uri.parse(jsonResponse['serverUrl']).isAbsolute;
+    } catch (e) {
+      throw MalformedServerUrlException(
+          'The server url cannot be parsed and, therefore, is invalid. '
+          'Make sure to pass a valid url.\n\n'
           'Initial error message:\n$e');
     }
 
@@ -254,12 +261,24 @@ class ClientConfigBuilder {
       jsonResponse['utcNotificationTimes'] =
           _deserializeUtcNotificationTimes(jsonResponse);
     } catch (e) {
+      debugPrint(e.toString());
       throw MalformedUtcNotificationTimesException(
           'utcNotificationTimes have not been deserialized properly. '
           'Make sure to identify the List type or invoke '
           '_deserializeUtcNotificationTimes!\n\n'
           '$jsonResponse\n\n'
           'Initial error message:\n$e');
+    }
+
+    for (final String time in jsonResponse['utcNotificationTimes']) {
+      if (time.length != 5 ||
+          !time.contains(':') && !(time.indexOf(':') == 2) ||
+          !(int.parse(time.substring(0, 2), radix: 10) < 24) ||
+          !(int.parse(time.substring(3, 5), radix: 10) < 60)) {
+        throw MalformedUtcNotificationTimesException(
+            'This notification time format is invalid and can not be processed.\n'
+            'Current time variable: $time');
+      }
     }
   }
 

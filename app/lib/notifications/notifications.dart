@@ -1,5 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:timezone/timezone.dart';
 
 class Notifications {
@@ -18,7 +17,6 @@ class Notifications {
 
   /// Show a notification at a specific time, for the next three days after starting the app.
   /// The *[utcNotificationTimes]* is a list with the specific times when the push notification will be delivered.
-  /// Note: The time is given in the UTC format as an tuple.
   /// The *[headLine]* will be showed on top in the push notification.
   /// The *[body]* is the main msg. do you will send.
   Future<void> showScheduleNotification(
@@ -29,7 +27,6 @@ class Notifications {
       //notifications for the next 3 days will be added
       for (final String time in utcNotificationTimes) {
         try {
-          _isNotificationTimeValid(time);
           final List<String> splitTime = time.split(':');
           final int hours = int.parse(splitTime[0], radix: 10);
           final int minutes = int.parse(splitTime[1], radix: 10);
@@ -113,13 +110,5 @@ class Notifications {
     const InitializationSettings initializeSetting =
         InitializationSettings(android: initializeAndroid);
     await notificationsPlugin.initialize(initializeSetting);
-  }
-
-  void _isNotificationTimeValid(String time) {
-    if (time.length != 5 || !time.contains(':') && !(time.indexOf(':') == 2)) {
-      throw NotificationTimeInvalidException(
-          'This notification time format is invalid and can not be processed.\n'
-          'Current time variable: $time');
-    }
   }
 }

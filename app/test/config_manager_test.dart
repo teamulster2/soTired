@@ -14,20 +14,20 @@ import 'package:so_tired/utils/utils.dart';
 ConfigManager? _configManager = ConfigManager();
 
 final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
-  'serverUrl': 'http://localhost',
+  'serverUrl': 'http://localhost:50000/',
   'utcNotificationTimes': <String>[
     // (hour:minutes) use UTC time
     '08:15',
     '12:30',
     '15:00'
   ],
-  'notificationText': "Hi, You've been notified! Open the app now!",
+  'notificationText': "Are you 'soTired'? Let's find out!",
   'isSpatialSpanTaskEnabled': true,
   'isMentalArithmeticEnabled': true,
   'isPsychomotorVigilanceTaskEnabled': true,
   'isQuestionnaireEnabled': true,
   'isCurrentActivityEnabled': true,
-  'studyName': 'study1',
+  'studyName': 'Default Study',
   'isStudy': true,
   'questions': _serializeQuestionnaireObjects(questions),
   'moods': <List<int>>[
@@ -46,7 +46,7 @@ final Map<String, dynamic> customAssertObject = <String, dynamic>{
     '12:30',
     '15:00'
   ],
-  'notificationText': "Hi, You've been notified! Open the app now!",
+  'notificationText': "Are you 'soTired'? Let's find out!",
   'isSpatialSpanTaskEnabled': true,
   'isMentalArithmeticEnabled': false,
   'isPsychomotorVigilanceTaskEnabled': true,

@@ -34,46 +34,44 @@ void main() {
     });
 
     test('localFilePath should match every time when given the same argument',
-            () async {
-          const String assertDir = 'testDir';
-          final String assertDirectoryPath =
-              (await getApplicationDocumentsDirectory()).path + '/$assertDir';
-          final String utilsDirectoryPath = await Utils.getLocalFilePath(
-              assertDir);
+        () async {
+      const String assertDir = 'testDir';
+      final String assertDirectoryPath =
+          (await getApplicationDocumentsDirectory()).path + '/$assertDir';
+      final String utilsDirectoryPath = await Utils.getLocalFilePath(assertDir);
 
-          expect(assertDirectoryPath, utilsDirectoryPath);
-        });
+      expect(assertDirectoryPath, utilsDirectoryPath);
+    });
 
     test('localFilePath should not match when given different arguments',
-            () async {
-          final String assertDirectoryPath =
-              (await getApplicationDocumentsDirectory()).path + '/test';
-          final String utilsDirectoryPath = await Utils.getLocalFilePath(
-              'testDir');
+        () async {
+      final String assertDirectoryPath =
+          (await getApplicationDocumentsDirectory()).path + '/test';
+      final String utilsDirectoryPath = await Utils.getLocalFilePath('testDir');
 
-          expect(assertDirectoryPath, isNot(utilsDirectoryPath));
-        });
+      expect(assertDirectoryPath, isNot(utilsDirectoryPath));
+    });
 
     test('FileObject should match every time when given the same argument',
-            () async {
-          const String assertDir = 'testDir';
-          final String assertDirectoryPath =
-              (await getApplicationDocumentsDirectory()).path + '/$assertDir';
-          final File assertDirectoryFile = File(assertDirectoryPath);
-          final File utilsDirectoryFile = await Utils.getFileObject(assertDir);
+        () async {
+      const String assertDir = 'testDir';
+      final String assertDirectoryPath =
+          (await getApplicationDocumentsDirectory()).path + '/$assertDir';
+      final File assertDirectoryFile = File(assertDirectoryPath);
+      final File utilsDirectoryFile = await Utils.getFileObject(assertDir);
 
-          expect(assertDirectoryFile.path, utilsDirectoryFile.path);
-        });
+      expect(assertDirectoryFile.path, utilsDirectoryFile.path);
+    });
 
     test('FileObject should not match when given different arguments',
-            () async {
-          final String assertDirectoryPath =
-              (await getApplicationDocumentsDirectory()).path + '/test';
-          final File assertDirectoryFile = File(assertDirectoryPath);
-          final File utilsDirectoryFile = await Utils.getFileObject('testDir');
+        () async {
+      final String assertDirectoryPath =
+          (await getApplicationDocumentsDirectory()).path + '/test';
+      final File assertDirectoryFile = File(assertDirectoryPath);
+      final File utilsDirectoryFile = await Utils.getFileObject('testDir');
 
-          expect(assertDirectoryFile.path, isNot(utilsDirectoryFile.path));
-        });
+      expect(assertDirectoryFile.path, isNot(utilsDirectoryFile.path));
+    });
 
     test('files should exists when being created beforehand', () async {
       const String assertDir = 'testDir';
@@ -95,9 +93,7 @@ void main() {
     test('generated v4 UUIDs should match specific format', () {
       const String assertUuid = 'xxxxxxxx-xxxx-4xxx-zxxx-xxxxxxxxxxxx';
 
-      expect(assertUuid.length, Utils
-          .generateUuid()
-          .length);
+      expect(assertUuid.length, Utils.generateUuid().length);
     });
 
     test('strings should be converted to code units', () {
@@ -125,9 +121,7 @@ void main() {
     });
 
     test('malformed code unit lists should throw a FormatException', () {
-      final List<int> assertList = <int>[
-        int.parse('F0', radix: 16)
-      ];
+      final List<int> assertList = <int>[int.parse('F0', radix: 16)];
 
       throwsA(() => Utils.codeUnitsToString(assertList));
     });
