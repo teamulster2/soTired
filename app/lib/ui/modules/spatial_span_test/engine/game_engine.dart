@@ -39,10 +39,15 @@ class GameEngine {
       gameState.checkUserInteraction(boxId);
     } on GameWrongStateException {
       showDialog(InfoDialogObject(
-          'Exception', 'Something went wrong. Please restart the application',
-          () {
-        // TODO: onTap ok
-      }, () {}, false, true, true));
+          'Exception',
+          'Something went wrong. Please restart the application',
+          () {},
+          //NOTE: Empty callback, functionality not used in this case.
+          () {},
+          //NOTE: Empty callback, functionality not used in this case.
+          false,
+          true,
+          true));
     }
   }
 

@@ -32,7 +32,12 @@ class StartState extends GameState {
           ..transitionTo(ShowSequenceState())
           ..handleState();
       });
-    }, () {}, true, false, false));
+    },
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        true,
+        false,
+        false));
   }
 
   @override
@@ -69,9 +74,15 @@ class UserInteractionState extends GameState {
   @override
   void handleState() {
     engine.showDialog(InfoDialogObject(
-        'Now its your turn', 'Tap the boxes in the order shown earlier.', () {
-      //TODO: add on tap
-    }, () {}, true, false, false));
+        'Now its your turn',
+        'Tap the boxes in the order shown earlier.',
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        true,
+        false,
+        false));
   }
 
   /// This method checks if the tapped boxes are in the right order and the right place.
@@ -106,7 +117,9 @@ class GameOverState extends GameState {
         'Game over',
         'You did not tap the right box. Game over.',
         () {},
+        //NOTE: Empty callback, functionality not used in this case.
         () {},
+        //NOTE: Empty callback, functionality not used in this case.
         false,
         true,
         true));
@@ -132,6 +145,11 @@ class NextLevelState extends GameState {
           ..transitionTo(ShowSequenceState())
           ..handleState();
       });
-    }, () {}, true, false, false));
+    },
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        true,
+        false,
+        false));
   }
 }
