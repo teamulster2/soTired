@@ -25,13 +25,13 @@ PRs are very welcome! :)
 You can set up your development environments following the steps below.
 
 ### App development environment setup
-1. Make sure you have flutter (version `2.5.0`) installed and `flutter doctor -v` does not have any 
+1. Make sure you have flutter (version `2.5.0` or higher) installed and `flutter doctor -v` does not have any 
 errors regarding Android development.
 1. Clone the repository and run `cd soTired/ && make init` to initialize git pre-commit hooks.
 1. Inside the `soTired/` directory run `make flutterPubGet` to install all depending packages.
 
 ### Server development environment setup
-1. Make sure you have go (version `1.17`) installed.
+1. Make sure you have go (version `1.17` or higher) installed.
 1. Clone the repository and run `cd soTired/ && make init` to initialize git pre-commit hooks.
 1. Inside the `soTired/server/` directory run `go install` to install all requirements.
 
@@ -39,7 +39,8 @@ You're good to go now :)
 NOTE: Check the `Makefile` for useful commands regarding the app and also the server part.
 
 ## How to install the app
-1. Make sure you have `adb` installed (or something similar to install the app).
+1. Make sure you have `adb` installed (or something similar to install the app). *(The lowest Android 
+version supported is version `9.0` (API level 28).)*
 1. Download the official release ([here](https://github.com/teamulster2/soTired/releases)) or build 
 it yourself by running `make flutterBuild` in the root directory of the project. Note that you need to 
 set up your development environment first.
