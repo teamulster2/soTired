@@ -32,3 +32,13 @@ class MalformedServerUrlException implements Exception {
   final String msg;
   MalformedServerUrlException(this.msg);
 }
+
+class LoadConfigException implements Exception {
+  final String msg;
+  LoadConfigException(this.msg);
+}
+
+class SendDataException implements Exception {
+  final String msg;
+  SendDataException(this.msg);
+}

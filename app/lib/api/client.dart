@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
+import 'package:so_tired/exceptions/exceptions.dart';
 
 Future<String> loadConfig(String url) async {
   final http.Response response = await http.post(
@@ -12,11 +15,14 @@ Future<String> loadConfig(String url) async {
   if (response.statusCode == 200) {
     return response.body;
   } else {
-    throw Exception('Failed to load config.');
+    final int statusCode = response.statusCode;
+    throw LoadConfigException('Failed to load config. \n'
+        'Response status code: $statusCode');
   }
 }
 
-Future<void> sendData(String url, String jsonDatabase) async {
+Future<void> sendData(String url, Map<String, dynamic> database) async {
+  final String jsonDatabase = jsonEncode(database);
   final http.Response response = await http.post(
     Uri.parse(url + '/data'),
     headers: <String, String>{
@@ -24,6 +30,12 @@ Future<void> sendData(String url, String jsonDatabase) async {
     },
     body: jsonDatabase,
   );
+  if (response.statusCode != 200) {
+    final int statusCode = response.statusCode;
+    throw SendDataException('Failed to send data.\n'
+        'Response status code: $statusCode');
+  }
+
 //ignore: avoid_print
-  print('Response: ' + response.body);
+  print('Response statusCode: ' + response.statusCode.toString());
 }
