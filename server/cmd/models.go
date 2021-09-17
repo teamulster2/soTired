@@ -32,7 +32,7 @@ type NotificationTime struct {
 // BeforeCreate is a hook to validate the Time field entry
 func (n *NotificationTime) BeforeCreate(tx *gorm.DB) (err error) {
 	if !n.isValid() {
-		err = errors.New("can't save invalid data")
+		err = errors.New("Error while creating notificationTime model instance: Can't save wrong time format")
 	}
 	return
 }
