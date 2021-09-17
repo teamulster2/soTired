@@ -13,6 +13,8 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+/// This class holds the home screen of the application. It contains a [Scaffold] that has its appBar, drawer and body.
+/// The body contains the [HomeImage] and [HomeButton]s.
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) => Scaffold(

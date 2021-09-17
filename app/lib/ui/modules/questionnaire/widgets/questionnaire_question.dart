@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This widget contains the question of a QuestionnaireObject.
 class QuestionnaireQuestion extends StatefulWidget {
   const QuestionnaireQuestion({required this.question, Key? key})
       : super(key: key);

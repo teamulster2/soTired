@@ -6,6 +6,8 @@ import 'package:so_tired/ui/modules/self_assessment/widgets/current_activity.dar
 import 'package:so_tired/ui/modules/self_assessment/widgets/current_emotional_state.dart';
 import 'package:so_tired/utils/utils.dart';
 
+/// This widget shows the whole self assessment part of the app.
+/// Sets the mood (current emotional state) and the activity of the subject.
 class SelfAssessment extends StatefulWidget {
   const SelfAssessment(
       {required this.onFinished,
@@ -40,6 +42,7 @@ class _SelfAssessmentState extends State<SelfAssessment> {
     );
   }
 
+  /// This method returns the widget with the mood or activity question.
   Widget getWidget() {
     if (emotionalState.value.isEmpty) {
       return CurrentEmotionalState(onTap: (List<int> value) {

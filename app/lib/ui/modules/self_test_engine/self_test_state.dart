@@ -1,6 +1,7 @@
 import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 
+/// This abstract class sets the current engine and provides the handleState method that contains different functionality in all sub-states.
 abstract class SelfTestState {
   late SelfTestEngine engine;
 
@@ -11,6 +12,7 @@ abstract class SelfTestState {
   void handleState();
 }
 
+/// This class contains the self test state functionality directly after starting the self test.
 class StartSelfTestState extends SelfTestState {
   @override
   void handleState() {
@@ -27,6 +29,8 @@ class StartSelfTestState extends SelfTestState {
   }
 }
 
+/// This class contains the self test state functionality when the user is doing the self assessment.
+/// Afterwards it forwards to the pvt test.
 class SelfAssessmentState extends SelfTestState {
   @override
   void handleState() {
@@ -44,6 +48,8 @@ class SelfAssessmentState extends SelfTestState {
   }
 }
 
+/// This class contains the self test state functionality when the user is doing the spatial span task.
+/// Afterwards it shows all results and returns to the home page.
 class SpatialSpanTaskState extends SelfTestState {
   @override
   void handleState() {
@@ -66,6 +72,8 @@ class SpatialSpanTaskState extends SelfTestState {
   }
 }
 
+/// This class contains the self test state functionality when the user is doing the pvt test.
+/// Afterwards it forwards to the spatial span task test.
 class PVTState extends SelfTestState {
   @override
   void handleState() {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+/// This class holds the box of a spatial span test that is highlighted when the box is pressed or shown.
 class SpatialSpanTestBox extends StatelessWidget {
   const SpatialSpanTestBox(
       {required this.onTap, required this.primary, Key? key})

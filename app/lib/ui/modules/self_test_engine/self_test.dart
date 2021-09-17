@@ -9,6 +9,7 @@ import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_state.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/spatial_span_test.dart';
 
+/// This class contains the whole self test ui with the self test engine that contains the logical part.
 class SelfTest extends StatefulWidget {
   const SelfTest({Key? key}) : super(key: key);
 

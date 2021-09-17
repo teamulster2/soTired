@@ -24,6 +24,9 @@ class PVTTest extends StatefulWidget {
   _PVTTestState createState() => _PVTTestState();
 }
 
+/// This widget holds the whole pvt test.
+/// The game engine is included.
+/// Widgets used: [PVTTestProgress], [PVTTestSquare] and [PVTTestDiff].
 class _PVTTestState extends State<PVTTest> {
   ValueNotifier<bool> boxAppears = ValueNotifier<bool>(false);
 
@@ -107,10 +110,8 @@ class _PVTTestState extends State<PVTTest> {
         widget.setDiff(calculateAverageDiff().round());
 
         final Map<ModuleType, Map<String, dynamic>> gameValue =
-        <ModuleType, Map<String, dynamic>>{
-          ModuleType.spatialSpanTask: <String, dynamic>{
-            '': diffs
-          }
+            <ModuleType, Map<String, dynamic>>{
+          ModuleType.spatialSpanTask: <String, dynamic>{'': diffs}
         };
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
@@ -122,8 +123,8 @@ class _PVTTestState extends State<PVTTest> {
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writePersonalHighScores(<PersonalHighScore>[
-          PersonalHighScore(Utils.generateUuid(), calculateAverageDiff().round(),
-              ModuleType.spatialSpanTask)
+          PersonalHighScore(Utils.generateUuid(),
+              calculateAverageDiff().round(), ModuleType.spatialSpanTask)
         ]);
         widget.onFinished();
       }

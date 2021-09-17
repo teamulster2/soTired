@@ -14,6 +14,8 @@ import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_
 import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_progress.dart';
 import 'package:so_tired/utils/utils.dart';
 
+/// This class contains the spatial span test widget.
+/// [GameEngine] with business logic to set variables
 class SpatialSpanTest extends StatefulWidget {
   const SpatialSpanTest(
       {required this.onFinished, required this.setLevel, Key? key})
@@ -76,6 +78,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
         ));
   }
 
+  /// This method shows the info dialog corresponding to the [InfoDialogObject].
   void showInfoDialog(InfoDialogObject ido) {
     showDialog(
         barrierDismissible: false,
@@ -102,6 +105,8 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                 ]));
   }
 
+  /// This method shows the game over dialog corresponding to the [InfoDialogObject] with the information given.
+  /// This dialog has a pink background to highlight the game over.
   void showGameOverDialog(InfoDialogObject ido) {
     showDialog(
         barrierDismissible: false,
@@ -118,11 +123,6 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                       if (ido.onOkPop) {
                         Navigator.pop(context);
                       } else if (ido.onOkPush) {
-                        /*Navigator.push(
-                            context,
-                            MaterialPageRoute<BuildContext>(
-                                builder: (BuildContext context) =>
-                                    const Home()));*/
                         widget.setLevel(gameEngine.level.value - 1);
 
                         final Map<ModuleType, Map<String, dynamic>> gameValue =
@@ -134,14 +134,19 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                         Provider.of<ServiceProvider>(context, listen: false)
                             .databaseManager
                             .writeUserLogs(<UserLog>[
-                          UserLog(Utils.generateUuid(), UserAccessMethod.regularAppStart,
-                              gameValue, DateTime.now().toString())
+                          UserLog(
+                              Utils.generateUuid(),
+                              UserAccessMethod.regularAppStart,
+                              gameValue,
+                              DateTime.now().toString())
                         ]);
 
                         Provider.of<ServiceProvider>(context, listen: false)
                             .databaseManager
                             .writePersonalHighScores(<PersonalHighScore>[
-                          PersonalHighScore(Utils.generateUuid(), gameEngine.level.value - 1,
+                          PersonalHighScore(
+                              Utils.generateUuid(),
+                              gameEngine.level.value - 1,
                               ModuleType.spatialSpanTask)
                         ]);
 

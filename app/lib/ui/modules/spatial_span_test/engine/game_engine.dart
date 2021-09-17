@@ -5,6 +5,7 @@ import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 import 'package:flutter/material.dart';
 
+/// This class holds the game engine with all variables and values needed to start the game.
 class GameEngine {
   late GameState gameState;
   Function(InfoDialogObject) showDialog;

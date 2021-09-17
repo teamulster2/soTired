@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This widget holds the progress of a questionnaire with the length of the questionnaire and the current question number.
 class QuestionnaireProgress extends StatefulWidget {
   const QuestionnaireProgress(
       {required this.length,

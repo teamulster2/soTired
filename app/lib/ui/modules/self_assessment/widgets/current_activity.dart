@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// This widget sets the current activity of the subject.
+/// It returns a [String] with the onTap Function().
 class CurrentActivity extends StatelessWidget {
   const CurrentActivity({required this.onTap, Key? key}) : super(key: key);
   final Function(String) onTap;
@@ -55,6 +57,7 @@ class CurrentActivity extends StatelessWidget {
       ));
 }
 
+/// This class contains the current activity ui part.
 class Activity extends StatelessWidget {
   const Activity(
       {required this.icon, required this.text, required this.onTap, Key? key})

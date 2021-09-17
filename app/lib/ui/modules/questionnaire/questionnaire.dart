@@ -12,6 +12,9 @@ import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_progress
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_question.dart';
 import 'package:so_tired/utils/utils.dart';
 
+/// This widget holds everything that has to do with the Questionnaire part of the app.
+/// It holds the [QuestionnaireProgress], the [QuestionnaireQuestion] and all four [QuestionnaireAnswer] widgets.
+/// This widget also contains the engine of the questionnaire part with the whole frontend logic.
 class Questionnaire extends StatefulWidget {
   const Questionnaire({Key? key}) : super(key: key);
 
@@ -68,6 +71,7 @@ class _QuestionnaireState extends State<Questionnaire> {
             )));
   }
 
+  /// This methods returns the [QuestionnaireProgress] widget with the number of questions and the current question number.
   Widget addQuestionnaireProgress(int length) => QuestionnaireProgress(
       length: length,
       currentQuestion: currentQuestion.value + 1,
@@ -86,6 +90,7 @@ class _QuestionnaireState extends State<Questionnaire> {
         }
       });
 
+  /// This method returns the [QuestionnaireAnswer] widget with the current list of answers and the functionality when you select an answer
   Widget addQuestionnaireAnswer(int i, List<QuestionnaireObject> questions) =>
       QuestionnaireAnswer(
         text: questions[currentQuestion.value].answers[i],
@@ -116,6 +121,7 @@ class _QuestionnaireState extends State<Questionnaire> {
         },
       );
 
+  /// This method shows a dialog with the information about finishing the questionnaire. It creates a questionnaire result and saves the data into the database.
   void showDialogQuestionnaireFinished() {
     showDialog(
         context: context,
@@ -142,6 +148,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 ]));
   }
 
+  /// This method shows a dialog with the information that you can not skip a question.
   void showDialogQuestionNotAnswered() {
     showDialog(
         context: context,

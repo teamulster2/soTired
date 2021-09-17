@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:so_tired/utils/utils.dart';
 
+/// This widget sets the current emotional state of the subject.
+/// It returns a [List] with the onTap Function().
 class CurrentEmotionalState extends StatelessWidget {
   const CurrentEmotionalState({required this.onTap, Key? key})
       : super(key: key);
@@ -49,6 +51,7 @@ class CurrentEmotionalState extends StatelessWidget {
       ));
 }
 
+/// This widget shows the emotional states with its text.
 class EmotionalState extends StatelessWidget {
   const EmotionalState(
       {required this.image,
