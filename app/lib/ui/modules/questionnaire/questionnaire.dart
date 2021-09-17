@@ -80,6 +80,7 @@ class _QuestionnaireState extends State<Questionnaire> {
           currentQuestion.value -= 1;
         }
       },
+      answeredQuestion: answeredQuestion,
       onForward: () {
         if (currentQuestion.value < answeredQuestion) {
           if (currentQuestion.value < length - 1) {

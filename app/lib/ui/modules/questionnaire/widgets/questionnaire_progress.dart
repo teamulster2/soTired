@@ -7,6 +7,7 @@ class QuestionnaireProgress extends StatefulWidget {
       required this.currentQuestion,
       required this.onBack,
       required this.onForward,
+      required this.answeredQuestion,
       Key? key})
       : super(key: key);
 
@@ -14,6 +15,7 @@ class QuestionnaireProgress extends StatefulWidget {
   final int currentQuestion;
   final VoidCallback onBack;
   final VoidCallback onForward;
+  final int answeredQuestion;
 
   @override
   _QuestionnaireProgressState createState() => _QuestionnaireProgressState();
@@ -41,15 +43,7 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
                   widget.length.toString(),
               style: Theme.of(context).textTheme.bodyText2),
           const SizedBox(width: 20),
-          GestureDetector(
-              child: Container(
-                color: Theme.of(context).primaryColor,
-                width: 40,
-                height: 40,
-                child: const Icon(IconData(62841, fontFamily: 'MaterialIcons'),
-                    color: Colors.white),
-              ),
-              onTap: () => widget.onForward())
+          getButton()
         ]),
       ),
       onWillPop: () => onWillPop(context));
@@ -69,4 +63,40 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
                   onPressed: () => Navigator.pop(context, true),
                 )
               ]));
+
+  Widget getButton() {
+    if (widget.currentQuestion <= widget.answeredQuestion) {
+      if (widget.currentQuestion < widget.length - 1) {
+        return GestureDetector(
+            child: Container(
+              color: Theme.of(context).primaryColor,
+              width: 40,
+              height: 40,
+              child: const Icon(IconData(62841, fontFamily: 'MaterialIcons'),
+                  color: Colors.white),
+            ),
+            onTap: () => widget.onForward());
+      } else {
+        return GestureDetector(
+            child: Container(
+              color: Colors.grey,
+              width: 40,
+              height: 40,
+              child: const Icon(IconData(62841, fontFamily: 'MaterialIcons'),
+                  color: Colors.white),
+            ),
+            onTap: () => widget.onForward());
+      }
+    } else {
+      return GestureDetector(
+          child: Container(
+            color: Colors.grey,
+            width: 40,
+            height: 40,
+            child: const Icon(IconData(62841, fontFamily: 'MaterialIcons'),
+                color: Colors.white),
+          ),
+          onTap: () => widget.onForward());
+    }
+  }
 }

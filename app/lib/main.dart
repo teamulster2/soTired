@@ -79,7 +79,7 @@ class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
                   color: Colors.white,
                   fontFamily: 'Roboto'),
               bodyText2: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.normal,
                   color: Colors.white,
                   fontFamily: 'Roboto'),
