@@ -1,5 +1,12 @@
-# soTired
-![build](https://github.com/teamulster2/soTired/actions/workflows/main.yml/badge.svg)
+![pipeline](https://github.com/teamulster2/soTired/actions/workflows/main.yml/badge.svg)
+![license](https://img.shields.io/github/license/teamulster2/soTired)
+
+<div align="center">
+  <img src="./app/icon/icon.png">
+  <p style="font-size:70px;">
+    soTired
+  </p>
+</div>
 
 ## Motivation
 soTired is an application for cognitive fatigue assessment.
@@ -9,10 +16,39 @@ implemented in Dart/Flutter and a server side (data management) written in Golan
 Besides Android, Dart/Flutter provides the ability to add an iOS, desktop and / or web application 
 from a single codebase.
 
-
 soTired is a rewrite of the application presented in the 
 [Validation of a Smartphone-Based Approach to In Situ Cognitive Fatigue Assessment](https://mhealth.jmir.org/2017/8/e125) 
 paper by Edward Price, George Moore, Leo Galway and Mark Linden.
+
+## How to contribute
+PRs are very welcome! :)  
+You can set up your development environments following the steps below.
+
+### App development environment setup
+1. Make sure you have flutter (version `2.5.0`) installed and `flutter doctor -v` does not have any 
+errors regarding Android development.
+1. Clone the repository and run `cd soTired/ && make init` to initialize git pre-commit hooks.
+1. Inside the `soTired/` directory run `make flutterPubGet` to install all depending packages.
+
+### Server development environment setup
+1. Make sure you have go (version `1.17`) installed.
+1. Clone the repository and run `cd soTired/ && make init` to initialize git pre-commit hooks.
+1. Inside the `soTired/server/` directory run `go install` to install all requirements.
+
+You're good to go now :)  
+NOTE: Check the `Makefile` for useful commands regarding the app and also the server part.
+
+## How to install the app
+1. Make sure you have `adb` installed (or something similar to install the app).
+1. Download the official release ([here](https://github.com/teamulster2/soTired/releases)) or build 
+it yourself by running `make flutterBuild` in the root directory of the project. Note that you need to 
+set up your development environment first.
+
+## How to set up the server
+1. After setting up the server development environment run `cd soTired && make gobuild` to build the 
+server.
+1. By then typing `cd server && ./soti-server` you will be displayed the server help. Follow these 
+instructions to start the server.
 
 ## Contributions
 For communication through the code, please use one of the following tags:
@@ -35,22 +71,5 @@ The git workflow for this repo is **rebase-merge**, which results in a history o
 In conclusion, the main branch only contains merge commits from other branches,
 which are rebased onto the most recent commit.
 
-## How to contribute
-PRs are very welcome! :)  
-You can set up your development environments following the steps below.
-
-### App development environment setup
-1. Make sure you have flutter (version `2.5.0`) installed and `flutter doctor -v` does not have any 
-errors regarding Android development.
-1. Clone the repository and run `cd soTired/ && make init` to initialize git pre-commit hooks.
-1. Inside the `soTired/` directory run `make flutterPubGet` to install all depending packages.
-
-You're good to go now :)
-
-### Server development environment setup
-1. Make sure you have go (version `1.17`) installed.
-1. Clone the repository and run `cd soTired/server/ && make init` to initialize git pre-commit hooks.
-1. Inside the `soTired/server/` directory run `go install` to install all requirements.
-
-You're good to go now :)  
-NOTE: Check the `Makefile` for useful commands regarding the app and also the server part.
+## Documentation
+For further information please refer to the app's [report](https://github.com/teamulster2/report).
