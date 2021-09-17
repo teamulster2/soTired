@@ -45,10 +45,10 @@ void main() {
         ModuleType.mentalArithmetic: {'game1': false}
       },
       '2021-09-15T16:04:26.870744');
-  final UserState _userState =
-      UserState(_uuidUserState, 'running', Utils.stringToCodeUnits('🤪'));
-  final UserState _userState2 =
-      UserState(_uuidUserState2, 'working', Utils.stringToCodeUnits('🤪'));
+  final UserState _userState = UserState(_uuidUserState,
+      Utils.stringToCodeUnits('☕️'), Utils.stringToCodeUnits('😐'));
+  final UserState _userState2 = UserState(_uuidUserState2,
+      Utils.stringToCodeUnits('🏡'), Utils.stringToCodeUnits('🤩'));
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
       _uuidQuestionnaireResult, {'firstQuestion': QuestionnaireAnswers.second});
 
@@ -66,13 +66,13 @@ void main() {
     'UserStates': [
       {
         'uuid': _uuidUserState,
-        'currentActivity': 'running',
-        'currentMood': [240, 159, 164, 170]
+        'currentActivity': [226, 152, 149, 239, 184, 143],
+        'currentMood': [240, 159, 152, 144]
       },
       {
         'uuid': _uuidUserState2,
-        'currentActivity': 'working',
-        'currentMood': [240, 159, 164, 170]
+        'currentActivity': [240, 159, 143, 161],
+        'currentMood': [240, 159, 164, 169]
       }
     ],
     'QuestionnaireResults': [
