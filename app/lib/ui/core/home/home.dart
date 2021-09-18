@@ -4,6 +4,7 @@ import 'package:so_tired/ui/core/home/widgets/home_image.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/modules/questionnaire/questionnaire.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test.dart';
+import 'package:so_tired/ui/modules/settings/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -63,17 +64,39 @@ class _HomeState extends State<Home> {
                           icon: Icons.app_settings_alt,
                           text: 'settings',
                           onTap: () {
-                            // TODO: navigation to new page: settings
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute<BuildContext>(
+                                    builder: (BuildContext context) =>
+                                    const Settings()));
                           },
                         ),
                         HomeButton(
                           icon: Icons.graphic_eq,
                           text: 'audio recognition',
                           onTap: () {
-                            // TODO: navigation to new page: audio recognition
+                            showAudioNotImplementedDialog();
                           },
                         ),
                       ])),
             ),
           ])));
+
+  void showAudioNotImplementedDialog() {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+            title: const Text(
+                'Unfortunately the audio recognition has not been implemented yet.'),
+            content: const Text('We will focus on that later on.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Ok'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ]));
+  }
 }
