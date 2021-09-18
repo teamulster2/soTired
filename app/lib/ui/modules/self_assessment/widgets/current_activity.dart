@@ -25,34 +25,40 @@ class CurrentActivity extends StatelessWidget {
             Activity(
                 onTap: () => onTap('home'),
                 icon: Icons.home_rounded,
-                text: 'home', emoji: const <int>[0xF0, 0x9F, 0x8F, 0xA1]),
+                text: 'home',
+                emoji: const <int>[0xF0, 0x9F, 0x8F, 0xA1]),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap('work'),
                 icon: Icons.work_rounded,
-                text: 'work', emoji: const <int>[0xE2, 0x98, 0x95]),
+                text: 'work',
+                emoji: const <int>[0xE2, 0x98, 0x95]),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap('university'),
                 icon: Icons.maps_home_work_rounded,
-                text: 'university', emoji: const <int>[0xF0, 0x9F, 0x8F, 0xAB]),
+                text: 'university',
+                emoji: const <int>[0xF0, 0x9F, 0x8F, 0xAB]),
           ]),
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
                 onTap: () => onTap('shops'),
                 icon: Icons.shopping_bag_rounded,
-                text: 'shops', emoji: const <int>[0xF0, 0x9F, 0x91, 0x98]),
+                text: 'shops',
+                emoji: const <int>[0xF0, 0x9F, 0x91, 0x98]),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap('friends / family'),
                 icon: Icons.people_rounded,
-                text: 'friends / family', emoji: const <int>[0xF0, 0x9F, 0x91, 0xAA]),
+                text: 'friends / family',
+                emoji: const <int>[0xF0, 0x9F, 0x91, 0xAA]),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap('other'),
                 icon: Icons.my_location_rounded,
-                text: 'other', emoji: const <int>[0xE2, 0x9B, 0xB3]),
+                text: 'other',
+                emoji: const <int>[0xE2, 0x9B, 0xB3]),
           ]),
         ],
       ));
@@ -61,7 +67,11 @@ class CurrentActivity extends StatelessWidget {
 /// This class contains the current activity ui part.
 class Activity extends StatelessWidget {
   const Activity(
-      {required this.icon, required this.emoji, required this.text, required this.onTap, Key? key})
+      {required this.icon,
+      required this.emoji,
+      required this.text,
+      required this.onTap,
+      Key? key})
       : super(key: key);
   final IconData icon;
   final String text;

@@ -14,7 +14,7 @@ class UserState extends HiveObject {
   String? uuid;
 
   @HiveField(1)
-  String? currentActivity;
+  List<int>? currentActivity;
 
   @HiveField(2)
   List<int>? currentMood;

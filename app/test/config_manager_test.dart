@@ -29,13 +29,7 @@ final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
   'isCurrentActivityEnabled': true,
   'studyName': 'Default Study',
   'isStudy': true,
-  'questions': _serializeQuestionnaireObjects(questions),
-  'moods': <List<int>>[
-    <int>[...Utils.stringToCodeUnits('😄')],
-    <int>[...Utils.stringToCodeUnits('🤩')],
-    <int>[...Utils.stringToCodeUnits('🥱')],
-    <int>[...Utils.stringToCodeUnits('😢')]
-  ]
+  'questions': _serializeQuestionnaireObjects(questions)
 };
 
 final Map<String, dynamic> customAssertObject = <String, dynamic>{
@@ -54,13 +48,7 @@ final Map<String, dynamic> customAssertObject = <String, dynamic>{
   'isCurrentActivityEnabled': false,
   'studyName': 'study2',
   'isStudy': true,
-  'questions': _serializeQuestionnaireObjects(questions),
-  'moods': <List<int>>[
-    <int>[...Utils.stringToCodeUnits('😄')],
-    <int>[...Utils.stringToCodeUnits('🤩')],
-    <int>[...Utils.stringToCodeUnits('🥱')],
-    <int>[...Utils.stringToCodeUnits('😢')]
-  ]
+  'questions': _serializeQuestionnaireObjects(questions)
 };
 
 void main() {
@@ -145,18 +133,7 @@ void main() {
       throwsA(() async => _configManager!.loadConfigFromJson());
     });
 
-    test('should throw MalformedMoodsException', () async {
-      final File fileObject =
-          await Utils.getFileObject(_configManager!.clientConfigFileName);
-      customAssertObject['moods'] = '';
-      final String customAssertObjectJson = jsonEncode(customAssertObject);
-      await fileObject.writeAsString(customAssertObjectJson);
-
-      throwsA(() async => _configManager!.loadConfigFromJson());
-    });
-
-    test('should throw MalformedUtcNotificationTimesException',
-        () async {
+    test('should throw MalformedUtcNotificationTimesException', () async {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
       customAssertObject['utcNotificationTimes'] = <String>['-5:10'];

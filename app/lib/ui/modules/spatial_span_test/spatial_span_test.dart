@@ -45,36 +45,39 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
 
     return Container(
         color: Theme.of(context).backgroundColor,
-        child: Column(
-          children: <Widget>[
-            SpatialSpanTestProgress(
-                level: gameEngine.level, currentValue: gameEngine.currentValue),
-            SizedBox(
-                height: MediaQuery.of(context).size.height - 250,
-                width: MediaQuery.of(context).size.width,
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 4,
-                  children: <Widget>[
-                    for (int i = 1; i < 17; i++)
-                      ValueListenableBuilder<List<int>>(
-                          valueListenable: gameEngine.currentSequence,
-                          builder: (BuildContext context, Object? value,
-                                  Widget? widget) =>
-                              ValueListenableBuilder<int>(
-                                  valueListenable: gameEngine.currentPrimary,
-                                  builder: (BuildContext context, Object? value,
-                                          Widget? widget) =>
-                                      SpatialSpanTestBox(
-                                        primary: i ==
-                                            gameEngine.currentPrimary.value,
-                                        onTap: () =>
-                                            gameEngine.checkUserInteraction(i),
-                                      ))),
-                  ],
-                )),
-          ],
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SpatialSpanTestProgress(
+                  level: gameEngine.level, currentValue: gameEngine.currentValue),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height - 250,
+                  width: MediaQuery.of(context).size.width,
+                  child: GridView.count(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 4,
+                    children: <Widget>[
+                      for (int i = 1; i < 17; i++)
+                        ValueListenableBuilder<List<int>>(
+                            valueListenable: gameEngine.currentSequence,
+                            builder: (BuildContext context, Object? value,
+                                    Widget? widget) =>
+                                ValueListenableBuilder<int>(
+                                    valueListenable: gameEngine.currentPrimary,
+                                    builder: (BuildContext context, Object? value,
+                                            Widget? widget) =>
+                                        SpatialSpanTestBox(
+                                          primary: i ==
+                                              gameEngine.currentPrimary.value,
+                                          onTap: () =>
+                                              gameEngine.checkUserInteraction(i),
+                                        ))),
+                    ],
+                  )),
+            ],
+          ),
         ));
   }
 
