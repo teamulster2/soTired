@@ -2,7 +2,7 @@
 ![license](https://img.shields.io/github/license/teamulster2/soTired)
 
 <div align="center">
-  <img src="./app/assets/images/background_06.png">
+  <img width="400px" src="./app/assets/images/background_06.png">
 </div>
 
 ## Motivation

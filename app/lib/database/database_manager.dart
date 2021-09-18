@@ -263,6 +263,8 @@ class DatabaseManager {
     return returnList;
   }
 
+  /// This method returns the current [SettingsObject] from [SettingsObject]
+  /// box.
   SettingsObject getSettings() {
     if (_settingsBox.isEmpty) {
       throw EmptyHiveBoxException('SettingsBox does not contain entries. '
