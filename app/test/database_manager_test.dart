@@ -400,8 +400,6 @@ void main() {
     test('empty database should throw Exception when asked for export', () {
       throwsA(exportDatabaseForTransfer());
     });
-
-    // TODO: Mock and add further tests for database
   });
 }
 

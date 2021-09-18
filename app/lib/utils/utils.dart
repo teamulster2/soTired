@@ -42,9 +42,10 @@ class Utils {
     try {
       const Utf8Decoder utf8decoder = Utf8Decoder();
       return utf8decoder.convert(codeUnits);
-    } on FormatException {
-      throw const FormatException('The given List can not be converted into a '
-          'valid UTF-8 String.');
+    } on FormatException catch (e) {
+      throw FormatException(
+          'The given List can not be converted into a valid UTF-8 String.\n\n'
+          'Initial error message:\n$e');
     }
   }
 
