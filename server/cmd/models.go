@@ -12,7 +12,6 @@ import (
 type Study struct {
 	gorm.Model
 	ID                                int
-	ServerURL                         string
 	StudyName                         string
 	NotificationText                  string
 	IsSpatialSpanTaskEnabled          bool
