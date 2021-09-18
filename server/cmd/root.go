@@ -18,8 +18,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -56,6 +57,8 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	run.Flags().Uint16P("port", "p", 50000, "port to serve on")
+	rootCmd.AddCommand(run)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -79,4 +82,11 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+var run = &cobra.Command{
+	Use:   "run",
+	Short: "start server",
+	Long:  `start http server listening on given port to send reports from the sotired app`,
+	Run:   serveRun,
 }
