@@ -21,15 +21,16 @@ import (
 // - the struct data is transformed into a string and send to the client
 
 type jsonConfig struct {
-	NotificationText                  string   `json:"notificationText"`
-	IsMentalArithmeticEnabled         bool     `json:"isMentalArithmeticEnabled"`
-	IsSpatialSpanTaskEnabled          bool     `json:"isSpatialSpanTaskEnabled"`
-	IsPsychomotorVigilanceTaskEnabled bool     `json:"isPsychomotorVigilanceTaskEnabled"`
-	IsQuestionnaireEnabled            bool     `json:"isQuestionnaireEnabled"`
-	IsCurrentActivityEnabled          bool     `json:"isCurrentActivityEnabled"`
-	StudyName                         string   `json:"studyName"`
-	NotificationTimes                 []string `json:"notificationTimes"`
-	Questionnaire                     []jsonQuestionWithAnswers
+	ServerVersion                     string                    `json:"serverVersion"`
+	NotificationText                  string                    `json:"notificationText"`
+	IsMentalArithmeticEnabled         bool                      `json:"isMentalArithmeticEnabled"`
+	IsSpatialSpanTaskEnabled          bool                      `json:"isSpatialSpanTaskEnabled"`
+	IsPsychomotorVigilanceTaskEnabled bool                      `json:"isPsychomotorVigilanceTaskEnabled"`
+	IsQuestionnaireEnabled            bool                      `json:"isQuestionnaireEnabled"`
+	IsCurrentActivityEnabled          bool                      `json:"isCurrentActivityEnabled"`
+	StudyName                         string                    `json:"studyName"`
+	UTCNotificationTimes              []string                  `json:"utcNotificationTimes"`
+	Questionnaire                     []jsonQuestionWithAnswers `json:"questions"`
 }
 
 type jsonQuestionWithAnswers struct {
@@ -38,10 +39,11 @@ type jsonQuestionWithAnswers struct {
 }
 
 type studyData struct {
-	Study             Study
-	IsStudy           bool
-	NotificationTimes []string
-	Questionnaire     []questionWithAnswers
+	ServerVersion       string
+	Study               Study
+	IsStudy             bool                  `json:"isStudy"`
+	UTCNotificationTime []string              `json:"utcNotificationTimes"`
+	Questions           []questionWithAnswers `json:"questions"`
 }
 
 type questionWithAnswers struct {
@@ -51,7 +53,7 @@ type questionWithAnswers struct {
 
 func serveRun(cmd *cobra.Command, args []string) {
 	// Set routing rules
-	http.HandleFunc("/", root)
+	http.HandleFunc("/", config)
 	http.HandleFunc("/config", config)
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
@@ -70,7 +72,7 @@ func root(w http.ResponseWriter, r *http.Request) {
 func config(w http.ResponseWriter, r *http.Request) {
 	io.ReadAll(r.Body)
 
-	content, err := ioutil.ReadFile("config.json")
+	content, err := ioutil.ReadFile("../config.json")
 	if err != nil {
 		log.Fatal("Error when opening config file: ", err)
 	}
@@ -84,7 +86,7 @@ func config(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic("Failed to connect database")
 	}
-	db.AutoMigrate(&Study{}, &Question{}, &Answer{}, &NotificationTime{})
+	db.AutoMigrate(&Study{}, &Question{}, &Answer{}, &UTCNotificationTime{})
 	study := Study{
 		StudyName:                         jsonConfig.StudyName,
 		NotificationText:                  jsonConfig.NotificationText,
@@ -95,35 +97,36 @@ func config(w http.ResponseWriter, r *http.Request) {
 		IsCurrentActivityEnabled:          jsonConfig.IsCurrentActivityEnabled,
 	}
 	db.Create(&study)
-	notificationTimes := make([]string, 0, len(jsonConfig.NotificationTimes))
-	for _, notificationTime := range jsonConfig.NotificationTimes {
+	utcNotificationTimes := make([]string, 0, len(jsonConfig.UTCNotificationTimes))
+	for _, notificationTime := range jsonConfig.UTCNotificationTimes {
 		db.Create(&notificationTime)
-		notificationTimes = append(notificationTimes, notificationTime)
+		utcNotificationTimes = append(utcNotificationTimes, notificationTime)
 	}
-	questionnaire := make([]questionWithAnswers, 0, len(jsonConfig.Questionnaire))
+	questions := make([]questionWithAnswers, 0, len(jsonConfig.Questionnaire))
 	for _, jsonQuestionWithAnswers := range jsonConfig.Questionnaire {
 		question := Question{
 			StudyID:      study.ID,
 			QuestionText: jsonQuestionWithAnswers.Question,
 		}
 		db.Create(&question)
+		var answers []Answer
 		for _, answer := range jsonQuestionWithAnswers.Answers {
 			answer := Answer{
 				QuestionID: question.ID,
 				AnswerText: answer,
 			}
 			db.Create(&answer)
+			answers = append(answers, answer)
 		}
-		var answers []Answer
-		db.Where("question_id = ?", question.ID).Find(&answers)
-		questionnaire = append(questionnaire, questionWithAnswers{Answers: answers, Question: question})
+		questions = append(questions, questionWithAnswers{Answers: answers, Question: question})
 	}
 
 	studyData := &studyData{
-		Study:             study,
-		IsStudy:           true,
-		NotificationTimes: notificationTimes,
-		Questionnaire:     questionnaire,
+		ServerVersion:       jsonConfig.ServerVersion,
+		Study:               study,
+		IsStudy:             true,
+		UTCNotificationTime: utcNotificationTimes,
+		Questions:           questions,
 	}
 
 	studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")
@@ -132,7 +135,7 @@ func config(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	io.WriteString(w, string(studyDataAsBytes))
-	fmt.Println("replied config: ", string(studyDataAsBytes))
+	fmt.Println("Replied config: ", string(studyDataAsBytes))
 }
 
 func data(w http.ResponseWriter, r *http.Request) {

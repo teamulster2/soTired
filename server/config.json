@@ -1,6 +1,6 @@
 {
   "serverVersion": "v0.0.0",
-  "notificationTimes": [
+  "utcNotificationTimes": [
     "08:15",
     "12:30",
     "15:00"
@@ -12,7 +12,7 @@
   "isQuestionnaireEnabled": true,
   "isCurrentActivityEnabled": true,
   "studyName": "Default Study",
-  "questionnaire": [
+  "questions": [
     {
       "question": "Have you felt fatigued during the past month? It does not matter if the fatigue is physical (muscular) or mental. If you recently experienced something unusual (for example an accident or short illness) you should try to disregard it when assessing your fatigue.",
       "answers": [

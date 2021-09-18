@@ -12,31 +12,31 @@ import (
 type Study struct {
 	gorm.Model
 	ID                                int
-	StudyName                         string
-	NotificationText                  string
-	IsSpatialSpanTaskEnabled          bool
-	IsPsychomotorVigilanceTaskEnabled bool
-	IsMentalArithmeticEnabled         bool
-	IsQuestionnaireEnabled            bool
-	IsCurrentActivityEnabled          bool
+	StudyName                         string `json:"studyName"`
+	NotificationText                  string `json:"notificationText"`
+	IsSpatialSpanTaskEnabled          bool   `json:"isSpatialSpanTaskEnabled"`
+	IsPsychomotorVigilanceTaskEnabled bool   `json:"isPsychomotorVigilanceTaskEnabled"`
+	IsMentalArithmeticEnabled         bool   `json:"isMentalArithmeticEnabled"`
+	IsQuestionnaireEnabled            bool   `json:"isQuestionnaireEnabled"`
+	IsCurrentActivityEnabled          bool   `json:"isCurrentActivityEnabled"`
 }
 
-// NotificationTime holds the times when the user gets a app notification
-type NotificationTime struct {
+// UTCNotificationTimes holds the times when the user gets a app notification
+type UTCNotificationTime struct {
 	ID      int
 	StudyID int
 	Time    string
 }
 
 // BeforeCreate is a hook to validate the Time field entry
-func (n *NotificationTime) BeforeCreate(tx *gorm.DB) (err error) {
+func (n *UTCNotificationTime) BeforeCreate(tx *gorm.DB) (err error) {
 	if !n.isValid() {
 		err = errors.New("Error while creating notificationTime model instance: Can't save wrong time format")
 	}
 	return
 }
 
-func (n *NotificationTime) isValid() bool {
+func (n *UTCNotificationTime) isValid() bool {
 	parts := strings.Split(n.Time, ":")
 	if len(parts) != 2 {
 		return false

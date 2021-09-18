@@ -15,28 +15,28 @@ func TestTimeValidation(t *testing.T) {
 	db, path := setUpTmpDB()
 	defer os.RemoveAll(path)
 
-	db.AutoMigrate(&NotificationTime{})
+	db.AutoMigrate(&UTCNotificationTime{})
 
-	var notificationTime = &NotificationTime{Time: "12:00"}
+	var notificationTime = &UTCNotificationTime{Time: "12:00"}
 	db.Create(&notificationTime)
 	if notificationTime == nil {
 		t.Fail()
 	}
 	db.Delete(&notificationTime, 1)
 
-	notificationTime = &NotificationTime{Time: "wrong_format"}
+	notificationTime = &UTCNotificationTime{Time: "wrong_format"}
 	if notificationTime.isValid() {
 		t.Fail()
 	}
-	notificationTime = &NotificationTime{Time: "wrong:format"}
+	notificationTime = &UTCNotificationTime{Time: "wrong:format"}
 	if notificationTime.isValid() {
 		t.Fail()
 	}
-	notificationTime = &NotificationTime{Time: "1:00"}
+	notificationTime = &UTCNotificationTime{Time: "1:00"}
 	if notificationTime.isValid() {
 		t.Fail()
 	}
-	notificationTime = &NotificationTime{Time: "31:76"}
+	notificationTime = &UTCNotificationTime{Time: "31:76"}
 	if notificationTime.isValid() {
 		t.Fail()
 	}
