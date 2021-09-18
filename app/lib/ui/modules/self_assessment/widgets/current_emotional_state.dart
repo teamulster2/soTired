@@ -39,7 +39,7 @@ class CurrentEmotionalState extends StatelessWidget {
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x92]),
                 image: const AssetImage('assets/images/boring.png'),
                 text: 'bored',
-                emoji: const <int>[0xF0, 0x9F, 0xA5, 0xB1]),
+                emoji: const <int>[0xF0, 0x9F, 0x98, 0x90]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0xB0]),
