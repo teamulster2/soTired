@@ -11,6 +11,8 @@ import 'package:so_tired/utils/utils.dart';
 // ignore_for_file: always_specify_types
 // ignore_for_file: cascade_invocations
 
+// NOTE: fetchConfigFromServer is not being tested because it can not be mocked properly.
+
 ConfigManager? _configManager = ConfigManager();
 
 final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
@@ -102,8 +104,6 @@ void main() {
           jsonDecode(await fileObject.readAsString());
       expect(fileObjectJson, _configManager!.clientConfig!.toJson());
     });
-
-    // TODO: Test fetchConfigFromServer
 
     test('empty object should throw exception', () async {
       final File fileObject =

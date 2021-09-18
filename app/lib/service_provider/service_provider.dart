@@ -25,9 +25,13 @@ class ServiceProvider extends ChangeNotifier {
     try {
       if (!Utils.doesFileExist(
           '$basePath/${_configManager.clientConfigFileName}')) {
-        // TODO: Add exception handling for server not reachable
-        // TODO: invoke _configManager.fetchConfigFromServer()
-        // ignore: cascade_invocations
+        try {
+          await _configManager
+              .fetchConfigFromServer(configManager.clientConfig!.serverUrl);
+        } on Exception {
+          _configManager.loadDefaultConfig();
+          rethrow;
+        }
         _configManager.writeConfigToFile();
       } else {
         _configManager.loadConfigFromJson();

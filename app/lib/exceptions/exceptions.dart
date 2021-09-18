@@ -32,3 +32,8 @@ class MalformedServerUrlException implements Exception {
   final String msg;
   MalformedServerUrlException(this.msg);
 }
+
+class HttpErrorCodeException implements Exception {
+  final String msg;
+  HttpErrorCodeException(this.msg);
+}

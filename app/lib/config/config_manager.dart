@@ -5,6 +5,7 @@ import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/constants/constants.dart';
 import 'package:so_tired/utils/utils.dart';
+import 'package:so_tired/api/client.dart';
 
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
@@ -67,11 +68,19 @@ class ConfigManager {
     }
   }
 
-// TODO: write doc comments
-// TODO: implement based on server API
-// void fetchConfigFromServer() async {
-//   _clientConfig = ... json object from server
-// }
+  /// This method loads the config from a server, and writes it to [_clientConfig].
+  Future<void> fetchConfigFromServer(String url) async {
+    try {
+      final String configString = await loadConfig(url);
+
+      final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
+      final ClientConfig configJson =
+          clientConfigBuilder.buildWithString(configString);
+      _clientConfig = configJson;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   /// This method is capable of writing a config to an existing JSON file.
   /// It takes an instance of type [ClientConfig] as argument and uses the
