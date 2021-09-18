@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:so_tired/ui/core/home/widgets/home_button.dart';
 import 'package:so_tired/ui/core/home/widgets/home_image.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
-import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
 import 'package:so_tired/ui/modules/questionnaire/questionnaire.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test.dart';
 
@@ -22,7 +21,8 @@ class _HomeState extends State<Home> {
         preferredSize: Size.fromHeight(55),
         child: NavigationBar(),
       ),
-      drawer: const NavigationDrawer(),
+      // NOTE: drawer not needed now
+      // drawer: const NavigationDrawer(),
       body: Container(
           color: Theme.of(context).backgroundColor,
           child: Column(children: <Widget>[

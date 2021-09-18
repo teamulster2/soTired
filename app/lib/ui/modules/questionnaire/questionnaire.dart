@@ -5,7 +5,6 @@ import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
-import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_answer.dart';
 import 'package:so_tired/ui/modules/questionnaire/widgets/questionnaire_progress.dart';
@@ -43,7 +42,8 @@ class _QuestionnaireState extends State<Questionnaire> {
           preferredSize: Size.fromHeight(55),
           child: NavigationBar(),
         ),
-        drawer: const NavigationDrawer(),
+        // NOTE: drawer not needed now
+        // drawer: const NavigationDrawer(),
         body: Container(
           color: Theme.of(context).backgroundColor,
           height: MediaQuery.of(context).size.height,
