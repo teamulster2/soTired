@@ -133,8 +133,7 @@ void main() {
       throwsA(() async => _configManager!.loadConfigFromJson());
     });
 
-    test('should throw MalformedUtcNotificationTimesException',
-        () async {
+    test('should throw MalformedUtcNotificationTimesException', () async {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
       customAssertObject['utcNotificationTimes'] = <String>['-5:10'];
