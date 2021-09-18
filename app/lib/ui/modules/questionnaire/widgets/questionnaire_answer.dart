@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:so_tired/ui/models/questionnaire.dart';
 
+/// This widget contains one of the answers of a [QuestionnaireObject] with a specific number, text and value
+/// The [VoidCallback] onPressed occurs each time an answer is tapped.
 class QuestionnaireAnswer extends StatefulWidget {
   const QuestionnaireAnswer(
       {required this.number,

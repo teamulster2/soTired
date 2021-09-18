@@ -7,6 +7,7 @@ class HomeImage extends StatefulWidget {
   _HomeImageState createState() => _HomeImageState();
 }
 
+/// This class defines the home image that occurs on the home screen when you start the application.
 class _HomeImageState extends State<HomeImage> {
   @override
   Widget build(BuildContext context) => const Image(

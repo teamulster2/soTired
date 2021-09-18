@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
 import 'package:flutter/material.dart';
 
+/// This class holds the game engine with all variables and values needed to start the game.
 class GameEngine {
   late GameState gameState;
   Function(InfoDialogObject) showDialog;
@@ -37,10 +39,15 @@ class GameEngine {
       gameState.checkUserInteraction(boxId);
     } on GameWrongStateException {
       showDialog(InfoDialogObject(
-          'Exception', 'Something went wrong. Please restart the application',
-          () {
-        // TODO: onTap ok
-      }, false, true, true));
+          'Exception',
+          'Something went wrong. Please restart the application',
+          () {},
+          //NOTE: Empty callback, functionality not used in this case.
+          () {},
+          //NOTE: Empty callback, functionality not used in this case.
+          false,
+          true,
+          true));
     }
   }
 

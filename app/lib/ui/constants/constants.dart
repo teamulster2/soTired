@@ -1,5 +1,6 @@
 import 'package:so_tired/ui/models/questionnaire.dart';
 
+/// This constant defined the first sample QuestionnaireObjects
 final List<QuestionnaireObject> questions = <QuestionnaireObject>[
   QuestionnaireObject(
       'Have you felt fatigued during the past month? It does not matter if the fatigue is physical (muscular) or mental. If you recently experienced something unusual (for example an accident or short illness) you should try to disregard it when assessing your fatigue.',

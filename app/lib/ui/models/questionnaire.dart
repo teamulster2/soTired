@@ -1,3 +1,4 @@
+/// This class holds the QuestionnaireObject that is used to set the questionnaire.
 class QuestionnaireObject {
   String question;
   List<String> answers;

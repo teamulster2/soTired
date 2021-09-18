@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
@@ -14,10 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   // ignore: always_specify_types
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-        create: (BuildContext context) => ServiceProvider(),
-        child: const MyAppContent(),
-      );
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        <DeviceOrientation>[DeviceOrientation.portraitUp]);
+    // ignore: always_specify_types, NOTE: endless loop when specifying
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => ServiceProvider(),
+      child: const MyAppContent(),
+    );
+  }
 }
 
 class MyAppContent extends StatefulWidget {
@@ -89,8 +95,14 @@ class MyAppState extends State<MyAppContent> with WidgetsBindingObserver {
         home: const Home(),
       );
     } else {
-      // TODO: style CircularProgressIndicator appropriately
-      return const CircularProgressIndicator();
+      return Container(
+          alignment: Alignment.center,
+          child: const SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(Color(0xff97E8D9)))));
     }
   }
 

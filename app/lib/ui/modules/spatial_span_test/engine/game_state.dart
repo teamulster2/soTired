@@ -1,8 +1,10 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
 
+/// This abstract class is the super class of all available game states.
+/// It holds the game engine to set specific variables and values.
 abstract class GameState {
   late GameEngine engine;
 
@@ -15,9 +17,11 @@ abstract class GameState {
   void checkUserInteraction(int boxId);
 }
 
+/// This class contains the functionality of the start state of the spatial span task.
 class StartState extends GameState {
   StartState() : super();
 
+  /// This method shows the start dialog and starts the first sequence of boxes shown.
   @override
   void handleState() {
     engine.showDialog(InfoDialogObject('Start Game',
@@ -28,7 +32,12 @@ class StartState extends GameState {
           ..transitionTo(ShowSequenceState())
           ..handleState();
       });
-    }, true, false, false));
+    },
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        true,
+        false,
+        false));
   }
 
   @override
@@ -37,9 +46,11 @@ class StartState extends GameState {
   }
 }
 
+/// This class contains the functionality of the show sequence state of the spatial span task.
 class ShowSequenceState extends GameState {
   ShowSequenceState() : super();
 
+  /// This method starts the user interaction state section of the game.
   @override
   void handleState() {
     engine.startSequence(() {
@@ -55,17 +66,26 @@ class ShowSequenceState extends GameState {
   }
 }
 
+/// This class contains the functionality of the user interaction state of the spatial span task.
 class UserInteractionState extends GameState {
   UserInteractionState() : super();
 
+  /// This methods shows the 'now it is your turn' dialog.
   @override
   void handleState() {
     engine.showDialog(InfoDialogObject(
-        'Now its your turn', 'Tap the boxes in the order shown earlier.', () {
-      //TODO: add on tap
-    }, true, false, false));
+        'Now its your turn',
+        'Tap the boxes in the order shown earlier.',
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        true,
+        false,
+        false));
   }
 
+  /// This method checks if the tapped boxes are in the right order and the right place.
   @override
   void checkUserInteraction(int boxId) {
     final int value = engine.checkTappedBox(boxId);
@@ -81,6 +101,7 @@ class UserInteractionState extends GameState {
   }
 }
 
+/// This class contains the functionality of the game over state of the spatial span task.
 class GameOverState extends GameState {
   GameOverState() : super();
 
@@ -89,19 +110,30 @@ class GameOverState extends GameState {
     throw GameWrongStateException();
   }
 
+  /// This method shows the game over dialog and stops the game.
   @override
   void handleState() {
-    engine.showDialog(InfoDialogObject('Game over',
-        'You did not tap the right box. Game over.', () {}, false, true, true));
+    engine.showDialog(InfoDialogObject(
+        'Game over',
+        'You did not tap the right box. Game over.',
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        false,
+        true,
+        true));
   }
 }
 
+/// This class contains the functionality of the next level state of the spatial span task.
 class NextLevelState extends GameState {
   @override
   void checkUserInteraction(int boxId) {
     throw GameWrongStateException();
   }
 
+  /// This methods shows the next level dialog and starts a new sequence of boxes shown.
   @override
   void handleState() {
     engine.showDialog(InfoDialogObject(
@@ -113,18 +145,11 @@ class NextLevelState extends GameState {
           ..transitionTo(ShowSequenceState())
           ..handleState();
       });
-    }, true, false, false));
+    },
+        () {},
+        //NOTE: Empty callback, functionality not used in this case.
+        true,
+        false,
+        false));
   }
-}
-
-class InfoDialogObject {
-  String title;
-  String content;
-  VoidCallback onOk;
-  bool pop;
-  bool push;
-  bool colored;
-
-  InfoDialogObject(
-      this.title, this.content, this.onOk, this.pop, this.push, this.colored);
 }

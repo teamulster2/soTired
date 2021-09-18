@@ -4,7 +4,7 @@ import 'package:so_tired/ui/core/home/widgets/home_image.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
 import 'package:so_tired/ui/modules/questionnaire/questionnaire.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/spatial_span_test.dart';
+import 'package:so_tired/ui/modules/self_test_engine/self_test.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,6 +13,8 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+/// This class holds the home screen of the application. It contains a [Scaffold] that has its appBar, drawer and body.
+/// The body contains the [HomeImage] and [HomeButton]s.
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -37,13 +39,13 @@ class _HomeState extends State<Home> {
                         // NOTE: Icons from: https://api.flutter.dev/flutter/material/Icons-class.html
                         HomeButton(
                           icon: Icons.access_time_filled,
-                          text: 'reaction game',
+                          text: 'self test',
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute<BuildContext>(
                                     builder: (BuildContext context) =>
-                                        const SpatialSpanTest()));
+                                        const SelfTest()));
                           },
                         ),
                         HomeButton(
