@@ -52,7 +52,7 @@ type questionWithAnswers struct {
 
 func serveRun(cmd *cobra.Command, args []string) {
 	// Set routing rules
-	http.HandleFunc("/", config)
+	http.HandleFunc("/", root)
 	http.HandleFunc("/config", config)
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
@@ -65,9 +65,7 @@ func serveRun(cmd *cobra.Command, args []string) {
 }
 
 func root(w http.ResponseWriter, r *http.Request) {
-	buff, _ := io.ReadAll(r.Body)
-	io.WriteString(w, string(buff))
-	fmt.Println("Recieved and replied: ", string(buff))
+	io.WriteString(w, "empty reply")
 }
 
 func config(w http.ResponseWriter, r *http.Request) {
