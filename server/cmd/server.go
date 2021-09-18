@@ -11,6 +11,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -53,14 +54,20 @@ type questionWithAnswers struct {
 
 func serveRun(cmd *cobra.Command, args []string) {
 	// Set routing rules
-	http.HandleFunc("/", config)
-	http.HandleFunc("/config", config)
+
+	http.HandleFunc("/", root)
+
+	configPath, err := cmd.Flags().GetString("config-path")
+	if err != nil {
+		fmt.Println(errors.Wrap(err, "missing config path argument"))
+	}
+	http.HandleFunc("/config", config(configPath))
+
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
 	fmt.Println("Start to listen on:", addr)
 	// Use the default DefaultServeMux
-	err := http.ListenAndServe(addr, nil)
-	if err != nil {
+	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -69,76 +76,78 @@ func root(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "empty reply")
 }
 
-func config(w http.ResponseWriter, r *http.Request) {
-	io.ReadAll(r.Body)
+func config(configPath string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		io.ReadAll(r.Body)
 
-	content, err := ioutil.ReadFile("../config.json")
-	if err != nil {
-		log.Fatal("Error when opening config file: ", err)
-	}
-	var jsonConfig jsonConfig
-	err = json.Unmarshal(content, &jsonConfig)
-	if err != nil {
-		log.Fatal("Error during unmarshaling config data: ", err)
-	}
-
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	if err != nil {
-		panic("Failed to connect database")
-	}
-	db.AutoMigrate(&Study{}, &Question{}, &Answer{}, &UTCNotificationTime{})
-	study := Study{
-		StudyName:                         jsonConfig.StudyName,
-		NotificationText:                  jsonConfig.NotificationText,
-		IsSpatialSpanTaskEnabled:          jsonConfig.IsSpatialSpanTaskEnabled,
-		IsPsychomotorVigilanceTaskEnabled: jsonConfig.IsPsychomotorVigilanceTaskEnabled,
-		IsMentalArithmeticEnabled:         jsonConfig.IsMentalArithmeticEnabled,
-		IsQuestionnaireEnabled:            jsonConfig.IsQuestionnaireEnabled,
-		IsCurrentActivityEnabled:          jsonConfig.IsCurrentActivityEnabled,
-	}
-	db.Create(&study)
-	utcNotificationTimes := make([]string, 0, len(jsonConfig.UTCNotificationTimes))
-	for _, notificationTime := range jsonConfig.UTCNotificationTimes {
-		db.Create(&UTCNotificationTime{
-			Time:    notificationTime,
-			StudyID: study.ID,
-		})
-		utcNotificationTimes = append(utcNotificationTimes, notificationTime)
-	}
-	questions := make([]questionWithAnswers, 0, len(jsonConfig.Questionnaire))
-	for _, jsonQuestionWithAnswers := range jsonConfig.Questionnaire {
-		question := Question{
-			StudyID:      study.ID,
-			QuestionText: jsonQuestionWithAnswers.Question,
+		content, err := ioutil.ReadFile(configPath)
+		if err != nil {
+			log.Fatal("Error when opening config file: ", err)
 		}
-		db.Create(&question)
-		var answers []Answer
-		for _, answer := range jsonQuestionWithAnswers.Answers {
-			answer := Answer{
-				QuestionID: question.ID,
-				AnswerText: answer,
+		var jsonConfig jsonConfig
+		err = json.Unmarshal(content, &jsonConfig)
+		if err != nil {
+			log.Fatal("Error during unmarshaling config data: ", err)
+		}
+
+		db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+		if err != nil {
+			panic("Failed to connect database")
+		}
+		db.AutoMigrate(&Study{}, &Question{}, &Answer{}, &UTCNotificationTime{})
+		study := Study{
+			StudyName:                         jsonConfig.StudyName,
+			NotificationText:                  jsonConfig.NotificationText,
+			IsSpatialSpanTaskEnabled:          jsonConfig.IsSpatialSpanTaskEnabled,
+			IsPsychomotorVigilanceTaskEnabled: jsonConfig.IsPsychomotorVigilanceTaskEnabled,
+			IsMentalArithmeticEnabled:         jsonConfig.IsMentalArithmeticEnabled,
+			IsQuestionnaireEnabled:            jsonConfig.IsQuestionnaireEnabled,
+			IsCurrentActivityEnabled:          jsonConfig.IsCurrentActivityEnabled,
+		}
+		db.Create(&study)
+		utcNotificationTimes := make([]string, 0, len(jsonConfig.UTCNotificationTimes))
+		for _, notificationTime := range jsonConfig.UTCNotificationTimes {
+			db.Create(&UTCNotificationTime{
+				Time:    notificationTime,
+				StudyID: study.ID,
+			})
+			utcNotificationTimes = append(utcNotificationTimes, notificationTime)
+		}
+		questions := make([]questionWithAnswers, 0, len(jsonConfig.Questionnaire))
+		for _, jsonQuestionWithAnswers := range jsonConfig.Questionnaire {
+			question := Question{
+				StudyID:      study.ID,
+				QuestionText: jsonQuestionWithAnswers.Question,
 			}
-			db.Create(&answer)
-			answers = append(answers, answer)
+			db.Create(&question)
+			var answers []Answer
+			for _, answer := range jsonQuestionWithAnswers.Answers {
+				answer := Answer{
+					QuestionID: question.ID,
+					AnswerText: answer,
+				}
+				db.Create(&answer)
+				answers = append(answers, answer)
+			}
+			questions = append(questions, questionWithAnswers{Answers: answers, Question: question})
 		}
-		questions = append(questions, questionWithAnswers{Answers: answers, Question: question})
-	}
 
-	studyData := &studyData{
-		ServerVersion:       jsonConfig.ServerVersion,
-		Study:               study,
-		IsStudy:             true,
-		UTCNotificationTime: utcNotificationTimes,
-		Questions:           questions,
-	}
+		studyData := &studyData{
+			ServerVersion:       jsonConfig.ServerVersion,
+			Study:               study,
+			IsStudy:             true,
+			UTCNotificationTime: utcNotificationTimes,
+			Questions:           questions,
+		}
 
-	studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")
-	if err != nil {
-		log.Fatal("Error during marsheling study data: ", err)
-		return
+		studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")
+		if err != nil {
+			log.Fatal("Error during marsheling study data: ", err)
+			return
+		}
+		io.WriteString(w, string(studyDataAsBytes))
+		fmt.Println("Replied config")
 	}
-	io.WriteString(w, string(studyDataAsBytes))
-	fmt.Println("Replied config: ", string(studyDataAsBytes))
 }
 
 func data(w http.ResponseWriter, r *http.Request) {
