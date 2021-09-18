@@ -125,6 +125,16 @@ void main() {
       throwsA(() async => _configManager!.loadConfigFromJson());
     });
 
+    test('should throw MalformedServerUrlException', () async {
+      final File fileObject =
+          await Utils.getFileObject(_configManager!.clientConfigFileName);
+      customAssertObject['serverUrl'] = 'htt://www.google.de';
+      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      await fileObject.writeAsString(customAssertObjectJson);
+
+      throwsA(() async => _configManager!.loadConfigFromJson());
+    });
+
     test('should throw MalformedQuestionnaireObjectException', () async {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
@@ -139,6 +149,17 @@ void main() {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
       customAssertObject['moods'] = '';
+      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      await fileObject.writeAsString(customAssertObjectJson);
+
+      throwsA(() async => _configManager!.loadConfigFromJson());
+    });
+
+    test('should throw MalformedUtcNotificationTimesException',
+        () async {
+      final File fileObject =
+          await Utils.getFileObject(_configManager!.clientConfigFileName);
+      customAssertObject['utcNotificationTimes'] = <String>['-5:10'];
       final String customAssertObjectJson = jsonEncode(customAssertObject);
       await fileObject.writeAsString(customAssertObjectJson);
 

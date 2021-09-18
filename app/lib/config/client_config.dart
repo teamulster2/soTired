@@ -273,8 +273,10 @@ class ClientConfigBuilder {
     for (final String time in jsonResponse['utcNotificationTimes']) {
       if (time.length != 5 ||
           !time.contains(':') && !(time.indexOf(':') == 2) ||
-          !(int.parse(time.substring(0, 2), radix: 10) < 24) ||
-          !(int.parse(time.substring(3, 5), radix: 10) < 60)) {
+          int.parse(time.substring(0, 2), radix: 10) > 23 ||
+          int.parse(time.substring(3, 5), radix: 10) > 59 ||
+          int.parse(time.substring(0, 2), radix: 10) < 0 ||
+          int.parse(time.substring(3, 5), radix: 10) < 0) {
         throw MalformedUtcNotificationTimesException(
             'This notification time format is invalid and can not be processed.\n'
             'Current time variable: $time');
