@@ -21,7 +21,6 @@ import (
 // - the struct data is transformed into a string and send to the client
 
 type jsonConfig struct {
-	ServerURL                         string   `json:"serverUrl"`
 	NotificationText                  string   `json:"notificationText"`
 	IsMentalArithmeticEnabled         bool     `json:"isMentalArithmeticEnabled"`
 	IsSpatialSpanTaskEnabled          bool     `json:"isSpatialSpanTaskEnabled"`
@@ -87,7 +86,6 @@ func config(w http.ResponseWriter, r *http.Request) {
 	}
 	db.AutoMigrate(&Study{}, &Question{}, &Answer{}, &NotificationTime{})
 	study := Study{
-		ServerURL:                         jsonConfig.ServerURL,
 		StudyName:                         jsonConfig.StudyName,
 		NotificationText:                  jsonConfig.NotificationText,
 		IsSpatialSpanTaskEnabled:          jsonConfig.IsSpatialSpanTaskEnabled,
