@@ -35,7 +35,7 @@ class ConfigManager {
   /// This method contains the default config and restores it on demand.
   void loadDefaultConfig() {
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
-      ..serverUrl = 'http://192.168.179.125:50000'
+      ..serverUrl = 'http://localhost:50000/'
       ..utcNotificationTimes = <String>[
         // (hour:minutes) use UTC time
         '08:15',

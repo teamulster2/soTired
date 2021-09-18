@@ -121,21 +121,11 @@ func config(w http.ResponseWriter, r *http.Request) {
 		questionnaire = append(questionnaire, questionWithAnswers{Answers: answers, Question: question})
 	}
 
-<<<<<<< HEAD
 	studyData := &studyData{
 		Study:             study,
 		IsStudy:           true,
 		NotificationTimes: notificationTimes,
 		Questionnaire:     questionnaire,
-=======
-	// Read study entry from db, create json and send to client
-	var studyFromDB Study
-	db.First(&studyFromDB, studyFromFile.ID)
-	if &studyFromDB == nil {
-		log.Fatal("Failed to retrieve study data from db")
-		fmt.Println("Failed to retrieve study data from db")
-		return
->>>>>>> bb354e1... [issue/64] - Add debug print to server, Fix HandlerFunc server
 	}
 
 	studyDataAsBytes, err := json.MarshalIndent(&studyData, "", "    ")

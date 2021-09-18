@@ -22,7 +22,7 @@ Future<bool> isServerReachable(String url) async {
 /// Send a request to the server and gets a config file back.
 Future<String> loadConfig(String url) async {
   final Response response = await post(
-    Uri.parse(url + '/config'),
+    Uri.parse(url + 'config'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -42,7 +42,7 @@ Future<void> sendData(String url) async {
   final String jsonDatabase =
       jsonEncode(DatabaseManager().exportDatabaseForTransfer());
   final Response response = await post(
-    Uri.parse(url + '/data'),
+    Uri.parse(url + 'data'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
