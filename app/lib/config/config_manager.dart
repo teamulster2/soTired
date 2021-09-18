@@ -70,12 +70,17 @@ class ConfigManager {
 
   /// This method loads the config from a server, and write it to [_clientConfig].
   Future<void> fetchConfigFromServer(String url) async {
-    final String configString = await loadConfig(url);
+    try{
+      final String configString = await loadConfig(url);
 
-    final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
-    final ClientConfig configJson =
-        clientConfigBuilder.buildWithString(configString);
-    _clientConfig = configJson;
+      final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
+      final ClientConfig configJson =
+      clientConfigBuilder.buildWithString(configString);
+      _clientConfig = configJson;
+    }catch(e){
+      rethrow;
+    }
+
   }
 
   /// This method is capable of writing a config to an existing JSON file.

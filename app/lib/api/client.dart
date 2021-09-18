@@ -4,6 +4,23 @@ import 'package:http/http.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 
+
+/// Send a request to the server and checks the availability.
+Future<bool> isServerReachable(String url) async {
+  final Response response = await post(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/// Send a request to the server and gets a config file back.
 Future<String> loadConfig(String url) async {
   final Response response = await post(
     Uri.parse(url + '/config'),
@@ -12,7 +29,6 @@ Future<String> loadConfig(String url) async {
     },
   );
 
-  // TODO: Add better exception handling for response.
   if (response.statusCode == 200) {
     return response.body;
   } else {
@@ -22,6 +38,7 @@ Future<String> loadConfig(String url) async {
   }
 }
 
+/// Send the full database to the Server.
 Future<void> sendData(String url) async {
   final String jsonDatabase =
       jsonEncode(DatabaseManager().exportDatabaseForTransfer());

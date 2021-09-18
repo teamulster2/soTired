@@ -23,19 +23,20 @@ class ServiceProvider extends ChangeNotifier {
   Future<void> init(Function onDoneInitializing, String basePath) async {
     // initialize config
     try {
+      // only for testing ######################################################
+
       try {
         await _configManager
-            .fetchConfigFromServer('http://192.168.179.125:50000');
+            .fetchConfigFromServer(configManager.clientConfig!.serverUrl);
       } on Exception {
         _configManager.loadDefaultConfig();
       }
+      // #######################################################################
       if (!Utils.doesFileExist(
           '$basePath/${_configManager.clientConfigFileName}')) {
-        // TODO: Add exception handling for server not reachable
-        // TODO: load url from config
         try {
           await _configManager
-              .fetchConfigFromServer('http://192.168.179.125:50000');
+              .fetchConfigFromServer(configManager.clientConfig!.serverUrl);
         } on Exception {
           _configManager.loadDefaultConfig();
           rethrow;

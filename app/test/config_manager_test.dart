@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/constants/constants.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
@@ -10,6 +12,8 @@ import 'package:so_tired/utils/utils.dart';
 
 // ignore_for_file: always_specify_types
 // ignore_for_file: cascade_invocations
+
+// NOTE: fetchConfigFromServer is not being tested because it can not be mocked properly.
 
 ConfigManager? _configManager = ConfigManager();
 
@@ -51,6 +55,7 @@ final Map<String, dynamic> customAssertObject = <String, dynamic>{
   'questions': _serializeQuestionnaireObjects(questions)
 };
 
+@GenerateMocks([Client])
 void main() {
   group('ConfigManager Basics', () {
     setUpAll(() async {
@@ -102,8 +107,6 @@ void main() {
           jsonDecode(await fileObject.readAsString());
       expect(fileObjectJson, _configManager!.clientConfig!.toJson());
     });
-
-    // TODO: Test fetchConfigFromServer
 
     test('empty object should throw exception', () async {
       final File fileObject =
