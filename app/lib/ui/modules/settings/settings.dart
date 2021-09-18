@@ -83,28 +83,37 @@ class _SettingsState extends State<Settings> {
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(),
-                hintText: 'Enter a url'),
+                hintText: 'Enter a url, e.g. http://www.example.com:50000'),
           ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             ClassicButton(
-              color: Theme.of(context).primaryColor.withOpacity(0.2),
-              buttonText: 'Test connection',
-              onPressed: () {
-                // TODO: Add method to test connection
-                // TODO: show info dialog with correct information afterwards, example:
-                showInfoDialog(
-                    'Connection possible', 'You can work with this url now.');
-              },
-            ),
-            ClassicButton(
               color: Theme.of(context).primaryColor,
               buttonText: 'Save',
               onPressed: () {
-                // TODO: Add method to save the url
-                // NOTE: get url from TextField via: myController.text
+                final String url = myController.text;
+
+                if (_isUrlValid(url)) {
+                  // TODO: ping server
+                  // if (_isServerReachable) {
+                  //   Provider.of<ServiceProvider>(context, listen: false)
+                  //       .databaseManager.writeSettings(SettingsObject(url));
+                  //   showInfoDialog('Successfully connected to server',
+                  //       'This url wil be stored and is active now.');
+                  // } else {
+                  //   showInfoDialog('Could not connect to server',
+                  //       'Please check your network connection and try again');
+                  // }
+                } else {
+                  showInfoDialog(
+                      'URL is invalid',
+                      'Please enter a valid URL.\n'
+                          'For example:\n'
+                          'http://www.example.com:50000 or '
+                          'http://192.168.178.20:60000');
+                }
               },
             ),
           ],
@@ -134,4 +143,6 @@ class _SettingsState extends State<Settings> {
           ],
         ),
       );
+
+  bool _isUrlValid(String url) => Uri.parse(url).isAbsolute;
 }

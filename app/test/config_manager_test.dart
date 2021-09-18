@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:so_tired/config/config_manager.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/constants/constants.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 import 'package:so_tired/utils/utils.dart';
@@ -15,8 +16,7 @@ import 'package:so_tired/utils/utils.dart';
 
 ConfigManager? _configManager = ConfigManager();
 
-final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
-  'serverUrl': 'http://localhost:50000/',
+Map<String, dynamic> _defaultAssertObject = <String, dynamic>{
   'utcNotificationTimes': <String>[
     // (hour:minutes) use UTC time
     '08:15',
@@ -34,8 +34,7 @@ final Map<String, dynamic> defaultAssertObject = <String, dynamic>{
   'questions': _serializeQuestionnaireObjects(questions)
 };
 
-final Map<String, dynamic> customAssertObject = <String, dynamic>{
-  'serverUrl': 'http://0.0.0.0',
+Map<String, dynamic> _customAssertObject = <String, dynamic>{
   'utcNotificationTimes': <String>[
     // (hour:minutes) use UTC time
     '08:15',
@@ -73,14 +72,50 @@ void main() {
       });
     });
 
-    setUp(() async {
+    setUp(() {
       _configManager = null;
       _configManager = ConfigManager();
+
+      _defaultAssertObject = <String, dynamic>{
+        'utcNotificationTimes': <String>[
+          // (hour:minutes) use UTC time
+          '08:15',
+          '12:30',
+          '15:00'
+        ],
+        'notificationText': "Are you 'soTired'? Let's find out!",
+        'isSpatialSpanTaskEnabled': true,
+        'isMentalArithmeticEnabled': true,
+        'isPsychomotorVigilanceTaskEnabled': true,
+        'isQuestionnaireEnabled': true,
+        'isCurrentActivityEnabled': true,
+        'studyName': 'Default Study',
+        'isStudy': true,
+        'questions': _serializeQuestionnaireObjects(questions)
+      };
+
+      _customAssertObject = <String, dynamic>{
+        'utcNotificationTimes': <String>[
+          // (hour:minutes) use UTC time
+          '08:15',
+          '12:30',
+          '15:00'
+        ],
+        'notificationText': "Are you 'soTired'? Let's find out!",
+        'isSpatialSpanTaskEnabled': true,
+        'isMentalArithmeticEnabled': false,
+        'isPsychomotorVigilanceTaskEnabled': true,
+        'isQuestionnaireEnabled': true,
+        'isCurrentActivityEnabled': false,
+        'studyName': 'study2',
+        'isStudy': true,
+        'questions': _serializeQuestionnaireObjects(questions)
+      };
     });
 
     test('default config should be available after loading it', () async {
       _configManager!.loadDefaultConfig();
-      expect(_configManager!.clientConfig!.toJson(), defaultAssertObject);
+      expect(_configManager!.clientConfig!.toJson(), _defaultAssertObject);
     });
 
     test('should write config to file', () async {
@@ -96,7 +131,7 @@ void main() {
     test('should load config from file', () async {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
-      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      final String customAssertObjectJson = jsonEncode(_customAssertObject);
       await fileObject.writeAsString(customAssertObjectJson);
       await _configManager!.loadConfigFromJson();
 
@@ -110,37 +145,30 @@ void main() {
           await Utils.getFileObject(_configManager!.clientConfigFileName);
       await fileObject.writeAsString('');
 
-      throwsA(() async => _configManager!.loadConfigFromJson());
-    });
-
-    test('should throw MalformedServerUrlException', () async {
-      final File fileObject =
-          await Utils.getFileObject(_configManager!.clientConfigFileName);
-      customAssertObject['serverUrl'] = 'htt://www.google.de';
-      final String customAssertObjectJson = jsonEncode(customAssertObject);
-      await fileObject.writeAsString(customAssertObjectJson);
-
-      throwsA(() async => _configManager!.loadConfigFromJson());
+      expect(() async => _configManager!.loadConfigFromJson(),
+          throwsA(isA<MalformedJsonException>()));
     });
 
     test('should throw MalformedQuestionnaireObjectException', () async {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
-      customAssertObject['questions'] = '';
-      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      _customAssertObject['questions'] = '';
+      final String customAssertObjectJson = jsonEncode(_customAssertObject);
       await fileObject.writeAsString(customAssertObjectJson);
 
-      throwsA(() async => _configManager!.loadConfigFromJson());
+      expect(() async => _configManager!.loadConfigFromJson(),
+          throwsA(isA<MalformedQuestionnaireObjectException>()));
     });
 
     test('should throw MalformedUtcNotificationTimesException', () async {
       final File fileObject =
           await Utils.getFileObject(_configManager!.clientConfigFileName);
-      customAssertObject['utcNotificationTimes'] = <String>['-5:10'];
-      final String customAssertObjectJson = jsonEncode(customAssertObject);
+      _customAssertObject['utcNotificationTimes'] = <String>['-5:10'];
+      final String customAssertObjectJson = jsonEncode(_customAssertObject);
       await fileObject.writeAsString(customAssertObjectJson);
 
-      throwsA(() async => _configManager!.loadConfigFromJson());
+      expect(() async => _configManager!.loadConfigFromJson(),
+          throwsA(isA<MalformedUtcNotificationTimesException>()));
     });
   });
 }
