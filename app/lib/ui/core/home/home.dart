@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
                                 context,
                                 MaterialPageRoute<BuildContext>(
                                     builder: (BuildContext context) =>
-                                    const Settings()));
+                                        const Settings()));
                           },
                         ),
                         HomeButton(
@@ -87,16 +87,16 @@ class _HomeState extends State<Home> {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => AlertDialog(
-            title: const Text(
-                'Unfortunately the audio recognition has not been implemented yet.'),
-            content: const Text('We will focus on that later on.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Ok'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ]));
+                title: const Text(
+                    'Unfortunately the audio recognition has not been implemented yet.'),
+                content: const Text('We will focus on that later on.'),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Ok'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ]));
   }
 }
