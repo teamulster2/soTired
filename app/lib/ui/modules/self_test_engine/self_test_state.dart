@@ -65,8 +65,24 @@ class SpatialSpanTaskState extends SelfTestState {
             '\nLevel reached in spatial span task: ' +
             engine.levelSpatialSpanTask.toString(),
         progress: 'Finished.',
-        onOk: () {},
-        onOkPush: true,
+        onOk: () {
+          Future<dynamic>.delayed(Duration.zero, () {
+            engine.showDialog(ProgressDialogObject(
+                title: 'Synchronize to server database?',
+                content:
+                    'Do you want to send your data to the server side database?',
+                progress: 'Synchronization',
+                onOk: () {
+                  // TODO: on synchronization
+                },
+                onCancel: () {
+                  // TODO: on cancel synchronization
+                },
+                onOkPush: true,
+                showCancel: true));
+          });
+        },
+        onOkPush: false,
         onCancel: () {},
         showCancel: false));
   }

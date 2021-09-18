@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// This widget provides the possibility to show a classic button with round edges in the whole application.
 class ClassicButton extends StatelessWidget {
   const ClassicButton(
       {required this.onPressed,
