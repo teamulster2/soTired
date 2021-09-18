@@ -15,9 +15,9 @@ type Study struct {
 	ServerURL                         string
 	StudyName                         string
 	NotificationText                  string
-	IsSpartalTaskEnabled              bool
+	IsSpatialSpanTaskEnabled          bool
 	IsPsychomotorVigilanceTaskEnabled bool
-	IsReactionGameEnabled             bool
+	IsMentalArithmeticEnabled         bool
 	IsQuestionnaireEnabled            bool
 	IsCurrentActivityEnabled          bool
 }
@@ -70,14 +70,14 @@ type User struct {
 // UserLog binds the data from an execution flow to an user and a timestamp.
 type UserLog struct {
 	gorm.Model
-	UserID              int
-	MoodID              int
-	ActivityID          int
-	AccessMethodID      int
-	SSTResultID         int
-	PVTResultID         int
-	ReationGameResultID int
-	TimeStamp           time.Time
+	UserID                   int
+	MoodID                   int
+	ActivityID               int
+	AccessMethodID           int
+	SSTResultID              int
+	PVTResultID              int
+	MentalArithmeticResultID int
+	TimeStamp                time.Time
 }
 
 // Mood holds the provided mood of an user.
@@ -138,11 +138,11 @@ type PVTResult struct {
 	PVTResultValue int
 }
 
-// ReationGameResult holds the Result of Reaction time measuring game
-type ReationGameResult struct {
+// MentalArithmeticResult holds the result of Mental Arithmetic assessment
+type MentalArithmeticResult struct {
 	gorm.Model
-	ID                     int
-	ReationGameResultValue int
+	ID                          int
+	MentalArithmeticResultValue int
 }
 
 // QuestionnaireLog binds the questionnaire results to an user and a timestamp.
