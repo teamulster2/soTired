@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 
-/// Send a request to the server and checks the availability.
+/// Sends a request to the server and checks the availability.
 Future<bool> isServerReachable(String url) async {
   final Response response = await post(
     Uri.parse(url),
@@ -19,7 +19,7 @@ Future<bool> isServerReachable(String url) async {
   }
 }
 
-/// Send a request to the server and gets a config file back.
+/// Sends a request to the server and gets a config file back.
 Future<String> loadConfig(String url) async {
   final Response response = await post(
     Uri.parse(url + 'config'),
@@ -32,12 +32,12 @@ Future<String> loadConfig(String url) async {
     return response.body;
   } else {
     final int statusCode = response.statusCode;
-    throw LoadConfigException('Failed to load config. \n'
+    throw HttpErrorCodeException('Failed to load config. \n'
         'Response status code: $statusCode');
   }
 }
 
-/// Send the full database to the Server.
+/// Sends the full database to the Server.
 Future<void> sendData(String url) async {
   final String jsonDatabase =
       jsonEncode(DatabaseManager().exportDatabaseForTransfer());
@@ -50,10 +50,10 @@ Future<void> sendData(String url) async {
   );
   if (response.statusCode != 200) {
     final int statusCode = response.statusCode;
-    throw SendDataException('Failed to send data.\n'
+    throw HttpErrorCodeException('Failed to send data.\n'
         'Response status code: $statusCode');
   }
-
+// TODO: test the function with real data.
 //ignore: avoid_print
   print('Response statusCode: ' + response.statusCode.toString());
 }

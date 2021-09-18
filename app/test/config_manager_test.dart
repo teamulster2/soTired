@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/ui/constants/constants.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
@@ -55,7 +53,6 @@ final Map<String, dynamic> customAssertObject = <String, dynamic>{
   'questions': _serializeQuestionnaireObjects(questions)
 };
 
-@GenerateMocks([Client])
 void main() {
   group('ConfigManager Basics', () {
     setUpAll(() async {
