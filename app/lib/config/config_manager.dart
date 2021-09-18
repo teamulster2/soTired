@@ -35,7 +35,7 @@ class ConfigManager {
   /// This method contains the default config and restores it on demand.
   void loadDefaultConfig() {
     final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder()
-      ..serverUrl = 'http://localhost:50000/'
+      ..serverUrl = 'http://192.168.179.125:50000'
       ..utcNotificationTimes = <String>[
         // (hour:minutes) use UTC time
         '08:15',
@@ -70,17 +70,16 @@ class ConfigManager {
 
   /// This method loads the config from a server, and write it to [_clientConfig].
   Future<void> fetchConfigFromServer(String url) async {
-    try{
+    try {
       final String configString = await loadConfig(url);
 
       final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
       final ClientConfig configJson =
-      clientConfigBuilder.buildWithString(configString);
+          clientConfigBuilder.buildWithString(configString);
       _clientConfig = configJson;
-    }catch(e){
+    } catch (e) {
       rethrow;
     }
-
   }
 
   /// This method is capable of writing a config to an existing JSON file.

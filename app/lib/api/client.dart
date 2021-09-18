@@ -4,7 +4,6 @@ import 'package:http/http.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 
-
 /// Send a request to the server and checks the availability.
 Future<bool> isServerReachable(String url) async {
   final Response response = await post(
