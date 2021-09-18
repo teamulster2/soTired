@@ -1,14 +1,59 @@
 package cmd
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+
 	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+func exportDatabase(cmd *cobra.Command, args []string) {
+	path, err := cmd.Flags().GetString("db-path")
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		log.Fatalln(err.Error())
+	}
+	db, err := gorm.Open(sqlite.Open(path))
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	studys, err := toJSONStudyList(db)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	all := fullDB{
+		AllStudies:    studys,
+		ServerVersion: "v0.0.0", // FIXME dont hardcode version
+	}
+	jsonString, err := json.MarshalIndent(all, "", "    ")
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	outPath, err := cmd.Flags().GetString("out-path")
+	if err != nil {
+		fmt.Println(jsonString)
+	}
+	err = ioutil.WriteFile(outPath, []byte(jsonString), 0644)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+}
 
 func toJSONStudyList(db *gorm.DB) ([]jsonStudy, error) {
 	var allStudies []Study
 	if err := db.Find(&allStudies).Error; err != nil {
 		return nil, err
+	}
+	if len(allStudies) == 0 {
+		return nil, errors.Errorf("no studies to export")
 	}
 	allJSONStudies := make([]jsonStudy, 0, len(allStudies))
 	for _, study := range allStudies {
@@ -48,6 +93,11 @@ func toJSONStudyList(db *gorm.DB) ([]jsonStudy, error) {
 	}
 
 	return allJSONStudies, nil
+}
+
+type fullDB struct {
+	ServerVersion string
+	AllStudies    []jsonStudy
 }
 
 type jsonStudy struct {
