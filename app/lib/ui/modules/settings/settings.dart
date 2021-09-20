@@ -97,8 +97,10 @@ class _SettingsState extends State<Settings> {
                         'This URL will be stored and is active now.');
                   }, () {
                     Navigator.pop(context);
-                    _showExceptionDialog('Could not connect to server',
-                        'Please check your network connection and the right research url and try again');
+                    _showExceptionDialog(
+                        'Could not connect to server',
+                        "Please check your network connection and verify "
+                            "you've entered the correct study URL.");
                   }, url);
                 } else {
                   _showExceptionDialog(
