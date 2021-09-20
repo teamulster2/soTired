@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
       resizeToAvoidBottomInset: false,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(55),
-        child: NavigationBar(),
+        child: NavigationBar(title: 'soTired'),
       ),
       // NOTE: drawer not needed now
       // drawer: const NavigationDrawer(),

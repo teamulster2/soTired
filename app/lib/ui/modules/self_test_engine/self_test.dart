@@ -29,7 +29,7 @@ class _SelfTestState extends State<SelfTest> {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(55),
-        child: NavigationBar(),
+        child: NavigationBar(title: 'Self Test'),
       ),
       // NOTE: drawer not needed now
       // drawer: const NavigationDrawer(),

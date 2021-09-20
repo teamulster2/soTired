@@ -40,7 +40,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     return Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(55),
-          child: NavigationBar(),
+          child: NavigationBar(title: 'Questionnaire'),
         ),
         // NOTE: drawer not needed now
         // drawer: const NavigationDrawer(),
