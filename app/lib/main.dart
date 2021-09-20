@@ -47,6 +47,7 @@ class SoTiredAppState extends State<SoTiredAppContent>
             .init(() => setState(() => _doneInitializing = true), path);
       } catch (e) {
         // TODO: invoke exception handling app popup window
+        _showExceptionDialog(e.toString(), '$e');
       }
     });
   }
@@ -114,5 +115,22 @@ class SoTiredAppState extends State<SoTiredAppContent>
     Provider.of<ServiceProvider>(context, listen: false)
         .databaseManager
         .closeDatabase();
+  }
+
+  void _showExceptionDialog(String title, String content) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+                backgroundColor: Theme.of(context).primaryColorLight,
+                title: Text(title),
+                content: Text(content),
+                actions: <Widget>[
+                  TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ]));
   }
 }

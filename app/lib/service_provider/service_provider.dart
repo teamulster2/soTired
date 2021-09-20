@@ -27,7 +27,7 @@ class ServiceProvider extends ChangeNotifier {
           '$basePath/${_configManager.clientConfigFileName}')) {
         try {
           await _configManager
-              .fetchConfigFromServer(configManager.clientConfig!.serverUrl);
+              .fetchConfigFromServer(databaseManager.getSettings().serverUrl);
         } on Exception {
           _configManager.loadDefaultConfig();
           rethrow;

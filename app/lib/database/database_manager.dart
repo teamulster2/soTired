@@ -268,7 +268,7 @@ class DatabaseManager {
   SettingsObject getSettings() {
     if (_settingsBox.isEmpty) {
       throw EmptyHiveBoxException('SettingsBox does not contain entries. '
-          'You might want to restart your app to fix this.');
+          'Please enter a valid server URL to fix this.');
     }
 
     return _settingsBox.values.first;

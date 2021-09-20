@@ -5,24 +5,25 @@ import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 
 /// Sends a request to the server and checks the availability.
-Future<bool> isServerReachable(String url) async {
-  final Response response = await post(
-    Uri.parse(url),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-  );
-  if (response.statusCode == 200) {
-    return true;
-  } else {
-    return false;
+Future<void> validateServerConnection(Function onServerReachable,
+    Function onServerNotReachable, String url) async {
+  try {
+    final Response response = await post(Uri.parse(url));
+    // TODO: check server response for identity string
+    if (response.statusCode == 200) {
+      onServerReachable();
+    } else {
+      onServerNotReachable();
+    }
+  } on Exception {
+    onServerNotReachable();
   }
 }
 
 /// Sends a request to the server and gets a config file back.
 Future<String> loadConfig(String url) async {
   final Response response = await post(
-    Uri.parse(url + 'config'),
+    Uri.parse('$url/config'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -42,7 +43,7 @@ Future<void> sendData(String url) async {
   final String jsonDatabase =
       jsonEncode(DatabaseManager().exportDatabaseForTransfer());
   final Response response = await post(
-    Uri.parse(url + 'data'),
+    Uri.parse('$url/data'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

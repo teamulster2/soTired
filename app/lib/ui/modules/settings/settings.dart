@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:so_tired/api/client.dart';
+import 'package:so_tired/database/models/settings/settings_object.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
+import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/widgets/classic_button.dart';
 
@@ -48,23 +53,6 @@ class _SettingsState extends State<Settings> {
             ],
           )));
 
-  void showInfoDialog(String title, String content) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-                title: Text(title),
-                content: Text(content),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ]));
-  }
-
   Widget getChangeUrlPart() => Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(20),
@@ -92,22 +80,27 @@ class _SettingsState extends State<Settings> {
             ClassicButton(
               color: Theme.of(context).primaryColor,
               buttonText: 'Save',
-              onPressed: () {
+              onPressed: () async {
                 final String url = myController.text;
 
                 if (_isUrlValid(url)) {
-                  // TODO: ping server
-                  // if (_isServerReachable) {
-                  //   Provider.of<ServiceProvider>(context, listen: false)
-                  //       .databaseManager.writeSettings(SettingsObject(url));
-                  //   showInfoDialog('Successfully connected to server',
-                  //       'This url wil be stored and is active now.');
-                  // } else {
-                  //   showInfoDialog('Could not connect to server',
-                  //       'Please check your network connection and try again');
-                  // }
+                  _showCircularProgressIndicator(
+                      'Checking server connection...',
+                      'This may take a while.');
+                  await validateServerConnection(() {
+                    Provider.of<ServiceProvider>(context, listen: false)
+                        .databaseManager
+                        .writeSettings(SettingsObject(url));
+                    Navigator.pop(context);
+                    _showInfoDialog('Successfully connected to server',
+                        'This URL will be stored and is active now.');
+                  }, () {
+                    Navigator.pop(context);
+                    _showExceptionDialog('Could not connect to server',
+                        'Please check your network connection and try again');
+                  }, url);
                 } else {
-                  showInfoDialog(
+                  _showExceptionDialog(
                       'URL is invalid',
                       'Please enter a valid URL.\n'
                           'For example:\n'
@@ -129,20 +122,94 @@ class _SettingsState extends State<Settings> {
           children: <Widget>[
             SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: Text('Synchronization: ',
+              child: Text('Send test results to database',
                   style: Theme.of(context).textTheme.headline3),
             ),
             const SizedBox(height: 20),
             ClassicButton(
               color: Theme.of(context).primaryColor,
-              buttonText: 'Sync test results to database',
+              buttonText: 'Send',
               onPressed: () {
-                // TODO: Add method to sync test results to database
+                late final SettingsObject _settings;
+                try {
+                  _settings =
+                      Provider.of<ServiceProvider>(context, listen: false)
+                          .databaseManager
+                          .getSettings();
+                } on EmptyHiveBoxException catch (e) {
+                  _showExceptionDialog('URL can not be found!', e.msg);
+                }
+                if (_settings.serverUrl!.isNotEmpty) {
+                  try {
+                    // TODO: test this method
+                    sendData(_settings.serverUrl!);
+                  } on HttpErrorCodeException catch (e) {
+                    _showExceptionDialog('Database could not be sent!', e.msg);
+                  }
+                }
               },
             ),
           ],
         ),
       );
 
-  bool _isUrlValid(String url) => Uri.parse(url).isAbsolute;
+  bool _isUrlValid(String url) =>
+      Uri.parse(url).isAbsolute && !url.endsWith('/');
+
+  void _showInfoDialog(String title, String content) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+                title: Text(title),
+                content: Text(content),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Ok'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ]));
+  }
+
+  void _showCircularProgressIndicator(String title, String content) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+            title: Text(title),
+            content: SizedBox(
+                height: 80,
+                child: Column(
+                  children: <Widget>[
+                    Text(content),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      width: 60,
+                      height: 60,
+                      child: const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Color(0xff97E8D9))),
+                    )
+                  ],
+                ))));
+  }
+
+  void _showExceptionDialog(String title, String content) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+                backgroundColor: Theme.of(context).primaryColorLight,
+                title: Text(title),
+                content: Text(content),
+                actions: <Widget>[
+                  TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ]));
+  }
 }

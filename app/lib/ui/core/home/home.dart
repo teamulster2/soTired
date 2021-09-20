@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) => Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(55),
         child: NavigationBar(),
@@ -64,11 +65,15 @@ class _HomeState extends State<Home> {
                           icon: Icons.app_settings_alt,
                           text: 'settings',
                           onTap: () {
-                            Navigator.push(
-                                context,
+                            Navigator.push(context,
                                 MaterialPageRoute<BuildContext>(
-                                    builder: (BuildContext context) =>
-                                        const Settings()));
+                                    builder: (BuildContext context) {
+                              try {
+                                return const Settings();
+                              } catch (e) {
+                                rethrow;
+                              }
+                            }));
                           },
                         ),
                         HomeButton(
