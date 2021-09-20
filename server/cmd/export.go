@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	"github.com/pkg/errors"
@@ -16,18 +15,22 @@ import (
 func exportDatabase(cmd *cobra.Command, args []string) {
 	path, err := cmd.Flags().GetString("db-path")
 	if err != nil {
-		log.Fatalln(err.Error())
+		fmt.Println(errors.Wrap(err, "missing argument for database path"))
+		os.Exit(1)
 	}
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		log.Fatalln(err.Error())
+		fmt.Println(errors.Wrap(err, "Failed to open file"))
+		os.Exit(1)
 	}
 	db, err := gorm.Open(sqlite.Open(path))
 	if err != nil {
-		log.Fatalln(err.Error())
+		fmt.Println(errors.Wrap(err, "Failed to open database"))
+		os.Exit(1)
 	}
 	studys, err := toJSONStudyList(db)
 	if err != nil {
-		log.Fatalln(err.Error())
+		fmt.Println(errors.Wrap(err, "Failed to export the studies from the database"))
+		os.Exit(1)
 	}
 	all := fullDB{
 		AllStudies:    studys,
@@ -35,7 +38,8 @@ func exportDatabase(cmd *cobra.Command, args []string) {
 	}
 	jsonString, err := json.MarshalIndent(all, "", "    ")
 	if err != nil {
-		log.Fatalln(err.Error())
+		fmt.Println(errors.Wrap(err, "Failed to write JSON"))
+		os.Exit(1)
 	}
 	outPath, err := cmd.Flags().GetString("out-path")
 	if err != nil {
@@ -43,14 +47,15 @@ func exportDatabase(cmd *cobra.Command, args []string) {
 	}
 	err = ioutil.WriteFile(outPath, []byte(jsonString), 0644)
 	if err != nil {
-		log.Fatalln(err.Error())
+		fmt.Println(errors.Wrap(err, "Failed to write to file"))
+		os.Exit(1)
 	}
 }
 
 func toJSONStudyList(db *gorm.DB) ([]jsonStudy, error) {
 	var allStudies []Study
 	if err := db.Find(&allStudies).Error; err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "can't read data from the database, is it empty?")
 	}
 	if len(allStudies) == 0 {
 		return nil, errors.Errorf("no studies to export")
