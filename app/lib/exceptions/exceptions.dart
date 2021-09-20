@@ -1,39 +1,52 @@
-class ClientConfigNotInitializedException implements Exception {
+abstract class BaseException implements Exception {
+  final String msg;
+  BaseException(this.msg);
+}
+
+class ClientConfigNotInitializedException implements BaseException {
+  @override
   final String msg;
   ClientConfigNotInitializedException(this.msg);
 }
 
-class MalformedJsonException implements Exception {
+class MalformedJsonException implements BaseException {
+  @override
   final String msg;
   MalformedJsonException(this.msg);
 }
 
-class MalformedQuestionnaireObjectException implements Exception {
+class MalformedQuestionnaireObjectException implements BaseException {
+  @override
   final String msg;
   MalformedQuestionnaireObjectException(this.msg);
 }
 
-class MalformedUtcNotificationTimesException implements Exception {
+class MalformedUtcNotificationTimesException implements BaseException {
+  @override
   final String msg;
   MalformedUtcNotificationTimesException(this.msg);
 }
 
-class EmptyHiveBoxException implements Exception {
+class EmptyHiveBoxException implements BaseException {
+  @override
   final String msg;
   EmptyHiveBoxException(this.msg);
 }
 
-class HiveBoxNullValueException implements Exception {
+class HiveBoxNullValueException implements BaseException {
+  @override
   final String msg;
   HiveBoxNullValueException(this.msg);
 }
 
-class MalformedServerUrlException implements Exception {
+class MalformedServerUrlException implements BaseException {
+  @override
   final String msg;
   MalformedServerUrlException(this.msg);
 }
 
-class HttpErrorCodeException implements Exception {
+class HttpErrorCodeException implements BaseException {
+  @override
   final String msg;
   HttpErrorCodeException(this.msg);
 }

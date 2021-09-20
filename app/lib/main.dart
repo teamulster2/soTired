@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/utils/utils.dart';
@@ -45,9 +46,15 @@ class SoTiredAppState extends State<SoTiredAppContent>
       try {
         Provider.of<ServiceProvider>(context, listen: false)
             .init(() => setState(() => _doneInitializing = true), path);
+      } on BaseException catch (e) {
+        _showExceptionDialog('Something went wrong!', e.msg);
       } catch (e) {
-        // TODO: invoke exception handling app popup window
-        _showExceptionDialog(e.toString(), '$e');
+        _showExceptionDialog(
+            'Something went wrong!',
+            'Critical app error. '
+                'Please restart your application! '
+                'If your problem still consists, please contact the study '
+                'administrators for further advice.');
       }
     });
   }
