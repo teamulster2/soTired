@@ -98,7 +98,7 @@ class _SettingsState extends State<Settings> {
                   }, () {
                     Navigator.pop(context);
                     _showExceptionDialog('Could not connect to server',
-                        'Please check your network connection and try again');
+                        'Please check your network connection and the right research url and try again');
                   }, url);
                 } else {
                   _showExceptionDialog(
@@ -173,7 +173,7 @@ class _SettingsState extends State<Settings> {
         builder: (BuildContext context) => AlertDialog(
             title: Text(title),
             content: SizedBox(
-                height: 80,
+                height: 85,
                 child: Column(
                   children: <Widget>[
                     Text(content),
