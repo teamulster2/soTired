@@ -27,7 +27,6 @@ import (
 )
 
 var cfgFile string
-var serverDBName string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -37,6 +36,13 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
+}
+
+// exportCmd represents the command which handels the full database export to json
+var exportCmd = &cobra.Command{
+	Use:   "export",
+	Short: "export full study data of database",
+	Run:   exportDatabase,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -51,8 +57,11 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVarP(&serverDBName, "db name", "n", "serverDB", "name of the server database")
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sotiredserver.yaml)")
+	exportCmd.Flags().String("db-path", "default.db", "the path to the database file")
+	exportCmd.Flags().String("out-path", "default.json", "the path to the file where the json output should be writen to")
+	exportCmd.Flags().BoolP("verbose", "v", false, "enable database verbosity")
+	rootCmd.AddCommand(exportCmd)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
