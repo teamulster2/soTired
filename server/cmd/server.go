@@ -99,7 +99,10 @@ func config(w http.ResponseWriter, r *http.Request) {
 	db.Create(&study)
 	utcNotificationTimes := make([]string, 0, len(jsonConfig.UTCNotificationTimes))
 	for _, notificationTime := range jsonConfig.UTCNotificationTimes {
-		db.Create(&notificationTime)
+		db.Create(&UTCNotificationTime{
+			Time:    notificationTime,
+			StudyID: study.ID,
+		})
 		utcNotificationTimes = append(utcNotificationTimes, notificationTime)
 	}
 	questions := make([]questionWithAnswers, 0, len(jsonConfig.Questionnaire))
