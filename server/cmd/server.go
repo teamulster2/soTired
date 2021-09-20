@@ -53,20 +53,25 @@ type questionWithAnswers struct {
 }
 
 func serveRun(cmd *cobra.Command, args []string) {
-	// Set routing rules
-
-	http.HandleFunc("/", root)
-
+	// Get cobra arguments
+	dbPath, err := cmd.Flags().GetString("db-path")
+	if err != nil {
+		fmt.Println(errors.Wrap(err, "missing db path argument"))
+	}
 	configPath, err := cmd.Flags().GetString("config-path")
 	if err != nil {
 		fmt.Println(errors.Wrap(err, "missing config path argument"))
 	}
-	http.HandleFunc("/config", config(configPath))
+
+	// Set routing rules
+	http.HandleFunc("/", root)
+	http.HandleFunc("/config", config(configPath, dbPath))
 	http.HandleFunc("/identity", identity)
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
 	fmt.Println("Start to listen on:", addr)
-	// Use the default DefaultServeMux
+
+	// Use default DefaultServeMux
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal(err)
 	}
@@ -76,7 +81,7 @@ func root(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "empty reply")
 }
 
-func config(configPath string) func(w http.ResponseWriter, r *http.Request) {
+func config(configPath string, dbPath string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		io.ReadAll(r.Body)
 
@@ -90,7 +95,7 @@ func config(configPath string) func(w http.ResponseWriter, r *http.Request) {
 			log.Fatal("Error during unmarshaling config data: ", err)
 		}
 
-		db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+		db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 		if err != nil {
 			panic("Failed to connect database")
 		}

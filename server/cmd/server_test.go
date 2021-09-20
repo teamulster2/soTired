@@ -13,7 +13,7 @@ import (
 
 func TestConfig(t *testing.T) {
 	var srv http.Server
-	http.HandleFunc("/config", config("../config.json"))
+	http.HandleFunc("/config", config("../config.json", "default.db"))
 	done := make(chan struct{})
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
