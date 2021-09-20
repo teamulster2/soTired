@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func exportDatabase(cmd *cobra.Command, args []string) {
@@ -22,7 +23,14 @@ func exportDatabase(cmd *cobra.Command, args []string) {
 		fmt.Println(errors.Wrap(err, "Failed to open file"))
 		os.Exit(1)
 	}
-	db, err := gorm.Open(sqlite.Open(path))
+
+	verbose, err := cmd.Flags().GetBool("verbose")
+	conf := &gorm.Config{Logger: logger.Default.LogMode(logger.Silent)}
+	if verbose {
+		conf = &gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
+	}
+
+	db, err := gorm.Open(sqlite.Open(path), conf)
 	if err != nil {
 		fmt.Println(errors.Wrap(err, "Failed to open database"))
 		os.Exit(1)
