@@ -4,6 +4,7 @@ import 'package:so_tired/api/client.dart';
 import 'package:so_tired/database/models/settings/settings_object.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
+import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/widgets/classic_button.dart';
 import 'package:so_tired/utils/utils.dart';
@@ -150,6 +151,7 @@ class _SettingsState extends State<Settings> {
               buttonText: 'Send',
               onPressed: () {
                 try {
+                  // TODO: Add transmission progress bar
                   Utils.sendDataToDatabase(context);
                 } on EmptyHiveBoxException catch (e) {
                   _showExceptionDialog('URL can not be found!', e.msg);
@@ -178,7 +180,10 @@ class _SettingsState extends State<Settings> {
                   TextButton(
                     child: const Text('Ok'),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute<BuildContext>(
+                              builder: (BuildContext context) => const Home()));
                     },
                   )
                 ]));

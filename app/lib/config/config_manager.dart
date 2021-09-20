@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:so_tired/api/client.dart';
 import 'package:so_tired/config/client_config.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/constants/constants.dart';
+import 'package:so_tired/ui/models/questionnaire.dart';
 import 'package:so_tired/utils/utils.dart';
-import 'package:so_tired/api/client.dart';
 
 /// This class is the main part of configs.
 /// It is capable of loading and storing configs from / to json files and also
@@ -70,7 +71,9 @@ class ConfigManager {
   /// This method loads the config from a server, and writes it to [_clientConfig].
   Future<void> fetchConfigFromServer(String? url) async {
     try {
-      final String configString = await loadConfig(url!);
+      final String loadedConfig = await loadConfig(url!);
+      _isServerSentConfigValid(loadedConfig);
+      final String configString = _adaptServerSentJson(loadedConfig);
 
       final ClientConfigBuilder clientConfigBuilder = ClientConfigBuilder();
       final ClientConfig configJson =
@@ -97,5 +100,79 @@ class ConfigManager {
     }
     final File configFile = await Utils.getFileObject(_clientConfigFileName);
     await configFile.writeAsString(json);
+  }
+
+  String _adaptServerSentJson(String json) {
+    final Map<String, dynamic> returnJson = <String, dynamic>{};
+    final Map<String, dynamic> inputJson = jsonDecode(json);
+
+    final List<QuestionnaireObject> questions = <QuestionnaireObject>[];
+    final List<Map<String, dynamic>> questionsJson =
+        List<Map<String, dynamic>>.from(inputJson['questions']);
+
+    for (final Map<String, dynamic> question in questionsJson) {
+      final List<Map<String, dynamic>> inputAnswers =
+          List<Map<String, dynamic>>.from(question['Answers']);
+      final List<String> answersAddition = <String>[];
+      for (final Map<String, dynamic> answer in inputAnswers) {
+        answersAddition.add(answer['AnswerText']);
+      }
+
+      final Map<String, dynamic> questionWrapper = question['Question'];
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'question': questionWrapper['QuestionText'],
+        'answers': answersAddition
+      };
+      questions.add(QuestionnaireObject.fromJson(addition));
+    }
+
+    final Map<String, dynamic> studyJson = inputJson['Study'];
+    returnJson.addAll(<String, dynamic>{
+      'utcNotificationTimes':
+          List<String>.from(inputJson['utcNotificationTimes']),
+      'notificationText': studyJson['notificationText'],
+      'isSpatialSpanTaskEnabled': studyJson['isSpatialSpanTaskEnabled'],
+      'isMentalArithmeticEnabled': studyJson['isMentalArithmeticEnabled'],
+      'isPsychomotorVigilanceTaskEnabled':
+          studyJson['isPsychomotorVigilanceTaskEnabled'],
+      'isQuestionnaireEnabled': studyJson['isQuestionnaireEnabled'],
+      'isCurrentActivityEnabled': studyJson['isCurrentActivityEnabled'],
+      'studyName': studyJson['studyName'],
+      'isStudy': inputJson['isStudy'],
+      'questions': questions
+    });
+
+    return jsonEncode(returnJson);
+  }
+
+  void _isServerSentConfigValid(String json) {
+    try {
+      jsonDecode(json);
+    } catch (e) {
+      throw MalformedJsonException(
+          'Your json string cannot be converted into a object. '
+          'Make sure it is properly formatted!\n\n'
+          'Initial error message:\n$e');
+    }
+
+    try {
+      json.contains('studyName') &&
+          json.contains('notificationText') &&
+          json.contains('isSpatialSpanTaskEnabled') &&
+          json.contains('isPsychomotorVigilanceTaskEnabled') &&
+          json.contains('isMentalArithmeticEnabled') &&
+          json.contains('isQuestionnaireEnabled') &&
+          json.contains('isCurrentActivityEnabled') &&
+          json.contains('isStudy') &&
+          json.contains('utcNotificationTimes') &&
+          json.contains('questions') &&
+          json.contains('QuestionText') &&
+          json.contains('AnswerText');
+    } catch (e) {
+      throw MalformedJsonException(
+          'The jsonResponse does not contain all necessary keys to '
+          'be able to adapt them for instantiating a client config.\n\n'
+          'Initial error message:\n$e');
+    }
   }
 }
