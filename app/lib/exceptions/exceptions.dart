@@ -39,12 +39,6 @@ class HiveBoxNullValueException implements BaseException {
   HiveBoxNullValueException(this.msg);
 }
 
-class MalformedServerUrlException implements BaseException {
-  @override
-  final String msg;
-  MalformedServerUrlException(this.msg);
-}
-
 class HttpErrorCodeException implements BaseException {
   @override
   final String msg;

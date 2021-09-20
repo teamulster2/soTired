@@ -88,13 +88,29 @@ class _SettingsState extends State<Settings> {
                   _showCircularProgressIndicator(
                       'Checking server connection...',
                       'This may take a while.');
-                  await validateServerConnection(() {
-                    Provider.of<ServiceProvider>(context, listen: false)
-                        .databaseManager
-                        .writeSettings(SettingsObject(url));
-                    Navigator.pop(context);
-                    _showInfoDialog('Successfully connected to server',
-                        'This URL will be stored and is active now.');
+                  await validateServerConnection(() async {
+                    try {
+                      await Provider.of<ServiceProvider>(context, listen: false)
+                          .configManager
+                          .fetchConfigFromServer(url);
+                      Provider.of<ServiceProvider>(context, listen: false)
+                          .databaseManager
+                          .writeSettings(SettingsObject(url));
+                      Navigator.pop(context);
+                      _showInfoDialog('Successfully connected to server',
+                          'This URL will be stored and is active now.');
+                    } on BaseException catch (e) {
+                      Navigator.pop(context);
+                      _showExceptionDialog('Something went wrong!', e.msg);
+                    } catch (e) {
+                      Navigator.pop(context);
+                      _showExceptionDialog(
+                          'Something went wrong!',
+                          'Critical app error. '
+                              'Please restart your application! '
+                              'If your problem still consists, please contact '
+                              'the study administrators for further advice.');
+                    }
                   }, () {
                     Navigator.pop(context);
                     _showExceptionDialog(
