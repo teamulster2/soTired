@@ -6,6 +6,7 @@ import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/widgets/classic_button.dart';
+import 'package:so_tired/utils/utils.dart';
 
 /// This widget holds all Setting parts of the application.
 class Settings extends StatefulWidget {
@@ -130,22 +131,14 @@ class _SettingsState extends State<Settings> {
               color: Theme.of(context).primaryColor,
               buttonText: 'Send',
               onPressed: () {
-                late final SettingsObject _settings;
                 try {
-                  _settings =
-                      Provider.of<ServiceProvider>(context, listen: false)
-                          .databaseManager
-                          .getSettings();
+                  Utils.sendDataToDatabase(context);
                 } on EmptyHiveBoxException catch (e) {
                   _showExceptionDialog('URL can not be found!', e.msg);
-                }
-                if (_settings.serverUrl!.isNotEmpty) {
-                  try {
-                    // TODO: test this method
-                    sendData(_settings.serverUrl!);
-                  } on HttpErrorCodeException catch (e) {
-                    _showExceptionDialog('Database could not be sent!', e.msg);
-                  }
+                } on HttpErrorCodeException catch (e) {
+                  _showExceptionDialog('Results could not be sent!', e.msg);
+                } catch (e) {
+                  // TODO: add proper exception handling
                 }
               },
             ),

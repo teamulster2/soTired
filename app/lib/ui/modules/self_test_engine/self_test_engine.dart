@@ -15,7 +15,9 @@ class SelfTestEngine {
   late int averageDiffPVT;
   late int levelSpatialSpanTask;
 
-  SelfTestEngine(SelfTestState selfTestState, this.showDialog) {
+  late BuildContext context;
+
+  SelfTestEngine(SelfTestState selfTestState, this.showDialog, this.context) {
     transitionTo(selfTestState);
     currentState = ValueNotifier<SelfTestState>(selfTestState);
   }

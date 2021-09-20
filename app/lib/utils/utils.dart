@@ -1,7 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:so_tired/api/client.dart';
+import 'package:so_tired/database/models/settings/settings_object.dart';
+import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:uuid/uuid.dart';
 
 /// This calls serves as utility class. It contains only static methods which
@@ -38,6 +43,8 @@ class Utils {
     return generator.v4();
   }
 
+  /// This method takes [codeUnits] as [List] of type [int] and converts them
+  /// into a [String].
   static String codeUnitsToString(List<int> codeUnits) {
     try {
       const Utf8Decoder utf8decoder = Utf8Decoder();
@@ -49,8 +56,29 @@ class Utils {
     }
   }
 
+  /// This method takes a [String] and converts it into code units.
   static List<int> stringToCodeUnits(String utf8) {
     const Utf8Encoder utf8encoder = Utf8Encoder();
     return utf8encoder.convert(utf8);
+  }
+
+  /// This method is used to send the current database content to the server.
+  /// It takes the [BuildContext] as argument to be able to get the
+  /// [ServiceProvider].
+  /// If the server export fails [Exception]s will be rethrown and need to be
+  /// handled.
+  static void sendDataToDatabase(BuildContext context) {
+    try {
+      final SettingsObject _settings =
+          Provider.of<ServiceProvider>(context, listen: false)
+              .databaseManager
+              .getSettings();
+      if (_settings.serverUrl!.isNotEmpty) {
+        // TODO: test this method
+        sendData(_settings.serverUrl!);
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

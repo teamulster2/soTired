@@ -23,7 +23,7 @@ class _SelfTestState extends State<SelfTest> {
   Widget build(BuildContext context) {
     engine = SelfTestEngine(StartSelfTestState(), (ProgressDialogObject pdo) {
       showProgressDialog(pdo);
-    });
+    }, context);
 
     Future<dynamic>.delayed(Duration.zero, () => engine.handleState());
     return Scaffold(
