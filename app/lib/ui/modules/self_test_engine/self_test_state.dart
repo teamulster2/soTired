@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
+import 'package:so_tired/utils/utils.dart';
 
 /// This abstract class sets the current engine and provides the handleState method that contains different functionality in all sub-states.
 abstract class SelfTestState {
@@ -65,10 +67,48 @@ class SpatialSpanTaskState extends SelfTestState {
             '\nLevel reached in spatial span task: ' +
             engine.levelSpatialSpanTask.toString(),
         progress: 'Finished.',
-        onOk: () {},
-        onOkPush: true,
+        onOk: () {
+          Future<dynamic>.delayed(Duration.zero, () {
+            engine.showDialog(ProgressDialogObject(
+                title: 'Send to study server?',
+                content:
+                    'Do you want to send your results to the study server?',
+                progress: 'Synchronization',
+                onOk: () {
+                  try {
+                    Utils.sendDataToDatabase(engine.context);
+                  } catch (e) {
+                    _showExceptionDialog(
+                        'Ups... There was an error sending your results.',
+                        'You did not lose any data. If you want, you can try '
+                            'again via the Settings menu.');
+                  }
+                },
+                onCancel: () {},
+                onOkPush: true,
+                showCancel: true));
+          });
+        },
+        onOkPush: false,
         onCancel: () {},
         showCancel: false));
+  }
+
+  void _showExceptionDialog(String title, String content) {
+    showDialog(
+        barrierDismissible: false,
+        context: engine.context,
+        builder: (BuildContext context) => AlertDialog(
+                backgroundColor: Theme.of(context).primaryColorLight,
+                title: Text(title),
+                content: Text(content),
+                actions: <Widget>[
+                  TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ]));
   }
 }
 

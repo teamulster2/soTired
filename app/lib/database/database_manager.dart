@@ -5,6 +5,7 @@ import 'package:so_tired/database/models/module_type.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
+import 'package:so_tired/database/models/settings/settings_object.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
@@ -23,6 +24,7 @@ class DatabaseManager {
   late final Box<UserLog> _userLogBox;
   late final Box<UserState> _userStateBox;
   late final Box<QuestionnaireResult> _questionnaireResultBox;
+  late final Box<SettingsObject> _settingsBox;
 
   DatabaseManager._databaseManager();
 
@@ -48,6 +50,8 @@ class DatabaseManager {
     Hive.registerAdapter(QuestionnaireAnswersAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(ModuleTypeAdapter());
+    // ignore: cascade_invocations
+    Hive.registerAdapter(SettingsObjectAdapter());
 
     _personalHighScoreBox =
         await Hive.openBox<PersonalHighScore>('personalHighScoreBox');
@@ -55,6 +59,7 @@ class DatabaseManager {
     _userStateBox = await Hive.openBox<UserState>('userStateBox');
     _questionnaireResultBox =
         await Hive.openBox<QuestionnaireResult>('questionnaireResultBox');
+    _settingsBox = await Hive.openBox('settingsBox');
   }
 
   /// This method provides write access to the database regarding all
@@ -78,12 +83,24 @@ class DatabaseManager {
           List<QuestionnaireResult> results) async =>
       _questionnaireResultBox.addAll(results);
 
+  /// This method provides write access to the database regarding the
+  /// [SettingsObject] object taken as single object argument.
+  Future<void> writeSettings(SettingsObject settings) async {
+    if (_settingsBox.isEmpty) {
+      _settingsBox.add(settings);
+    } else {
+      await _settingsBox.clear();
+      // ignore: cascade_invocations
+      _settingsBox.add(settings);
+    }
+  }
+
   /// This method provides the ability to get an object by uuid.
   /// It is responsible for the [PersonalHighScore] hive box.
   /// It takes an uuid as argument and returns a single [PersonalHighScore]
   /// object.
   PersonalHighScore getPersonalHighScoreById(String uuid) {
-    if (_personalHighScoreBox.length == 0) {
+    if (_personalHighScoreBox.isEmpty) {
       throw EmptyHiveBoxException(
           'PersonalHighScoreBox does not contain entries. '
           'Go, store some to disk!');
@@ -108,7 +125,7 @@ class DatabaseManager {
   /// It is responsible for the [UserLog] hive box.
   /// It takes an uuid as argument and returns a single [UserLog] object.
   UserLog getUserLogById(String uuid) {
-    if (_userLogBox.length == 0) {
+    if (_userLogBox.isEmpty) {
       throw EmptyHiveBoxException(
           'UserLogBox does not contain entries. Go, store some to disk!');
     }
@@ -133,7 +150,7 @@ class DatabaseManager {
   /// It takes an uuid as argument and returns a single [UserState]
   /// object.
   UserState getUserStateById(String uuid) {
-    if (_userStateBox.length == 0) {
+    if (_userStateBox.isEmpty) {
       throw EmptyHiveBoxException(
           'UserStateBox does not contain entries. Go, store some to disk!');
     }
@@ -158,7 +175,7 @@ class DatabaseManager {
   /// It takes an uuid as argument and returns a single [QuestionnaireResult]
   /// object.
   QuestionnaireResult getQuestionnaireResultById(String uuid) {
-    if (_questionnaireResultBox.length == 0) {
+    if (_questionnaireResultBox.isEmpty) {
       throw EmptyHiveBoxException(
           'QuestionnaireResultBox does not contain entries. '
           'Go, store some to disk!');
@@ -183,7 +200,7 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [PersonalScore?].
   List<PersonalHighScore> getAllPersonalHighScores() {
-    if (_personalHighScoreBox.length == 0) {
+    if (_personalHighScoreBox.isEmpty) {
       throw EmptyHiveBoxException(
           'PersonalHighScoreBox does not contain entries. Go, store some to disk!');
     }
@@ -204,7 +221,7 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [UserLog?].
   List<UserLog?> getAllUserLogs() {
-    if (_userLogBox.length == 0) {
+    if (_userLogBox.isEmpty) {
       throw EmptyHiveBoxException(
           'UserLogBox does not contain entries. Go, store some to disk!');
     }
@@ -219,7 +236,7 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [CurrentActivity?].
   List<UserState?> getAllUserStates() {
-    if (_userStateBox.length == 0) {
+    if (_userStateBox.isEmpty) {
       throw EmptyHiveBoxException(
           'UserStateBox does not contain entries. Go, store some to disk!');
     }
@@ -234,7 +251,7 @@ class DatabaseManager {
   /// It is null-aware. Therefore, the returned List is of type
   /// [QuestionnaireResult?].
   List<QuestionnaireResult?> getAllQuestionnaireResults() {
-    if (_questionnaireResultBox.length == 0) {
+    if (_questionnaireResultBox.isEmpty) {
       throw EmptyHiveBoxException(
           'QuestionnaireResultBox does not contain entries. '
           'Go, store some to disk!');
@@ -244,6 +261,17 @@ class DatabaseManager {
       returnList.add(_questionnaireResultBox.getAt(i));
     }
     return returnList;
+  }
+
+  /// This method returns the current [SettingsObject] from [SettingsObject]
+  /// box.
+  SettingsObject getSettings() {
+    if (_settingsBox.isEmpty) {
+      throw EmptyHiveBoxException('SettingsBox does not contain entries. '
+          'Please enter a valid server URL to fix this.');
+    }
+
+    return _settingsBox.values.first;
   }
 
   /// This method takes a [uuid] and deletes the corresponding value from

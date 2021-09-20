@@ -23,13 +23,14 @@ class _NavigationBarState extends State<NavigationBar> {
         title: Text('soTired', style: Theme.of(context).textTheme.headline3),
         backgroundColor: Theme.of(context).backgroundColor,
         automaticallyImplyLeading: false,
-        leading: GestureDetector(
+        // NOTE: drawer not needed now
+        /*leading: GestureDetector(
           onTap: () {
             Scaffold.of(context).openDrawer();
           },
           child: const Icon(
             Icons.menu,
           ),
-        ),
+        ),*/
       );
 }

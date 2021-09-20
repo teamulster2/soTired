@@ -10,6 +10,7 @@ import 'package:so_tired/database/models/module_type.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
+import 'package:so_tired/database/models/settings/settings_object.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
@@ -29,6 +30,7 @@ void main() {
   final Box<UserLog> _userLogMockBox = MockBox();
   final Box<UserState> _userStateMockBox = MockBox();
   final Box<QuestionnaireResult> _questionnaireResultMockBox = MockBox();
+  final Box<SettingsObject> _settingsMockBox = MockBox();
 
   final String _uuidPersonalHighScore = Utils.generateUuid();
   final String _uuidUserLog = Utils.generateUuid();
@@ -51,6 +53,8 @@ void main() {
       Utils.stringToCodeUnits('🏡'), Utils.stringToCodeUnits('🤩'));
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
       _uuidQuestionnaireResult, {'firstQuestion': QuestionnaireAnswers.second});
+  final SettingsObject _settings =
+      SettingsObject('http://www.example.com:50000');
 
   final Map<String, dynamic> assertJson = {
     'UserLogs': [
@@ -87,6 +91,7 @@ void main() {
   List<UserLog> _userLogList = [];
   List<UserState> _userStateList = [];
   List<QuestionnaireResult> _questionnaireResultList = [];
+  List<SettingsObject> _settingsObjectList = [];
 
   group('DatabaseManager Basics', () {
     setUpAll(() async {
@@ -112,14 +117,45 @@ void main() {
       _userLogList = [];
       _userStateList = [];
       _questionnaireResultList = [];
+      _settingsObjectList = [];
     });
 
-    when(_databaseManager.getAllPersonalHighScores())
-        .thenAnswer((_) => _personalHighScoreList);
-    when(_databaseManager.getAllUserLogs()).thenAnswer((_) => _userLogList);
-    when(_databaseManager.getAllUserStates()).thenAnswer((_) => _userStateList);
-    when(_databaseManager.getAllQuestionnaireResults())
-        .thenAnswer((_) => _questionnaireResultList);
+    when(_databaseManager.getAllPersonalHighScores()).thenAnswer((_) {
+      if (_personalHighScoreList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserStateBox does not contain entries. Go, store some to disk!');
+      }
+      return _personalHighScoreList;
+    });
+    when(_databaseManager.getAllUserLogs()).thenAnswer((_) {
+      if (_userLogList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserStateBox does not contain entries. Go, store some to disk!');
+      }
+      return _userLogList;
+    });
+    when(_databaseManager.getAllUserStates()).thenAnswer((_) {
+      if (_userStateList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserStateBox does not contain entries. Go, store some to disk!');
+      }
+      return _userStateList;
+    });
+    when(_databaseManager.getAllQuestionnaireResults()).thenAnswer((_) {
+      if (_questionnaireResultList.isEmpty) {
+        throw EmptyHiveBoxException(
+            'UserStateBox does not contain entries. Go, store some to disk!');
+      }
+      return _questionnaireResultList;
+    });
+    when(_databaseManager.getSettings()).thenAnswer((_) {
+      if (_settingsObjectList.isEmpty) {
+        throw EmptyHiveBoxException('SettingsBox does not contain entries. '
+            'You might want to restart your app to fix this.');
+      }
+
+      return _settingsObjectList.first;
+    });
 
     when(_databaseManager.writePersonalHighScores([_personalHighScore]))
         .thenAnswer((_) => Future<void>(
@@ -134,6 +170,21 @@ void main() {
     when(_databaseManager.writeQuestionnaireResults([_questionnaireResult]))
         .thenAnswer((_) => Future<void>(
             () => _questionnaireResultMockBox.addAll([_questionnaireResult])));
+    when(_databaseManager.writeSettings(_settings))
+        .thenAnswer((_) => Future<void>(() async {
+              if (_settingsObjectList.isEmpty) {
+                await _settingsMockBox.add(_settings);
+              } else {
+                _settingsObjectList.clear();
+                // ignore: cascade_invocations
+                await _settingsMockBox.add(_settings);
+              }
+            }));
+
+    when(_settingsMockBox.add(_settings)).thenAnswer((_) => Future<int>(() {
+          _settingsObjectList.add(_settings);
+          return Future.value(0);
+        }));
 
     when(_personalHighScoreMockBox.addAll([_personalHighScore]))
         .thenAnswer((_) => Future<Iterable<int>>(() {
@@ -255,7 +306,7 @@ void main() {
 
       PersonalHighScore? value;
       for (final PersonalHighScore score in _personalHighScoreList) {
-        if (score.uuid == _uuidPersonalHighScore) {
+        if (score.uuid == '') {
           value = score;
         }
       }
@@ -274,7 +325,7 @@ void main() {
 
       UserLog? value;
       for (final UserLog log in _userLogList) {
-        if (log.uuid == _uuidUserLog) {
+        if (log.uuid == '') {
           value = log;
         }
       }
@@ -293,7 +344,7 @@ void main() {
 
       UserState? value;
       for (final UserState state in _userStateList) {
-        if (state.uuid == _uuidUserState) {
+        if (state.uuid == '') {
           value = state;
         }
         // NOTE: add if statement for _uuidUserState2 if necessary
@@ -314,7 +365,7 @@ void main() {
 
       QuestionnaireResult? value;
       for (final QuestionnaireResult result in _questionnaireResultList) {
-        if (result.uuid == _uuidQuestionnaireResult) {
+        if (result.uuid == '') {
           value = result;
         }
       }
@@ -330,10 +381,16 @@ void main() {
         .thenAnswer((_) => exportDatabaseForTransfer());
 
     test('boxes should be empty after initialization', () {
-      throwsA(_databaseManager.getAllPersonalHighScores().length);
-      throwsA(_databaseManager.getAllUserLogs().length);
-      throwsA(_databaseManager.getAllUserStates().length);
-      throwsA(_databaseManager.getAllQuestionnaireResults().length);
+      expect(() => _databaseManager.getAllPersonalHighScores(),
+          throwsA(isA<EmptyHiveBoxException>()));
+      expect(() => _databaseManager.getAllUserLogs(),
+          throwsA(isA<EmptyHiveBoxException>()));
+      expect(() => _databaseManager.getAllUserStates(),
+          throwsA(isA<EmptyHiveBoxException>()));
+      expect(() => _databaseManager.getAllQuestionnaireResults(),
+          throwsA(isA<EmptyHiveBoxException>()));
+      expect(() => _databaseManager.getSettings(),
+          throwsA(isA<EmptyHiveBoxException>()));
     });
 
     test('objects should be stored in database after write operation',
@@ -349,6 +406,17 @@ void main() {
 
       await _databaseManager.writeQuestionnaireResults([_questionnaireResult]);
       verify(_questionnaireResultMockBox.addAll([_questionnaireResult]));
+
+      await _databaseManager.writeSettings(_settings);
+      verify(_settingsMockBox.add(_settings));
+    });
+
+    test('settings should only contain one object', () async {
+      _settingsObjectList.add(SettingsObject(''));
+      // ignore: cascade_invocations
+      await _databaseManager.writeSettings(_settings);
+
+      expect(_settingsObjectList.length, 1);
     });
 
     test('objects should be identified by uuid', () {
@@ -367,10 +435,19 @@ void main() {
     });
 
     test('null values should not be returned by get...ById', () {
-      throwsA(() => _databaseManager.getPersonalHighScoreById(''));
-      throwsA(() => _databaseManager.getUserLogById(''));
-      throwsA(() => _databaseManager.getUserStateById(''));
-      throwsA(() => _databaseManager.getQuestionnaireResultById(''));
+      _personalHighScoreList.add(_personalHighScore);
+      _userLogList.add(_userLog);
+      _userStateList.add(_userState);
+      _questionnaireResultList.add(_questionnaireResult);
+
+      expect(() => _databaseManager.getPersonalHighScoreById(''),
+          throwsA(isA<HiveBoxNullValueException>()));
+      expect(() => _databaseManager.getUserLogById(''),
+          throwsA(isA<HiveBoxNullValueException>()));
+      expect(() => _databaseManager.getUserStateById(''),
+          throwsA(isA<HiveBoxNullValueException>()));
+      expect(() => _databaseManager.getQuestionnaireResultById(''),
+          throwsA(isA<HiveBoxNullValueException>()));
     });
 
     test('all objects should be available', () {
@@ -378,6 +455,7 @@ void main() {
       _userLogList.add(_userLog);
       _userStateList.add(_userState);
       _questionnaireResultList.add(_questionnaireResult);
+      _settingsObjectList.add(_settings);
 
       expect(
           _databaseManager.getAllPersonalHighScores()[0], _personalHighScore);
@@ -385,6 +463,7 @@ void main() {
       expect(_databaseManager.getAllUserStates()[0], _userState);
       expect(_databaseManager.getAllQuestionnaireResults()[0],
           _questionnaireResult);
+      expect(_databaseManager.getSettings(), _settings);
     });
 
     test('should return json containing all database entries', () async {
@@ -398,7 +477,8 @@ void main() {
     });
 
     test('empty database should throw Exception when asked for export', () {
-      throwsA(exportDatabaseForTransfer());
+      expect(() => exportDatabaseForTransfer(),
+          throwsA(isA<EmptyHiveBoxException>()));
     });
   });
 }

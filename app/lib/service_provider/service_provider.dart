@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/notifications/notifications.dart';
 import 'package:so_tired/utils/utils.dart';
 import 'package:timezone/data/latest.dart';
@@ -25,17 +28,16 @@ class ServiceProvider extends ChangeNotifier {
     try {
       if (!Utils.doesFileExist(
           '$basePath/${_configManager.clientConfigFileName}')) {
-        try {
-          await _configManager
-              .fetchConfigFromServer(configManager.clientConfig!.serverUrl);
-        } on Exception {
-          _configManager.loadDefaultConfig();
-          rethrow;
-        }
+        await _configManager
+            .fetchConfigFromServer(databaseManager.getSettings().serverUrl);
         _configManager.writeConfigToFile();
       } else {
         _configManager.loadConfigFromJson();
       }
+    } on HttpErrorCodeException {
+      _configManager.loadDefaultConfig();
+    } on SocketException {
+      _configManager.loadDefaultConfig();
     } catch (e) {
       rethrow;
     }

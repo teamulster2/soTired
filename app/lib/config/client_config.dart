@@ -1,12 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/models/questionnaire.dart';
 
 /// A JSON template containing all relevant keys for the client side (app).
 class ClientConfig {
-  late final String _serverUrl;
   late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
@@ -22,7 +20,6 @@ class ClientConfig {
   late final List<QuestionnaireObject> _questions;
 
   ClientConfig._clientConfig(ClientConfigBuilder clientConfigBuilder) {
-    _serverUrl = clientConfigBuilder._serverUrl;
     _utcNotificationTimes = clientConfigBuilder._utcNotificationTimes;
     _notificationText = clientConfigBuilder._notificationText;
 
@@ -38,8 +35,6 @@ class ClientConfig {
 
     _questions = clientConfigBuilder._questions;
   }
-
-  get serverUrl => _serverUrl;
 
   get utcNotificationTimes => _utcNotificationTimes;
 
@@ -64,8 +59,7 @@ class ClientConfig {
   /// A private constructor which takes a [Map<String, dynamic> json] and
   /// assigns all keys to their counterpart.
   ClientConfig._fromJson(Map<String, dynamic> json)
-      : _serverUrl = json['serverUrl'],
-        _utcNotificationTimes = json['utcNotificationTimes'],
+      : _utcNotificationTimes = json['utcNotificationTimes'],
         _notificationText = json['notificationText'],
         _isSpatialSpanTaskEnabled = json['isSpatialSpanTaskEnabled'],
         _isMentalArithmeticEnabled = json['isMentalArithmeticEnabled'],
@@ -81,7 +75,6 @@ class ClientConfig {
   /// JSON object represented as [Map<String, dynamic>].
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> returnMap = <String, dynamic>{
-      'serverUrl': _serverUrl,
       'utcNotificationTimes': _utcNotificationTimes,
       'notificationText': _notificationText,
       'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
@@ -102,7 +95,6 @@ class ClientConfig {
 
 /// This class serves as Builder class for [ClientConfig].
 class ClientConfigBuilder {
-  late final String _serverUrl;
   late final List<String> _utcNotificationTimes;
   late final String _notificationText;
 
@@ -118,8 +110,6 @@ class ClientConfigBuilder {
   late final List<QuestionnaireObject> _questions;
 
   ClientConfigBuilder();
-
-  set serverUrl(String url) => _serverUrl = url;
 
   set utcNotificationTimes(List<String> notificationTimes) =>
       _utcNotificationTimes = notificationTimes;
@@ -194,8 +184,7 @@ class ClientConfigBuilder {
     }
 
     try {
-      jsonResponse.containsKey('serverUrl') &&
-          jsonResponse.containsKey('utcNotificationTimes') &&
+      jsonResponse.containsKey('utcNotificationTimes') &&
           jsonResponse.containsKey('notificationText') &&
           jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
           jsonResponse.containsKey('isMentalArithmeticEnabled') &&
@@ -209,15 +198,6 @@ class ClientConfigBuilder {
       throw MalformedJsonException(
           'The jsonResponse does not contain all necessary keys to '
           'instantiate a new client config.\n\n'
-          'Initial error message:\n$e');
-    }
-
-    try {
-      Uri.parse(jsonResponse['serverUrl']).isAbsolute;
-    } catch (e) {
-      throw MalformedServerUrlException(
-          'The server url cannot be parsed and, therefore, is invalid. '
-          'Make sure to pass a valid url.\n\n'
           'Initial error message:\n$e');
     }
 
@@ -237,7 +217,6 @@ class ClientConfigBuilder {
       jsonResponse['utcNotificationTimes'] =
           _deserializeUtcNotificationTimes(jsonResponse);
     } catch (e) {
-      debugPrint(e.toString());
       throw MalformedUtcNotificationTimesException(
           'utcNotificationTimes have not been deserialized properly. '
           'Make sure to identify the List type or invoke '

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
-import 'package:so_tired/ui/core/navigation/navigation_drawer.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/pvt_test/pvt_test.dart';
 import 'package:so_tired/ui/modules/self_assessment/self_assessment.dart';
@@ -24,7 +23,7 @@ class _SelfTestState extends State<SelfTest> {
   Widget build(BuildContext context) {
     engine = SelfTestEngine(StartSelfTestState(), (ProgressDialogObject pdo) {
       showProgressDialog(pdo);
-    });
+    }, context);
 
     Future<dynamic>.delayed(Duration.zero, () => engine.handleState());
     return Scaffold(
@@ -32,7 +31,8 @@ class _SelfTestState extends State<SelfTest> {
         preferredSize: Size.fromHeight(55),
         child: NavigationBar(),
       ),
-      drawer: const NavigationDrawer(),
+      // NOTE: drawer not needed now
+      // drawer: const NavigationDrawer(),
       body: ValueListenableBuilder<SelfTestState>(
           valueListenable: engine.currentState,
           builder: (BuildContext builder, Object? value, Widget? widget) =>
