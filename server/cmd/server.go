@@ -54,11 +54,11 @@ type questionWithAnswers struct {
 
 func serveRun(cmd *cobra.Command, args []string) {
 	// Get cobra arguments
-	dbPath, err := cmd.Flags().GetString("db-path")
+	dbPath, err := cmd.Flags().GetString(dbPathFlag)
 	if err != nil {
 		fmt.Println(errors.Wrap(err, "missing db path argument"))
 	}
-	configPath, err := cmd.Flags().GetString("config-path")
+	configPath, err := cmd.Flags().GetString(configPathFlag)
 	if err != nil {
 		fmt.Println(errors.Wrap(err, "missing config path argument"))
 	}

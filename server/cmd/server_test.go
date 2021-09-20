@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"sync"
 	"testing"
 	"time"
@@ -13,7 +15,13 @@ import (
 
 func TestConfig(t *testing.T) {
 	var srv http.Server
-	http.HandleFunc("/config", config("../config.json", "default.db"))
+	path, err := ioutil.TempDir("", "soti")
+	if err != nil {
+		panic(err)
+	}
+	defer os.RemoveAll(path)
+
+	http.HandleFunc("/config", config("../config.json", filepath.Join(path, "default.db")))
 	done := make(chan struct{})
 	wg := &sync.WaitGroup{}
 	wg.Add(1)

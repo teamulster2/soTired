@@ -14,7 +14,7 @@ import (
 )
 
 func exportDatabase(cmd *cobra.Command, args []string) {
-	path, err := cmd.Flags().GetString("db-path")
+	path, err := cmd.Flags().GetString(dbPathFlag)
 	if err != nil {
 		fmt.Println(errors.Wrap(err, "missing argument for database path"))
 		os.Exit(1)
@@ -24,7 +24,7 @@ func exportDatabase(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	verbose, err := cmd.Flags().GetBool("verbose")
+	verbose, err := cmd.Flags().GetBool(verboseFlag)
 	conf := &gorm.Config{Logger: logger.Default.LogMode(logger.Silent)}
 	if verbose {
 		conf = &gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
@@ -49,7 +49,7 @@ func exportDatabase(cmd *cobra.Command, args []string) {
 		fmt.Println(errors.Wrap(err, "Failed to write JSON"))
 		os.Exit(1)
 	}
-	outPath, err := cmd.Flags().GetString("out-path")
+	outPath, err := cmd.Flags().GetString(outPathFlag)
 	if err != nil {
 		fmt.Println(jsonString)
 	}

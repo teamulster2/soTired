@@ -28,6 +28,14 @@ import (
 
 var cfgFile string
 
+const (
+	dbPathFlag     = "db-path"
+	outPathFlag    = "out-path"
+	verboseFlag    = "verbose"
+	portFlag       = "port"
+	configPathFlag = "config-path"
+)
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "soti-server",
@@ -58,16 +66,16 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sotiredserver.yaml)")
-	exportCmd.Flags().String("db-path", "default.db", "the path to the database file")
-	exportCmd.Flags().String("out-path", "default.json", "the path to the file where the json output should be writen to")
-	exportCmd.Flags().Bool("verbose", false, "enable database verbosity")
+	exportCmd.Flags().String(dbPathFlag, "default.db", "the path to the database file")
+	exportCmd.Flags().String(outPathFlag, "default.json", "the path to the file where the json output should be writen to")
+	exportCmd.Flags().Bool(verboseFlag, false, "enable database verbosity")
 	rootCmd.AddCommand(exportCmd)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	run.Flags().Uint16("port", 50000, "port to serve on")
-	run.Flags().String("config-path", "default.db", "server config path to be used")
+	run.Flags().Uint16(portFlag, 50000, "port to serve on")
+	run.Flags().String(configPathFlag, "default.db", "server config path to be used")
 	rootCmd.AddCommand(run)
 }
 
