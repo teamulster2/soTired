@@ -10,7 +10,7 @@ import (
 
 // Study holds the configuration data and is refered by multiple users.
 type Study struct {
-	gorm.Model
+	gorm.Model                        `json:"-"`
 	ID                                int
 	StudyName                         string `json:"studyName"`
 	NotificationText                  string `json:"notificationText"`
@@ -21,11 +21,12 @@ type Study struct {
 	IsCurrentActivityEnabled          bool   `json:"isCurrentActivityEnabled"`
 }
 
-// UTCNotificationTimes holds the times when the user gets a app notification
+// UTCNotificationTime holds the times when the user gets a app notification
 type UTCNotificationTime struct {
-	ID      int
-	StudyID int
-	Time    string
+	gorm.Model `json:"-"`
+	ID         int
+	StudyID    int
+	Time       string
 }
 
 // BeforeCreate is a hook to validate the Time field entry
@@ -61,14 +62,14 @@ func (n *UTCNotificationTime) isValid() bool {
 
 // User binds the data from one user
 type User struct {
-	gorm.Model
-	ID      int
-	StudyID int
+	gorm.Model `json:"-"`
+	ID         int
+	StudyID    int
 }
 
 // UserLog binds the data from an execution flow to an user and a timestamp.
 type UserLog struct {
-	gorm.Model
+	gorm.Model               `json:"-"`
 	UserID                   int
 	MoodID                   int
 	ActivityID               int
@@ -125,36 +126,36 @@ const (
 
 // SSTResult holds the sstResult value.
 type SSTResult struct {
-	gorm.Model
+	gorm.Model     `json:"-"`
 	ID             int
 	SSTResultValue int
 }
 
 // PVTResult holds the pvtResult value.
 type PVTResult struct {
-	gorm.Model
+	gorm.Model     `json:"-"`
 	ID             int
 	PVTResultValue int
 }
 
 // MentalArithmeticResult holds the result of Mental Arithmetic assessment
 type MentalArithmeticResult struct {
-	gorm.Model
+	gorm.Model                  `json:"-"`
 	ID                          int
 	MentalArithmeticResultValue int
 }
 
 // QuestionnaireLog binds the questionnaire results to an user and a timestamp.
 type QuestionnaireLog struct {
-	gorm.Model
-	ID        int
-	UserID    int
-	timestamp time.Time
+	gorm.Model `json:"-"`
+	ID         int
+	UserID     int
+	timestamp  time.Time
 }
 
 // QuestionnaireResult holds the results from a questionnaire execution.
 type QuestionnaireResult struct {
-	gorm.Model
+	gorm.Model         `json:"-"`
 	ID                 int
 	AnswerID           int
 	QuestionID         int
@@ -163,7 +164,7 @@ type QuestionnaireResult struct {
 
 // Question holds the question text and a reference to the corresponding tudy.
 type Question struct {
-	gorm.Model
+	gorm.Model   `json:"-"`
 	ID           int
 	StudyID      int
 	QuestionText string
@@ -171,7 +172,7 @@ type Question struct {
 
 // Answer holds the answer text and a reference to the question.
 type Answer struct {
-	gorm.Model
+	gorm.Model `json:"-"`
 	ID         int
 	QuestionID int
 	AnswerText string
