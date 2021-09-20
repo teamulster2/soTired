@@ -62,7 +62,7 @@ func serveRun(cmd *cobra.Command, args []string) {
 		fmt.Println(errors.Wrap(err, "missing config path argument"))
 	}
 	http.HandleFunc("/config", config(configPath))
-
+	http.HandleFunc("/identity", identity)
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
 	fmt.Println("Start to listen on:", addr)
@@ -150,7 +150,12 @@ func config(configPath string) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func identity(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "sotiserver")
+	fmt.Println("Replied identity")
+}
+
 func data(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "thanks for the data")
-	fmt.Println("recieved data")
+	fmt.Println("Recieved data")
 }
