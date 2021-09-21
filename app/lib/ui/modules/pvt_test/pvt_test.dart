@@ -35,8 +35,9 @@ class _PVTTestState extends State<PVTTest> {
 
   int next(int min, int max) => min + Random().nextInt(max - min);
   bool boxInPlanning = false;
+  bool setDiff = true;
 
-  final ValueNotifier<int> diff = ValueNotifier<int>(0);
+  int diff = 0;
   final ValueNotifier<bool> showDiff = ValueNotifier<bool>(false);
 
   int now = 0;
@@ -79,14 +80,9 @@ class _PVTTestState extends State<PVTTest> {
                                 builder: (BuildContext context, Object? value,
                                         Widget? widget) =>
                                     Visibility(
-                                  visible: showDiff.value,
-                                  child: ValueListenableBuilder<int>(
-                                      valueListenable: diff,
-                                      builder: (BuildContext context,
-                                              Object? value, Widget? widget) =>
-                                          PVTTestDiff(
-                                              diff: diff.value.toString())),
-                                ),
+                                        visible: showDiff.value,
+                                        child:
+                                            PVTTestDiff(diff: diff.toString())),
                               ),
                             ],
                           )),
@@ -102,6 +98,7 @@ class _PVTTestState extends State<PVTTest> {
         Future<dynamic>.delayed(Duration(seconds: next(1, 3)), () {
           boxAppears.value = true;
           now = DateTime.now().millisecondsSinceEpoch;
+          setDiff = true;
         });
       }
       if (counter.value < 1) {
@@ -151,13 +148,16 @@ class _PVTTestState extends State<PVTTest> {
   }
 
   calculateAndShowDiff() {
-    diff.value = DateTime.now().millisecondsSinceEpoch - now;
-    if (boxAppears.value && boxInPlanning) {
-      diffs.add(diff.value);
+    diff = DateTime.now().millisecondsSinceEpoch - now;
+    if (boxAppears.value && boxInPlanning && setDiff) {
+      diffs.add(diff);
       showDiff.value = true;
+      setDiff = false;
+
       Future<dynamic>.delayed(const Duration(seconds: 1), () {
         showDiff.value = false;
       });
+
       boxAppears.value = false;
       boxInPlanning = false;
       counter.value -= 1;
