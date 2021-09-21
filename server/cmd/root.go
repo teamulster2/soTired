@@ -75,7 +75,8 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	run.Flags().Uint16(portFlag, 50000, "port to serve on")
-	run.Flags().String(configPathFlag, "default.db", "server config path to be used")
+	run.Flags().String(configPathFlag, "config.json", "server config path to be used")
+	run.Flags().String(dbPathFlag, "default.db", "server database path to be used")
 	rootCmd.AddCommand(run)
 }
 
