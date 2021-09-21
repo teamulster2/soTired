@@ -18,20 +18,15 @@ class Home extends StatefulWidget {
 /// This class holds the home screen of the application. It contains a [Scaffold] that has its appBar, drawer and body.
 /// The body contains the [HomeImage] and [HomeButton]s.
 class _HomeState extends State<Home> {
+
+  bool serverUrlTested = false;
+
   @override
   Widget build(BuildContext context) {
-    try {
-      final String? serverUrl =
-          Provider.of<ServiceProvider>(context, listen: false)
-              .databaseManager
-              .getSettings()
-              .serverUrl;
-      debugPrint(serverUrl);
-    } catch (exception) {
-      Future<dynamic>.delayed(Duration.zero, () {
-        showInfoDialog();
-      });
+    if (!serverUrlTested){
+      testServerUrl();
     }
+
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -149,5 +144,21 @@ class _HomeState extends State<Home> {
                     },
                   )
                 ]));
+  }
+
+  testServerUrl(){
+    serverUrlTested = true;
+    try {
+      final String? serverUrl =
+          Provider.of<ServiceProvider>(context, listen: false)
+              .databaseManager
+              .getSettings()
+              .serverUrl;
+      debugPrint(serverUrl);
+    } catch (exception) {
+      Future<dynamic>.delayed(Duration.zero, () {
+        showInfoDialog();
+      });
+    }
   }
 }
