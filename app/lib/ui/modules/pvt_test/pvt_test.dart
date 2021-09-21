@@ -27,7 +27,7 @@ class PVTTest extends StatefulWidget {
 /// This widget holds the whole pvt test.
 /// The game engine is included.
 /// Widgets used: [PVTTestProgress], [PVTTestSquare] and [PVTTestDiff].
-class _PVTTestState extends State<PVTTest> {
+class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
   ValueNotifier<bool> boxAppears = ValueNotifier<bool>(false);
 
   final int max = 3;
@@ -42,6 +42,26 @@ class _PVTTestState extends State<PVTTest> {
 
   int now = 0;
   List<int> diffs = <int>[];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      now = DateTime.now().millisecondsSinceEpoch;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

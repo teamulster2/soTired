@@ -39,7 +39,7 @@ class SelfAssessmentState extends SelfTestState {
     engine.showDialog(ProgressDialogObject(
         title:
             'Thank you for answering the questions. Now you will be forwarded to a psychomotor vigilance task.',
-        content: 'When you want to leave the self test press Cancel',
+        content: 'When you want to leave the self test press Cancel (previous data is not lost)',
         progress: 'Step 2 of 3',
         onOk: () {
           engine.transitionTo(PVTState());
@@ -120,7 +120,7 @@ class PVTState extends SelfTestState {
     engine.showDialog(ProgressDialogObject(
         title:
             'Thank you for doing the psychomotor vigilance task. Now you will be forwarded to a spatial span task.',
-        content: 'When you want to leave the self test press Cancel',
+        content: 'When you want to leave the self test press Cancel (previous data is not lost)',
         progress: 'Step 3 of 3',
         onOk: () {
           engine.transitionTo(SpatialSpanTaskState());
