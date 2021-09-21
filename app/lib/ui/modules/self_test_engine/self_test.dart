@@ -68,91 +68,94 @@ class _SelfTestState extends State<SelfTest> {
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) => Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              child: Container(
-                padding:
-                    const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
-                margin: const EdgeInsets.only(top: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+        builder: (BuildContext context) => WillPopScope(
+          onWillPop: () async => false,
+          child: Dialog(
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                        height: 70,
-                        width: 400,
-                        padding: const EdgeInsets.only(left: 15),
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorDark,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(pdo.progress,
-                            style: Theme.of(context).textTheme.headline3)),
-                    const SizedBox(height: 20),
-                    Text(
-                      pdo.title,
-                      style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      pdo.content,
-                      style: const TextStyle(fontSize: 14, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 22,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Visibility(
-                          visible: pdo.showCancel,
-                          child: TextButton(
-                            child: const Text('Cancel'),
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  padding:
+                      const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+                  margin: const EdgeInsets.only(top: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(
+                          height: 70,
+                          width: 400,
+                          padding: const EdgeInsets.only(left: 15),
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColorDark,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(pdo.progress,
+                              style: Theme.of(context).textTheme.headline3)),
+                      const SizedBox(height: 20),
+                      Text(
+                        pdo.title,
+                        style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        pdo.content,
+                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 22,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Visibility(
+                            visible: pdo.showCancel,
+                            child: TextButton(
+                              child: const Text('Cancel'),
+                              onPressed: () {
+                                pdo.onCancel();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute<BuildContext>(
+                                        builder: (BuildContext context) =>
+                                            const Home()));
+                              },
+                            ),
+                          ),
+                          TextButton(
+                            child: const Text('Ok'),
                             onPressed: () {
-                              pdo.onCancel();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute<BuildContext>(
-                                      builder: (BuildContext context) =>
-                                          const Home()));
+                              pdo.onOk();
+                              if (pdo.onOkPush) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute<BuildContext>(
+                                        builder: (BuildContext context) =>
+                                            const Home()));
+                              } else {
+                                Navigator.pop(context);
+                              }
                             },
                           ),
-                        ),
-                        TextButton(
-                          child: const Text('Ok'),
-                          onPressed: () {
-                            pdo.onOk();
-                            if (pdo.onOkPush) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute<BuildContext>(
-                                      builder: (BuildContext context) =>
-                                          const Home()));
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ));
+        ));
   }
 }

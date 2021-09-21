@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:so_tired/ui/models/dialog_objects.dart';
-import 'package:so_tired/ui/models/exceptions.dart';
 import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
 
 /// This abstract class is the super class of all available game states.
@@ -42,7 +41,7 @@ class StartState extends GameState {
 
   @override
   void checkUserInteraction(int boxId) {
-    throw GameWrongStateException();
+    // throw GameWrongStateException();
   }
 }
 
@@ -62,7 +61,7 @@ class ShowSequenceState extends GameState {
 
   @override
   void checkUserInteraction(int boxId) {
-    throw GameWrongStateException();
+    // throw GameWrongStateException();
   }
 }
 
@@ -107,7 +106,7 @@ class GameOverState extends GameState {
 
   @override
   void checkUserInteraction(int boxId) {
-    throw GameWrongStateException();
+    // throw GameWrongStateException();
   }
 
   /// This method shows the game over dialog and stops the game.
@@ -130,7 +129,7 @@ class GameOverState extends GameState {
 class NextLevelState extends GameState {
   @override
   void checkUserInteraction(int boxId) {
-    throw GameWrongStateException();
+    // throw GameWrongStateException();
   }
 
   /// This methods shows the next level dialog and starts a new sequence of boxes shown.

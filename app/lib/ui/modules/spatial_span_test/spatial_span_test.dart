@@ -87,26 +87,29 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-                title: Text(ido.title),
-                content: Text(ido.content),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      ido.onOk();
-                      if (ido.onOkPop) {
-                        Navigator.pop(context);
-                      } else if (ido.onOkPush) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute<BuildContext>(
-                                builder: (BuildContext context) =>
-                                    const Home()));
-                      }
-                    },
-                  )
-                ]));
+        builder: (BuildContext context) => WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+                  title: Text(ido.title),
+                  content: Text(ido.content),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        ido.onOk();
+                        if (ido.onOkPop) {
+                          Navigator.pop(context);
+                        } else if (ido.onOkPush) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute<BuildContext>(
+                                  builder: (BuildContext context) =>
+                                      const Home()));
+                        }
+                      },
+                    )
+                  ]),
+        ));
   }
 
   /// This method shows the game over dialog corresponding to the [InfoDialogObject] with the information given.
@@ -115,49 +118,52 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-                backgroundColor: Theme.of(context).primaryColorLight,
-                title: Text(ido.title),
-                content: Text(ido.content),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      ido.onOk();
-                      if (ido.onOkPop) {
-                        Navigator.pop(context);
-                      } else if (ido.onOkPush) {
-                        widget.setLevel(gameEngine.level.value - 1);
+        builder: (BuildContext context) => WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+                  backgroundColor: Theme.of(context).primaryColorLight,
+                  title: Text(ido.title),
+                  content: Text(ido.content),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        ido.onOk();
+                        if (ido.onOkPop) {
+                          Navigator.pop(context);
+                        } else if (ido.onOkPush) {
+                          widget.setLevel(gameEngine.level.value - 1);
 
-                        final Map<ModuleType, Map<String, dynamic>> gameValue =
-                            <ModuleType, Map<String, dynamic>>{
-                          ModuleType.spatialSpanTask: <String, dynamic>{
-                            '': gameEngine.level.value - 1
-                          }
-                        };
-                        Provider.of<ServiceProvider>(context, listen: false)
-                            .databaseManager
-                            .writeUserLogs(<UserLog>[
-                          UserLog(
-                              Utils.generateUuid(),
-                              UserAccessMethod.regularAppStart,
-                              gameValue,
-                              DateTime.now().toString())
-                        ]);
+                          final Map<ModuleType, Map<String, dynamic>> gameValue =
+                              <ModuleType, Map<String, dynamic>>{
+                            ModuleType.spatialSpanTask: <String, dynamic>{
+                              '': gameEngine.level.value - 1
+                            }
+                          };
+                          Provider.of<ServiceProvider>(context, listen: false)
+                              .databaseManager
+                              .writeUserLogs(<UserLog>[
+                            UserLog(
+                                Utils.generateUuid(),
+                                UserAccessMethod.regularAppStart,
+                                gameValue,
+                                DateTime.now().toString())
+                          ]);
 
-                        Provider.of<ServiceProvider>(context, listen: false)
-                            .databaseManager
-                            .writePersonalHighScores(<PersonalHighScore>[
-                          PersonalHighScore(
-                              Utils.generateUuid(),
-                              gameEngine.level.value - 1,
-                              ModuleType.spatialSpanTask)
-                        ]);
+                          Provider.of<ServiceProvider>(context, listen: false)
+                              .databaseManager
+                              .writePersonalHighScores(<PersonalHighScore>[
+                            PersonalHighScore(
+                                Utils.generateUuid(),
+                                gameEngine.level.value - 1,
+                                ModuleType.spatialSpanTask)
+                          ]);
 
-                        widget.onFinished();
-                      }
-                    },
-                  )
-                ]));
+                          widget.onFinished();
+                        }
+                      },
+                    )
+                  ]),
+        ));
   }
 }

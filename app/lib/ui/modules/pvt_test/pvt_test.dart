@@ -152,19 +152,22 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-                title: const Text(
-                    'We will now show you a turquoise square over and over again. Each time it appears, please touch the screen.'),
-                content: const Text('To start the game press Ok.'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      startPVT();
-                      Navigator.pop(context);
-                    },
-                  )
-                ]));
+        builder: (BuildContext context) => WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+                  title: const Text(
+                      'We will now show you a turquoise square over and over again. Each time it appears, please touch the screen.'),
+                  content: const Text('To start the game press Ok.'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        startPVT();
+                        Navigator.pop(context);
+                      },
+                    )
+                  ]),
+        ));
   }
 
   calculateAndShowDiff() {
