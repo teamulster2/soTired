@@ -26,15 +26,7 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
   Widget build(BuildContext context) => WillPopScope(
       child: SizedBox(
         child: Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-          GestureDetector(
-              child: Container(
-                color: Theme.of(context).primaryColor,
-                width: 40,
-                height: 40,
-                child: const Icon(IconData(62832, fontFamily: 'MaterialIcons'),
-                    color: Colors.white),
-              ),
-              onTap: () => widget.onBack()),
+          getBackButton(),
           const SizedBox(width: 20),
           Text(
               'question ' +
@@ -64,9 +56,33 @@ class _QuestionnaireProgressState extends State<QuestionnaireProgress> {
                 )
               ]));
 
+  Widget getBackButton() {
+    if (widget.currentQuestion == 1) {
+      return GestureDetector(
+          child: Container(
+            color: Colors.grey,
+            width: 40,
+            height: 40,
+            child: const Icon(IconData(62832, fontFamily: 'MaterialIcons'),
+                color: Colors.white),
+          ),
+          onTap: () => widget.onBack());
+    } else {
+      return GestureDetector(
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            width: 40,
+            height: 40,
+            child: const Icon(IconData(62832, fontFamily: 'MaterialIcons'),
+                color: Colors.white),
+          ),
+          onTap: () => widget.onBack());
+    }
+  }
+
   Widget getButton() {
     if (widget.currentQuestion <= widget.answeredQuestion) {
-      if (widget.currentQuestion < widget.length - 1) {
+      if (widget.currentQuestion < widget.length) {
         return GestureDetector(
             child: Container(
               color: Theme.of(context).primaryColor,

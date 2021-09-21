@@ -27,7 +27,7 @@ class _TwoSidesTestState extends State<TwoSidesTest> {
   Widget build(BuildContext context) => Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(55),
-        child: NavigationBar(),
+        child: NavigationBar(title: 'Two sides test'),
       ),
       drawer: const NavigationDrawer(),
       body: Stack(

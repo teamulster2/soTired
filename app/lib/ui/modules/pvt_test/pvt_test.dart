@@ -27,7 +27,7 @@ class PVTTest extends StatefulWidget {
 /// This widget holds the whole pvt test.
 /// The game engine is included.
 /// Widgets used: [PVTTestProgress], [PVTTestSquare] and [PVTTestDiff].
-class _PVTTestState extends State<PVTTest> {
+class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
   ValueNotifier<bool> boxAppears = ValueNotifier<bool>(false);
 
   final int max = 3;
@@ -35,12 +35,33 @@ class _PVTTestState extends State<PVTTest> {
 
   int next(int min, int max) => min + Random().nextInt(max - min);
   bool boxInPlanning = false;
+  bool setDiff = true;
 
-  final ValueNotifier<int> diff = ValueNotifier<int>(0);
+  int diff = 0;
   final ValueNotifier<bool> showDiff = ValueNotifier<bool>(false);
 
   int now = 0;
   List<int> diffs = <int>[];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      now = DateTime.now().millisecondsSinceEpoch;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +100,9 @@ class _PVTTestState extends State<PVTTest> {
                                 builder: (BuildContext context, Object? value,
                                         Widget? widget) =>
                                     Visibility(
-                                  visible: showDiff.value,
-                                  child: ValueListenableBuilder<int>(
-                                      valueListenable: diff,
-                                      builder: (BuildContext context,
-                                              Object? value, Widget? widget) =>
-                                          PVTTestDiff(
-                                              diff: diff.value.toString())),
-                                ),
+                                        visible: showDiff.value,
+                                        child:
+                                            PVTTestDiff(diff: diff.toString())),
                               ),
                             ],
                           )),
@@ -102,6 +118,7 @@ class _PVTTestState extends State<PVTTest> {
         Future<dynamic>.delayed(Duration(seconds: next(1, 3)), () {
           boxAppears.value = true;
           now = DateTime.now().millisecondsSinceEpoch;
+          setDiff = true;
         });
       }
       if (counter.value < 1) {
@@ -135,29 +152,35 @@ class _PVTTestState extends State<PVTTest> {
     showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-                title: const Text(
-                    'We will now show you a turquoise square over and over again. Each time it appears, please touch the screen.'),
-                content: const Text('To start the game press Ok.'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Ok'),
-                    onPressed: () {
-                      startPVT();
-                      Navigator.pop(context);
-                    },
-                  )
-                ]));
+        builder: (BuildContext context) => WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+                  title: const Text(
+                      'We will now show you a turquoise square over and over again. Each time it appears, please touch the screen.'),
+                  content: const Text('To start the game press Ok.'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        startPVT();
+                        Navigator.pop(context);
+                      },
+                    )
+                  ]),
+        ));
   }
 
   calculateAndShowDiff() {
-    diff.value = DateTime.now().millisecondsSinceEpoch - now;
-    if (boxAppears.value && boxInPlanning) {
-      diffs.add(diff.value);
+    diff = DateTime.now().millisecondsSinceEpoch - now;
+    if (boxAppears.value && boxInPlanning && setDiff) {
+      diffs.add(diff);
       showDiff.value = true;
+      setDiff = false;
+
       Future<dynamic>.delayed(const Duration(seconds: 1), () {
         showDiff.value = false;
       });
+
       boxAppears.value = false;
       boxInPlanning = false;
       counter.value -= 1;

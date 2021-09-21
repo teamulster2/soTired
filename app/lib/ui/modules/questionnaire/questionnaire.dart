@@ -40,7 +40,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     return Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(55),
-          child: NavigationBar(),
+          child: NavigationBar(title: 'Questionnaire'),
         ),
         // NOTE: drawer not needed now
         // drawer: const NavigationDrawer(),
@@ -104,27 +104,30 @@ class _QuestionnaireState extends State<Questionnaire> {
         number: i,
         value: i,
         onPressed: () {
-          if (currentQuestion.value < questions.length - 1) {
-            currentQuestion.value += 1;
-            answeredQuestion += 1;
-            score += i;
+          Future<dynamic>.delayed(const Duration(milliseconds: 200), () {
+            if (currentQuestion.value < questions.length - 1) {
+              currentQuestion.value += 1;
+              answeredQuestion += 1;
+              score += i;
 
-            QuestionnaireAnswers answer;
-            if (i == 1) {
-              answer = QuestionnaireAnswers.first;
-            } else if (i == 2) {
-              answer = QuestionnaireAnswers.second;
-            } else if (i == 3) {
-              answer = QuestionnaireAnswers.third;
+              QuestionnaireAnswers answer;
+              if (i == 1) {
+                answer = QuestionnaireAnswers.first;
+              } else if (i == 2) {
+                answer = QuestionnaireAnswers.second;
+              } else if (i == 3) {
+                answer = QuestionnaireAnswers.third;
+              } else {
+                answer = QuestionnaireAnswers.fourth;
+              }
+              questionnaireResult.addAll(<String, QuestionnaireAnswers?>{
+                questions[currentQuestion.value].question: answer
+              });
             } else {
-              answer = QuestionnaireAnswers.fourth;
+              showDialogQuestionnaireFinished();
             }
-            questionnaireResult.addAll(<String, QuestionnaireAnswers?>{
-              questions[currentQuestion.value].question: answer
-            });
-          } else {
-            showDialogQuestionnaireFinished();
-          }
+          });
+
         },
       );
 

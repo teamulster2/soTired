@@ -17,11 +17,26 @@ class Settings extends StatefulWidget {
   _SettingsState createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends State<Settings> with WidgetsBindingObserver {
   final TextEditingController myController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _showInfoDialog('Connection lost.', 'We will try to connect again.');
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
     myController.dispose();
     super.dispose();
   }
@@ -31,7 +46,7 @@ class _SettingsState extends State<Settings> {
       resizeToAvoidBottomInset: false,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(55),
-        child: NavigationBar(),
+        child: NavigationBar(title: 'Settings'),
       ),
       // NOTE: drawer not needed now
       // drawer: const NavigationDrawer(),
