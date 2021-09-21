@@ -9,5 +9,5 @@ class PVTTestDiff extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Text(diff + ' ms', style: Theme.of(context).textTheme.headline2);
+      Text('$diff ms', style: Theme.of(context).textTheme.headline2);
 }
