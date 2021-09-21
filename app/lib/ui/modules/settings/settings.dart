@@ -4,6 +4,7 @@ import 'package:so_tired/api/client.dart';
 import 'package:so_tired/database/models/settings/settings_object.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
+import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/core/widgets/classic_button.dart';
 import 'package:so_tired/utils/utils.dart';
@@ -88,13 +89,29 @@ class _SettingsState extends State<Settings> {
                   _showCircularProgressIndicator(
                       'Checking server connection...',
                       'This may take a while.');
-                  await validateServerConnection(() {
-                    Provider.of<ServiceProvider>(context, listen: false)
-                        .databaseManager
-                        .writeSettings(SettingsObject(url));
-                    Navigator.pop(context);
-                    _showInfoDialog('Successfully connected to server',
-                        'This URL will be stored and is active now.');
+                  await validateServerConnection(() async {
+                    try {
+                      await Provider.of<ServiceProvider>(context, listen: false)
+                          .configManager
+                          .fetchConfigFromServer(url);
+                      Provider.of<ServiceProvider>(context, listen: false)
+                          .databaseManager
+                          .writeSettings(SettingsObject(url));
+                      Navigator.pop(context);
+                      _showInfoDialog('Successfully connected to server',
+                          'This URL will be stored and is active now.');
+                    } on BaseException catch (e) {
+                      Navigator.pop(context);
+                      _showExceptionDialog('Something went wrong!', e.msg);
+                    } catch (e) {
+                      Navigator.pop(context);
+                      _showExceptionDialog(
+                          'Something went wrong!',
+                          'Critical app error. '
+                              'Please restart your application! '
+                              'If your problem still consists, please contact '
+                              'the study administrators for further advice.');
+                    }
                   }, () {
                     Navigator.pop(context);
                     _showExceptionDialog(
@@ -134,6 +151,7 @@ class _SettingsState extends State<Settings> {
               buttonText: 'Send',
               onPressed: () {
                 try {
+                  // TODO: Add transmission progress bar
                   Utils.sendDataToDatabase(context);
                 } on EmptyHiveBoxException catch (e) {
                   _showExceptionDialog('URL can not be found!', e.msg);
@@ -162,7 +180,10 @@ class _SettingsState extends State<Settings> {
                   TextButton(
                     child: const Text('Ok'),
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute<BuildContext>(
+                              builder: (BuildContext context) => const Home()));
                     },
                   )
                 ]));
