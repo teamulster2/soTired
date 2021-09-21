@@ -41,6 +41,7 @@ class StartState extends GameState {
 
   @override
   void checkUserInteraction(int boxId) {
+    // NOTE: At the moment, this exception disrupts the program flow more than it brings advantages
     // throw GameWrongStateException();
   }
 }
@@ -61,6 +62,7 @@ class ShowSequenceState extends GameState {
 
   @override
   void checkUserInteraction(int boxId) {
+    // NOTE: At the moment, this exception disrupts the program flow more than it brings advantages
     // throw GameWrongStateException();
   }
 }
@@ -106,6 +108,7 @@ class GameOverState extends GameState {
 
   @override
   void checkUserInteraction(int boxId) {
+    // NOTE: At the moment, this exception disrupts the program flow more than it brings advantages
     // throw GameWrongStateException();
   }
 
@@ -129,6 +132,7 @@ class GameOverState extends GameState {
 class NextLevelState extends GameState {
   @override
   void checkUserInteraction(int boxId) {
+    // NOTE: At the moment, this exception disrupts the program flow more than it brings advantages
     // throw GameWrongStateException();
   }
 
