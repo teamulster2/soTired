@@ -1,6 +1,10 @@
 package cmd
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"gorm.io/gorm"
+)
 
 type clientJSON struct {
 	StudyName               string                      `json:"studyName"`
@@ -35,4 +39,12 @@ func fromClientJSON(in []byte) (clientJSON, error) {
 	err := json.Unmarshal(in, &parsedJSON)
 
 	return parsedJSON, err
+}
+
+func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
+	if err := db.Where("study_name = ?", c.StudyName).Error; err != nil {
+		return err
+	}
+
+	panic("")
 }
