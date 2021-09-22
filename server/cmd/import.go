@@ -12,10 +12,8 @@ type clientUserLog struct {
 	UUID                     string `json:"uuid"`
 	AccessMethod             string `json:"accessMethod"`
 	SpatialSpanTask          int    `json:"spatialSpanTask"`
-	MentalArithmetic         int    `json:"mentalArithmetic"`
 	PsychomotorVigilanceTask int    `json:"psychomotorVigilanceTask"`
-	Questionnaire            bool   `json:"questionnaire"`
-	CurrentActivity          string `json:"currentActivity"`
+	TimeStamp                string `json:"timestamp"`
 }
 
 type clientUserStates struct {
