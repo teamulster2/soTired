@@ -1,11 +1,13 @@
 package cmd
 
+import "encoding/json"
+
 type clientJSON struct {
 	StudyName               string                      `json:"studyName"`
 	ClientVersion           string                      `json:"clientVersion"`
-	UserLogList             []clientUserLog             `json:"UserLogs"`
-	UserStateList           []clientUserStates          `json:"UserStates"`
-	QuestionnaireResultList []clientQuestionnaireResult `json:"QuestionnaireResults"`
+	UserLogList             []clientUserLog             `json:"userLogs"`
+	UserStateList           []clientUserStates          `json:"userStates"`
+	QuestionnaireResultList []clientQuestionnaireResult `json:"questionnaireResults"`
 }
 
 type clientUserLog struct {
@@ -24,6 +26,13 @@ type clientUserStates struct {
 
 type clientQuestionnaireResult struct {
 	UUID     string `json:"uuid"`
-	Question string `json:"question"`
-	Answer   string `json:"answer"`
+	Question int    `json:"question"`
+	Answer   int    `json:"answer"`
+}
+
+func fromClientJSON(in []byte) (clientJSON, error) {
+	var parsedJSON clientJSON
+	err := json.Unmarshal(in, &parsedJSON)
+
+	return parsedJSON, err
 }

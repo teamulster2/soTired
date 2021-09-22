@@ -1,0 +1,27 @@
+{
+    "studyName": "test",
+    "clientVersion": "test",
+    "userLogs": [
+        {
+            "uuid": "test",
+            "accessMethod": "test",
+            "spatialSpanTask": 1,
+            "psychomotorVigilanceTask": 1,
+            "timestamp": "test"
+        }
+    ],
+    "userStates": [
+        {
+            "uuid": "test",
+            "currentActivity": "test",
+            "currentMood": "test"
+        }
+    ],
+    "questionnaireResults": [
+        {
+            "uuid": "test",
+            "question": 1,
+            "answer": 1
+        }
+    ]
+}
