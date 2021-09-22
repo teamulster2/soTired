@@ -550,6 +550,8 @@ Map<String, dynamic> exportDatabaseForTransfer() {
       userLogs.add(userLogJson!);
     }
     returnMap.addAll(<String, dynamic>{'userLogs': userLogs});
+  } on EmptyHiveBoxException {
+    returnMap.addAll(<String, dynamic>{'userLogs': <Map<String, dynamic>>[]});
   } catch (e) {
     rethrow;
   }
@@ -560,6 +562,8 @@ Map<String, dynamic> exportDatabaseForTransfer() {
       userStates.add(userStateJson!);
     }
     returnMap.addAll(<String, dynamic>{'userStates': userStates});
+  } on EmptyHiveBoxException {
+    returnMap.addAll(<String, dynamic>{'userStates': <Map<String, dynamic>>[]});
   } catch (e) {
     rethrow;
   }
@@ -573,13 +577,22 @@ Map<String, dynamic> exportDatabaseForTransfer() {
     }
     returnMap.addAll(
         <String, dynamic>{'questionnaireResults': questionnaireResults});
+  } on EmptyHiveBoxException {
+    returnMap.addAll(
+        <String, dynamic>{'questionnaireResults': <Map<String, dynamic>>[]});
   } catch (e) {
     rethrow;
   }
 
-  if (returnMap.isEmpty) {
-    throw EmptyHiveBoxException('Nothing to return! All boxes are empty!');
+  if (List<Map<String, dynamic>>.from(returnMap['userLogs']).isEmpty &&
+      List<Map<String, dynamic>>.from(returnMap['userStates']).isEmpty &&
+      List<Map<String, dynamic>>.from(returnMap['questionnaireResults'])
+          .isEmpty) {
+    throw EmptyHiveBoxException('Currently you have not created any results. '
+        'Please participate in the self-test or answer the questionnaire '
+        'first!');
   }
+
   return returnMap;
 }
 
@@ -596,64 +609,79 @@ Map<String, dynamic> adaptDatabaseExportToServerSyntax(
 
   // Adapt userLogs
   final List<Map<String, dynamic>> userLogs = exportMap['userLogs'];
-  final List<Map<String, dynamic>> userLogList = <Map<String, dynamic>>[];
-  for (final Map<String, dynamic> userLog in userLogs) {
-    final Map<ModuleType, Map<String, dynamic>> gamesExecuted =
-        userLog['gamesExecuted'];
-    final Map<String, dynamic> addition = <String, dynamic>{
-      'uuid': userLog['uuid'],
-      'accessMethod': '${userLog['accessMethod']}'
-    };
-    if (gamesExecuted.containsKey(ModuleType.psychomotorVigilanceTask)) {
-      final Map<String, dynamic>? diffs =
-          gamesExecuted[ModuleType.psychomotorVigilanceTask];
-      addition
-          .addAll({'${ModuleType.psychomotorVigilanceTask}': diffs!['diffs']});
-    }
-    if (gamesExecuted.containsKey(ModuleType.spatialSpanTask)) {
-      final Map<String, dynamic>? levels =
-          gamesExecuted[ModuleType.spatialSpanTask];
-      addition.addAll({'${ModuleType.spatialSpanTask}': levels!['levels']});
-    }
-    addition.addAll({'timestamp': userLog['timestamp']});
+  if (userLogs.isEmpty) {
+    returnMap['userLogs'] = <Map<String, dynamic>>[];
+  } else {
+    final List<Map<String, dynamic>> userLogList = <Map<String, dynamic>>[];
+    for (final Map<String, dynamic> userLog in userLogs) {
+      final Map<ModuleType, Map<String, dynamic>> gamesExecuted =
+          userLog['gamesExecuted'];
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'uuid': userLog['uuid'],
+        'accessMethod': '${userLog['accessMethod']}'
+      };
+      if (gamesExecuted.containsKey(ModuleType.psychomotorVigilanceTask)) {
+        final Map<String, dynamic>? diffs =
+            gamesExecuted[ModuleType.psychomotorVigilanceTask];
+        addition.addAll(<String, int>{
+          '${ModuleType.psychomotorVigilanceTask}': diffs!['diffs']
+        });
+      }
+      if (gamesExecuted.containsKey(ModuleType.spatialSpanTask)) {
+        final Map<String, dynamic>? levels =
+            gamesExecuted[ModuleType.spatialSpanTask];
+        addition.addAll(
+            <String, int>{'${ModuleType.spatialSpanTask}': levels!['levels']});
+      }
+      addition.addAll(<String, String>{'timestamp': userLog['timestamp']});
 
-    userLogList.add(addition);
+      userLogList.add(addition);
+    }
+    returnMap['userLogs'] = userLogList;
   }
-  returnMap['userLogs'] = userLogList;
 
   // Adapt userStates
   final List<Map<String, dynamic>> userStates = exportMap['userStates'];
-  final List<Map<String, dynamic>> userStateList = <Map<String, dynamic>>[];
-  for (final Map<String, dynamic>? userState in userStates) {
-    final Map<String, dynamic> addition = <String, dynamic>{
-      'uuid': userState!['uuid'],
-      'currentActivity': Utils.codeUnitsToString(userState['currentActivity']),
-      'currentMood': Utils.codeUnitsToString(userState['currentMood'])
-    };
-    userStateList.add(addition);
+  if (userStates.isEmpty) {
+    returnMap['userStates'] = <Map<String, dynamic>>[];
+  } else {
+    final List<Map<String, dynamic>> userStateList = <Map<String, dynamic>>[];
+    for (final Map<String, dynamic>? userState in userStates) {
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'uuid': userState!['uuid'],
+        'currentActivity':
+            Utils.codeUnitsToString(userState['currentActivity']),
+        'currentMood': Utils.codeUnitsToString(userState['currentMood'])
+      };
+      userStateList.add(addition);
+    }
+    returnMap['userStates'] = userStateList;
   }
-  returnMap['userStates'] = userStateList;
 
   // Adapt questionnaireResults
   final List<Map<String, dynamic>> questionnaireResults =
       exportMap['questionnaireResults'];
-  final List<Map<String, dynamic>> questionnaireResultList =
-      <Map<String, dynamic>>[];
-  for (final Map<String, dynamic>? questionnaireResult
-      in questionnaireResults) {
-    final Map<String, dynamic> questions = questionnaireResult!['questions'];
-    final Map<String, dynamic> addition = <String, dynamic>{
-      'uuid': questionnaireResult['uuid']
-    };
-    for (final String questionKey in questions.keys) {
-      addition.addAll(<String, dynamic>{
-        'question': questionKey,
-        'answer': '${questions[questionKey]}'
-      });
+  if (questionnaireResults.isEmpty) {
+    returnMap['questionnaireResults'] = <Map<String, dynamic>>[];
+  } else {
+    final List<Map<String, dynamic>> questionnaireResultList =
+        <Map<String, dynamic>>[];
+    for (final Map<String, dynamic>? questionnaireResult
+        in questionnaireResults) {
+      final Map<String, dynamic> questions = questionnaireResult!['questions'];
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'uuid': questionnaireResult['uuid']
+      };
+      for (final String questionKey in questions.keys) {
+        addition.addAll(<String, dynamic>{
+          'question': questionKey,
+          'answer': '${questions[questionKey]}'
+        });
+      }
+      questionnaireResultList.add(addition);
     }
-    questionnaireResultList.add(addition);
+    returnMap['questionnaireResults'] = questionnaireResultList;
   }
-  returnMap['questionnaireResults'] = questionnaireResultList;
 
   return returnMap;
 }

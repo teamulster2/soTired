@@ -75,9 +75,9 @@ class SpatialSpanTaskState extends SelfTestState {
                 content:
                     'Do you want to send your results to the study server?',
                 progress: 'Synchronization',
-                onOk: () {
+                onOk: () async {
                   try {
-                    Utils.sendDataToDatabase(engine.context);
+                    await Utils.sendDataToDatabase(engine.context);
                   } catch (e) {
                     _showExceptionDialog(
                         'Ups... There was an error sending your results.',

@@ -128,7 +128,7 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
 
         final Map<ModuleType, Map<String, dynamic>> gameValue =
             <ModuleType, Map<String, dynamic>>{
-          ModuleType.spatialSpanTask: <String, dynamic>{'diffs': diffs}
+          ModuleType.psychomotorVigilanceTask: <String, dynamic>{'diffs': diffs}
         };
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager

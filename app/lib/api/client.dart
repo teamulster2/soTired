@@ -44,8 +44,10 @@ Future<String> loadConfig(String url) async {
 /// Sends the full database to the server.
 Future<void> sendData(String url) async {
   try {
-    final String jsonDatabase =
-        jsonEncode(DatabaseManager().exportDatabaseForTransfer());
+    final DatabaseManager databaseManager = DatabaseManager();
+    final String jsonDatabase = jsonEncode(
+        databaseManager.adaptDatabaseExportToServerSyntax(
+            databaseManager.exportDatabaseForTransfer()));
     final Response response = await post(
       Uri.parse('$url/data'),
       headers: <String, String>{

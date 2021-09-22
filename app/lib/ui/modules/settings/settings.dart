@@ -88,7 +88,7 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(),
-                hintText: 'Enter a url, e.g. http://www.example.com:50000'),
+                hintText: 'Enter a url...'),
           ),
         ),
         Row(
@@ -171,16 +171,18 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
             ClassicButton(
               color: Theme.of(context).primaryColor,
               buttonText: 'Send',
-              onPressed: () {
+              onPressed: () async {
                 try {
                   // TODO: Add transmission progress bar
-                  Utils.sendDataToDatabase(context);
+                  await Utils.sendDataToDatabase(context);
                 } on EmptyHiveBoxException catch (e) {
-                  _showExceptionDialog('URL can not be found!', e.msg);
+                  _showInfoDialog('Ups... Something went wrong!', e.msg);
                 } on HttpErrorCodeException catch (e) {
                   _showExceptionDialog('Results could not be sent!', e.msg);
                 } catch (e) {
-                  // TODO: add proper exception handling
+                  _showExceptionDialog(
+                      'Ups... There was an error sending your results.',
+                      'You did not lose any data. Please try again!');
                 }
               },
             ),

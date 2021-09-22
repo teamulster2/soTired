@@ -68,7 +68,7 @@ class Utils {
   /// [ServiceProvider].
   /// If the server export fails [Exception]s will be rethrown and need to be
   /// handled.
-  static void sendDataToDatabase(BuildContext context) {
+  static Future<void> sendDataToDatabase(BuildContext context) async {
     try {
       final SettingsObject _settings =
           Provider.of<ServiceProvider>(context, listen: false)
@@ -76,7 +76,7 @@ class Utils {
               .getSettings();
       if (_settings.serverUrl!.isNotEmpty) {
         // TODO: test this method
-        sendData(_settings.serverUrl!);
+        await sendData(_settings.serverUrl!);
       }
     } catch (e) {
       rethrow;
