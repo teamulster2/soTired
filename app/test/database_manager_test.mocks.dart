@@ -268,5 +268,11 @@ class MockDatabaseManager extends _i1.Mock implements _i9.DatabaseManager {
       super.noSuchMethod(Invocation.method(#closeDatabase, []),
           returnValueForMissingStub: null);
   @override
+  Map<String, dynamic> adaptDatabaseExportToServerSyntax(
+          Map<String, dynamic>? exportMap) =>
+      (super.noSuchMethod(
+          Invocation.method(#adaptDatabaseExportToServerSyntax, [exportMap]),
+          returnValue: <String, dynamic>{}) as Map<String, dynamic>);
+  @override
   String toString() => super.toString();
 }

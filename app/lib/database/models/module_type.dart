@@ -7,12 +7,6 @@ part 'module_type.g.dart';
 enum ModuleType {
   @HiveField(0)
   spatialSpanTask,
-  @HiveField(1)
-  mentalArithmetic,
   @HiveField(2)
-  psychomotorVigilanceTask,
-  @HiveField(3)
-  questionnaire,
-  @HiveField(4)
-  currentActivity
+  psychomotorVigilanceTask
 }

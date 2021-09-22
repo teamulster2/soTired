@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:so_tired/api/client.dart';
@@ -80,5 +81,11 @@ class Utils {
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// This method returns the current version and build number of the app.
+  static Future<String> getAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return '${packageInfo.version}+${packageInfo.buildNumber}';
   }
 }

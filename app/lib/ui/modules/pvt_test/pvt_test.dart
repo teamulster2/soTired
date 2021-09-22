@@ -128,7 +128,7 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
 
         final Map<ModuleType, Map<String, dynamic>> gameValue =
             <ModuleType, Map<String, dynamic>>{
-          ModuleType.spatialSpanTask: <String, dynamic>{'': diffs}
+          ModuleType.spatialSpanTask: <String, dynamic>{'diffs': diffs}
         };
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
@@ -153,8 +153,8 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => WillPopScope(
-          onWillPop: () async => false,
-          child: AlertDialog(
+              onWillPop: () async => false,
+              child: AlertDialog(
                   title: const Text(
                       'We will now show you a turquoise square over and over again. Each time it appears, please touch the screen.'),
                   content: const Text('To start the game press Ok.'),
@@ -167,7 +167,7 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
                       },
                     )
                   ]),
-        ));
+            ));
   }
 
   calculateAndShowDiff() {

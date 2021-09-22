@@ -11,11 +11,11 @@ class HomeImage extends StatefulWidget {
 class _HomeImageState extends State<HomeImage> {
   @override
   Widget build(BuildContext context) => SizedBox(
-    width: MediaQuery.of(context).size.width,
-    height: 320,
-    child: const Image(
+        width: MediaQuery.of(context).size.width,
+        height: 320,
+        child: const Image(
           fit: BoxFit.cover,
           image: AssetImage('assets/images/background_06.png'),
         ),
-  );
+      );
 }

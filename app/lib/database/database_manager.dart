@@ -10,6 +10,7 @@ import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
+import 'package:so_tired/utils/utils.dart';
 
 /// This class is responsible for all matters regarding database interactions.
 /// It holds all boxes (comparable to tables in SQLite) and provides a CRUD API
@@ -316,7 +317,7 @@ class DatabaseManager {
         final Map<String, dynamic>? userLogJson = userLog?.toJson();
         userLogs.add(userLogJson!);
       }
-      returnMap.addAll(<String, dynamic>{'UserLogs': userLogs});
+      returnMap.addAll(<String, dynamic>{'userLogs': userLogs});
     } catch (e) {
       rethrow;
     }
@@ -326,7 +327,7 @@ class DatabaseManager {
         final Map<String, dynamic>? userStateJson = userState?.toJson();
         userStates.add(userStateJson!);
       }
-      returnMap.addAll(<String, dynamic>{'UserStates': userStates});
+      returnMap.addAll(<String, dynamic>{'userStates': userStates});
     } catch (e) {
       rethrow;
     }
@@ -339,7 +340,7 @@ class DatabaseManager {
         questionnaireResults.add(questionnaireResultJson!);
       }
       returnMap.addAll(
-          <String, dynamic>{'QuestionnaireResults': questionnaireResults});
+          <String, dynamic>{'questionnaireResults': questionnaireResults});
     } catch (e) {
       rethrow;
     }
@@ -357,5 +358,86 @@ class DatabaseManager {
     // NOTE: uncomment this if the database should be deleted every time closing the app
     // Hive.deleteFromDisk();
     _databaseManagerInstance = null;
+  }
+
+  /// This method adapts the client database export to be able to satisfy
+  /// the server's expectations regarding the json format.
+  Map<String, dynamic> adaptDatabaseExportToServerSyntax(
+      Map<String, dynamic> exportMap) {
+    final Map<String, dynamic> returnMap = <String, dynamic>{};
+    final SettingsObject settings = getSettings();
+
+    // Add studyName, clientVersion
+    returnMap.addAll(<String, dynamic>{
+      'studyName': settings.studyName,
+      'clientVersion': settings.appVersion
+    });
+
+    // Adapt userLogs
+    final List<Map<String, dynamic>> userLogs = exportMap['userLogs'];
+    final List<Map<String, dynamic>> userLogList = <Map<String, dynamic>>[];
+    for (final Map<String, dynamic> userLog in userLogs) {
+      final Map<ModuleType, Map<String, dynamic>> gamesExecuted =
+          userLog['gamesExecuted'];
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'uuid': userLog['uuid'],
+        'accessMethod': '${userLog['accessMethod']}'
+      };
+      if (gamesExecuted.containsKey(ModuleType.psychomotorVigilanceTask)) {
+        final Map<String, dynamic>? diffs =
+            gamesExecuted[ModuleType.psychomotorVigilanceTask];
+        addition.addAll(<String, Map<String, dynamic>>{
+          '${ModuleType.psychomotorVigilanceTask}': diffs!['diffs']
+        });
+      }
+      if (gamesExecuted.containsKey(ModuleType.spatialSpanTask)) {
+        final Map<String, dynamic>? levels =
+            gamesExecuted[ModuleType.spatialSpanTask];
+        addition.addAll(<String, Map<String, dynamic>>{
+          '${ModuleType.spatialSpanTask}': levels!['levels']
+        });
+      }
+      addition.addAll(<String, String>{'timestamp': userLog['timestamp']});
+
+      userLogList.add(addition);
+    }
+    returnMap['userLogs'] = userLogList;
+
+    // Adapt userStates
+    final List<Map<String, dynamic>> userStates = exportMap['userStates'];
+    final List<Map<String, dynamic>> userStateList = <Map<String, dynamic>>[];
+    for (final Map<String, dynamic>? userState in userStates) {
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'uuid': userState!['uuid'],
+        'currentActivity':
+            Utils.codeUnitsToString(userState['currentActivity']),
+        'currentMood': Utils.codeUnitsToString(userState['currentMood'])
+      };
+      userStateList.add(addition);
+    }
+    returnMap['userStates'] = userStateList;
+
+    // Adapt questionnaireResults
+    final List<Map<String, dynamic>> questionnaireResults =
+        exportMap['questionnaireResults'];
+    final List<Map<String, dynamic>> questionnaireResultList =
+        <Map<String, dynamic>>[];
+    for (final Map<String, dynamic>? questionnaireResult
+        in questionnaireResults) {
+      final Map<String, dynamic> questions = questionnaireResult!['questions'];
+      final Map<String, dynamic> addition = <String, dynamic>{
+        'uuid': questionnaireResult['uuid']
+      };
+      for (final String questionKey in questions.keys) {
+        addition.addAll(<String, dynamic>{
+          'question': questionKey,
+          'answer': '${questions[questionKey]}'
+        });
+      }
+      questionnaireResultList.add(addition);
+    }
+    returnMap['questionnaireResults'] = questionnaireResultList;
+
+    return returnMap;
   }
 }

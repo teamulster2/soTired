@@ -109,9 +109,16 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       await Provider.of<ServiceProvider>(context, listen: false)
                           .configManager
                           .fetchConfigFromServer(url);
+                      final String appVersion = await Utils.getAppVersion();
+                      final String studyName =
+                          Provider.of<ServiceProvider>(context, listen: false)
+                              .configManager
+                              .clientConfig!
+                              .studyName;
                       Provider.of<ServiceProvider>(context, listen: false)
                           .databaseManager
-                          .writeSettings(SettingsObject(url));
+                          .writeSettings(
+                              SettingsObject(url, studyName, appVersion));
                       Navigator.pop(context);
                       _showInfoDialog('Successfully connected to server',
                           'This URL will be stored and is active now.');
