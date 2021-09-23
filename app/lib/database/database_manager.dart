@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
@@ -20,6 +21,8 @@ class DatabaseManager {
       DatabaseManager._databaseManager();
 
   final String _databasePath = 'database';
+
+  Map<String, dynamic> latestDatabaseExport = <String, dynamic>{};
 
   late final Box<PersonalHighScore> _personalHighScoreBox;
   late final Box<UserLog> _userLogBox;
@@ -381,10 +384,13 @@ class DatabaseManager {
     final Map<String, dynamic> returnMap = <String, dynamic>{};
     final SettingsObject settings = getSettings();
 
+    debugPrint('$exportMap');
+
     // Add studyName, clientVersion
     returnMap.addAll(<String, dynamic>{
       'studyName': settings.studyName,
-      'clientVersion': settings.appVersion
+      'clientVersion': settings.appVersion,
+      'clientUuid': settings.clientUuid
     });
 
     // Adapt userLogs
@@ -452,16 +458,16 @@ class DatabaseManager {
           in questionnaireResults) {
         final Map<String, dynamic> questions =
             questionnaireResult!['questions'];
-        final Map<String, dynamic> addition = <String, dynamic>{
-          'uuid': questionnaireResult['uuid']
-        };
+        Map<String, dynamic> addition = <String, dynamic>{};
         for (final String questionKey in questions.keys) {
           addition.addAll(<String, dynamic>{
+            'uuid': questionnaireResult['uuid'],
             'question': questionKey,
             'answer': '${questions[questionKey]}'
           });
+          questionnaireResultList.add(addition);
+          addition = <String, dynamic>{};
         }
-        questionnaireResultList.add(addition);
       }
       returnMap['questionnaireResults'] = questionnaireResultList;
     }

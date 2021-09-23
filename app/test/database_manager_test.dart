@@ -37,6 +37,7 @@ void main() {
   final String _uuidUserState = Utils.generateUuid();
   final String _uuidUserState2 = Utils.generateUuid();
   final String _uuidQuestionnaireResult = Utils.generateUuid();
+  final String _uuidClient = Utils.generateUuid();
 
   final PersonalHighScore _personalHighScore = PersonalHighScore(
       _uuidPersonalHighScore, 33, UserGameType.psychomotorVigilanceTask);
@@ -61,7 +62,7 @@ void main() {
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
       _uuidQuestionnaireResult, {'How are you?': QuestionnaireAnswers.second});
   final SettingsObject _settings = SettingsObject(
-      'http://www.example.com:50000', 'Default Study', '0.0.1+1');
+      'http://www.example.com:50000', 'Default Study', '0.0.1+1', _uuidClient);
 
   final Map<String, dynamic> assertJson = {
     'userLogs': [
@@ -100,6 +101,7 @@ void main() {
   final Map<String, dynamic> adaptAssertMap = <String, dynamic>{
     'studyName': 'Default Study',
     'clientVersion': '0.0.1+1',
+    'clientUuid': _uuidClient,
     'userLogs': [
       {
         'uuid': _uuidUserLog,
@@ -457,7 +459,7 @@ void main() {
     });
 
     test('settings should only contain one object', () async {
-      _settingsObjectList.add(SettingsObject('', '', ''));
+      _settingsObjectList.add(SettingsObject('', '', '', ''));
       // ignore: cascade_invocations
       await _databaseManager.writeSettings(_settings);
 
@@ -610,7 +612,8 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
   // Add studyName, clientVersion
   returnMap.addAll(<String, dynamic>{
     'studyName': settings.studyName,
-    'clientVersion': settings.appVersion
+    'clientVersion': settings.appVersion,
+    'clientUuid': settings.clientUuid
   });
 
   // Adapt userLogs

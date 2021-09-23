@@ -20,19 +20,22 @@ class SettingsObjectAdapter extends TypeAdapter<SettingsObject> {
       fields[0] as String?,
       fields[1] as String?,
       fields[2] as String?,
+      fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SettingsObject obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.serverUrl)
       ..writeByte(1)
       ..write(obj.studyName)
       ..writeByte(2)
-      ..write(obj.appVersion);
+      ..write(obj.appVersion)
+      ..writeByte(3)
+      ..write(obj.clientUuid);
   }
 
   @override

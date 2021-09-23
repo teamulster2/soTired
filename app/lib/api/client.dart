@@ -48,25 +48,38 @@ Future<String> loadConfig(String url) async {
 Future<void> sendData(String url) async {
   try {
     final DatabaseManager databaseManager = DatabaseManager();
-    final String jsonDatabase =
-        jsonEncode(databaseManager.exportDatabaseAdaptedToServerSyntax());
-    final Response response = await post(
-      Uri.parse('$url/data'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonDatabase,
-    );
-    if (response.statusCode != 200) {
-      final int statusCode = response.statusCode;
-      throw HttpErrorCodeException('Failed to send data.\n'
-          'Response status code: $statusCode');
+    final Map<String, dynamic> databaseExport =
+        databaseManager.exportDatabaseAdaptedToServerSyntax();
+    final String jsonDatabase = jsonEncode(databaseExport);
+    final String latestDatabaseExportJson =
+        jsonEncode(databaseManager.latestDatabaseExport);
+
+    if (latestDatabaseExportJson != jsonDatabase) {
+      // TODO: only send diff compared to previous transmission
+      final Response response = await post(
+        Uri.parse('$url/data'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonDatabase,
+      );
+      databaseManager.latestDatabaseExport = databaseExport;
+
+      if (response.statusCode != 200) {
+        final int statusCode = response.statusCode;
+        throw HttpErrorCodeException('Failed to send data.\n'
+            'Response status code: $statusCode');
+      } else {
+        Notifications().showSimpleNotification(
+            ConfigManager().clientConfig!.studyName,
+            "Your result upload was successful.");
+      }
+      debugPrint('Response statusCode: ' + response.statusCode.toString());
     } else {
-      Notifications().showSimpleNotification(
-          ConfigManager().clientConfig!.studyName,
-          "Your result upload was successful.");
+      throw DatabaseNotChangedException(
+          'No result changes could be found! Please run a self-test or take '
+          'the questionnaire before sending data again.');
     }
-    debugPrint('Response statusCode: ' + response.statusCode.toString());
   } catch (e) {
     rethrow;
   }

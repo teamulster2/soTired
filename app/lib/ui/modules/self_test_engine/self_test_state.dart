@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 import 'package:so_tired/utils/utils.dart';
@@ -78,6 +79,8 @@ class SpatialSpanTaskState extends SelfTestState {
                 onOk: () async {
                   try {
                     await Utils.sendDataToDatabase(engine.context);
+                  } on EmptyHiveBoxException {
+                    // NOTE: Do nothing and refer to setting a valid URL
                   } catch (e) {
                     _showExceptionDialog(
                         'Ups... There was an error sending your results.',
