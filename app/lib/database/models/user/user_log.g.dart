@@ -20,7 +20,7 @@ class UserLogAdapter extends TypeAdapter<UserLog> {
       fields[0] as String?,
       fields[1] as UserAccessMethod?,
       (fields[2] as Map?)?.map((dynamic k, dynamic v) =>
-          MapEntry(k as ModuleType, (v as Map).cast<String, dynamic>())),
+          MapEntry(k as UserGameType, (v as Map).cast<String, dynamic>())),
       fields[3] as String?,
     );
   }

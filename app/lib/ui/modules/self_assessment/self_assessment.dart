@@ -56,7 +56,7 @@ class _SelfAssessmentState extends State<SelfAssessment> {
             .databaseManager
             .writeUserStates(<UserState>[
           UserState(uuid, Utils.stringToCodeUnits(currentActivity),
-              emotionalState.value)
+              emotionalState.value, DateTime.now().toIso8601String())
         ]);
         widget.setMood(Utils.codeUnitsToString(emotionalState.value));
         widget.setActivity(currentActivity);

@@ -19,7 +19,7 @@ class PersonalHighScoreAdapter extends TypeAdapter<PersonalHighScore> {
     return PersonalHighScore(
       fields[0] as String?,
       fields[1] as int?,
-      fields[2] as ModuleType?,
+      fields[2] as UserGameType?,
     );
   }
 

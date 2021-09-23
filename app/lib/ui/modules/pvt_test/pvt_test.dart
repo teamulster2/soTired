@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
@@ -126,22 +126,24 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
         timer.cancel();
         widget.setDiff(calculateAverageDiff().round());
 
-        final Map<ModuleType, Map<String, dynamic>> gameValue =
-            <ModuleType, Map<String, dynamic>>{
-          ModuleType.psychomotorVigilanceTask: <String, dynamic>{'diffs': diffs}
+        final Map<UserGameType, Map<String, dynamic>> gameValue =
+            <UserGameType, Map<String, dynamic>>{
+          UserGameType.psychomotorVigilanceTask: <String, dynamic>{
+            'diffs': diffs
+          }
         };
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writeUserLogs(<UserLog>[
           UserLog(Utils.generateUuid(), UserAccessMethod.regularAppStart,
-              gameValue, DateTime.now().toString())
+              gameValue, DateTime.now().toIso8601String())
         ]);
 
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writePersonalHighScores(<PersonalHighScore>[
           PersonalHighScore(Utils.generateUuid(),
-              calculateAverageDiff().round(), ModuleType.spatialSpanTask)
+              calculateAverageDiff().round(), UserGameType.spatialSpanTask)
         ]);
         widget.onFinished();
       }
@@ -156,7 +158,9 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
               onWillPop: () async => false,
               child: AlertDialog(
                   title: const Text(
-                      'We will now show you a turquoise square over and over again. Each time it appears, please touch the screen.'),
+                      'We will now show you a turquoise square over and over '
+                      'again. Each time it appears, please touch the '
+                      'screen.'),
                   content: const Text('To start the game press Ok.'),
                   actions: <Widget>[
                     TextButton(

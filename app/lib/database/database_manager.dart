@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
@@ -50,7 +50,7 @@ class DatabaseManager {
     // ignore: cascade_invocations
     Hive.registerAdapter(QuestionnaireAnswersAdapter());
     // ignore: cascade_invocations
-    Hive.registerAdapter(ModuleTypeAdapter());
+    Hive.registerAdapter(UserGameTypeAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(SettingsObjectAdapter());
 
@@ -394,24 +394,24 @@ class DatabaseManager {
     } else {
       final List<Map<String, dynamic>> userLogList = <Map<String, dynamic>>[];
       for (final Map<String, dynamic> userLog in userLogs) {
-        final Map<ModuleType, Map<String, dynamic>> gamesExecuted =
+        final Map<UserGameType, Map<String, dynamic>> gamesExecuted =
             userLog['gamesExecuted'];
         final Map<String, dynamic> addition = <String, dynamic>{
           'uuid': userLog['uuid'],
           'accessMethod': '${userLog['accessMethod']}'
         };
-        if (gamesExecuted.containsKey(ModuleType.psychomotorVigilanceTask)) {
+        if (gamesExecuted.containsKey(UserGameType.psychomotorVigilanceTask)) {
           final Map<String, dynamic>? diffs =
-              gamesExecuted[ModuleType.psychomotorVigilanceTask];
+              gamesExecuted[UserGameType.psychomotorVigilanceTask];
           addition.addAll(<String, List<int>>{
-            '${ModuleType.psychomotorVigilanceTask}': diffs!['diffs']
+            '${UserGameType.psychomotorVigilanceTask}': diffs!['diffs']
           });
         }
-        if (gamesExecuted.containsKey(ModuleType.spatialSpanTask)) {
+        if (gamesExecuted.containsKey(UserGameType.spatialSpanTask)) {
           final Map<String, dynamic>? levels =
-              gamesExecuted[ModuleType.spatialSpanTask];
+              gamesExecuted[UserGameType.spatialSpanTask];
           addition.addAll(<String, int>{
-            '${ModuleType.spatialSpanTask}': levels!['levels']
+            '${UserGameType.spatialSpanTask}': levels!['levels']
           });
         }
         addition.addAll(<String, String>{'timestamp': userLog['timestamp']});
@@ -432,7 +432,8 @@ class DatabaseManager {
           'uuid': userState!['uuid'],
           'currentActivity':
               Utils.codeUnitsToString(userState['currentActivity']),
-          'currentMood': Utils.codeUnitsToString(userState['currentMood'])
+          'currentMood': Utils.codeUnitsToString(userState['currentMood']),
+          'timestamp': userState['timestamp']
         };
         userStateList.add(addition);
       }

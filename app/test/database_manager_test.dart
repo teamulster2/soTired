@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:so_tired/database/database_manager.dart';
-import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
@@ -39,19 +39,25 @@ void main() {
   final String _uuidQuestionnaireResult = Utils.generateUuid();
 
   final PersonalHighScore _personalHighScore = PersonalHighScore(
-      _uuidPersonalHighScore, 33, ModuleType.psychomotorVigilanceTask);
+      _uuidPersonalHighScore, 33, UserGameType.psychomotorVigilanceTask);
   final UserLog _userLog = UserLog(
       _uuidUserLog,
       UserAccessMethod.notification,
       {
-        ModuleType.psychomotorVigilanceTask: {'diffs': 500},
-        ModuleType.spatialSpanTask: {'levels': 5}
+        UserGameType.psychomotorVigilanceTask: {'diffs': 500},
+        UserGameType.spatialSpanTask: {'levels': 5}
       },
       '2021-09-15T16:04:26.870744');
-  final UserState _userState = UserState(_uuidUserState,
-      Utils.stringToCodeUnits('☕️'), Utils.stringToCodeUnits('😐'));
-  final UserState _userState2 = UserState(_uuidUserState2,
-      Utils.stringToCodeUnits('🏡'), Utils.stringToCodeUnits('🤩'));
+  final UserState _userState = UserState(
+      _uuidUserState,
+      Utils.stringToCodeUnits('☕️'),
+      Utils.stringToCodeUnits('😐'),
+      '2021-09-15T16:04:26.870744');
+  final UserState _userState2 = UserState(
+      _uuidUserState2,
+      Utils.stringToCodeUnits('🏡'),
+      Utils.stringToCodeUnits('🤩'),
+      '2021-09-15T16:04:26.870744');
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
       _uuidQuestionnaireResult, {'How are you?': QuestionnaireAnswers.second});
   final SettingsObject _settings = SettingsObject(
@@ -63,8 +69,8 @@ void main() {
         'uuid': _uuidUserLog,
         'accessMethod': UserAccessMethod.notification,
         'gamesExecuted': {
-          ModuleType.psychomotorVigilanceTask: {'diffs': 500},
-          ModuleType.spatialSpanTask: {'levels': 5}
+          UserGameType.psychomotorVigilanceTask: {'diffs': 500},
+          UserGameType.spatialSpanTask: {'levels': 5}
         },
         'timestamp': '2021-09-15T16:04:26.870744'
       }
@@ -73,12 +79,14 @@ void main() {
       {
         'uuid': _uuidUserState,
         'currentActivity': [226, 152, 149, 239, 184, 143],
-        'currentMood': [240, 159, 152, 144]
+        'currentMood': [240, 159, 152, 144],
+        'timestamp': '2021-09-15T16:04:26.870744'
       },
       {
         'uuid': _uuidUserState2,
         'currentActivity': [240, 159, 143, 161],
-        'currentMood': [240, 159, 164, 169]
+        'currentMood': [240, 159, 164, 169],
+        'timestamp': '2021-09-15T16:04:26.870744'
       }
     ],
     'questionnaireResults': [
@@ -96,8 +104,8 @@ void main() {
       {
         'uuid': _uuidUserLog,
         'accessMethod': 'UserAccessMethod.notification',
-        'ModuleType.spatialSpanTask': 5,
-        'ModuleType.psychomotorVigilanceTask': 500,
+        'UserGameType.spatialSpanTask': 5,
+        'UserGameType.psychomotorVigilanceTask': 500,
         'timestamp': '2021-09-15T16:04:26.870744'
       }
     ],
@@ -106,12 +114,14 @@ void main() {
         'uuid': _uuidUserState,
         'currentActivity':
             Utils.codeUnitsToString([226, 152, 149, 239, 184, 143]),
-        'currentMood': Utils.codeUnitsToString([240, 159, 152, 144])
+        'currentMood': Utils.codeUnitsToString([240, 159, 152, 144]),
+        'timestamp': '2021-09-15T16:04:26.870744'
       },
       {
         'uuid': _uuidUserState2,
         'currentActivity': Utils.codeUnitsToString([240, 159, 143, 161]),
-        'currentMood': Utils.codeUnitsToString([240, 159, 164, 169])
+        'currentMood': Utils.codeUnitsToString([240, 159, 164, 169]),
+        'timestamp': '2021-09-15T16:04:26.870744'
       }
     ],
     'questionnaireResults': [
@@ -610,24 +620,25 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
   } else {
     final List<Map<String, dynamic>> userLogList = <Map<String, dynamic>>[];
     for (final Map<String, dynamic> userLog in userLogs) {
-      final Map<ModuleType, Map<String, dynamic>> gamesExecuted =
+      final Map<UserGameType, Map<String, dynamic>> gamesExecuted =
           userLog['gamesExecuted'];
       final Map<String, dynamic> addition = <String, dynamic>{
         'uuid': userLog['uuid'],
         'accessMethod': '${userLog['accessMethod']}'
       };
-      if (gamesExecuted.containsKey(ModuleType.psychomotorVigilanceTask)) {
+      if (gamesExecuted.containsKey(UserGameType.psychomotorVigilanceTask)) {
         final Map<String, dynamic>? diffs =
-            gamesExecuted[ModuleType.psychomotorVigilanceTask];
+            gamesExecuted[UserGameType.psychomotorVigilanceTask];
         addition.addAll(<String, int>{
-          '${ModuleType.psychomotorVigilanceTask}': diffs!['diffs']
+          '${UserGameType.psychomotorVigilanceTask}': diffs!['diffs']
         });
       }
-      if (gamesExecuted.containsKey(ModuleType.spatialSpanTask)) {
+      if (gamesExecuted.containsKey(UserGameType.spatialSpanTask)) {
         final Map<String, dynamic>? levels =
-            gamesExecuted[ModuleType.spatialSpanTask];
-        addition.addAll(
-            <String, int>{'${ModuleType.spatialSpanTask}': levels!['levels']});
+            gamesExecuted[UserGameType.spatialSpanTask];
+        addition.addAll(<String, int>{
+          '${UserGameType.spatialSpanTask}': levels!['levels']
+        });
       }
       addition.addAll(<String, String>{'timestamp': userLog['timestamp']});
 
@@ -647,7 +658,8 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
         'uuid': userState!['uuid'],
         'currentActivity':
             Utils.codeUnitsToString(userState['currentActivity']),
-        'currentMood': Utils.codeUnitsToString(userState['currentMood'])
+        'currentMood': Utils.codeUnitsToString(userState['currentMood']),
+        'timestamp': userState['timestamp']
       };
       userStateList.add(addition);
     }

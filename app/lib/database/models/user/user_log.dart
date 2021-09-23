@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:so_tired/utils/utils.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
-import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/user/user_game_type.dart';
 
 part 'user_log.g.dart';
 
@@ -18,7 +18,7 @@ class UserLog extends HiveObject {
   UserAccessMethod? accessMethod;
 
   @HiveField(2)
-  Map<ModuleType, Map<String, dynamic>>? gamesExecuted;
+  Map<UserGameType, Map<String, dynamic>>? gamesExecuted;
 
   @HiveField(3)
   String? timestamp;
