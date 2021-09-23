@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
@@ -45,9 +46,8 @@ Future<String> loadConfig(String url) async {
 Future<void> sendData(String url) async {
   try {
     final DatabaseManager databaseManager = DatabaseManager();
-    final String jsonDatabase = jsonEncode(
-        databaseManager.adaptDatabaseExportToServerSyntax(
-            databaseManager.exportDatabaseForTransfer()));
+    final String jsonDatabase =
+        jsonEncode(databaseManager.exportDatabaseAdaptedToServerSyntax());
     final Response response = await post(
       Uri.parse('$url/data'),
       headers: <String, String>{
@@ -60,10 +60,7 @@ Future<void> sendData(String url) async {
       throw HttpErrorCodeException('Failed to send data.\n'
           'Response status code: $statusCode');
     }
-
-    // TODO: test the function with real data.
-    //ignore: avoid_print
-    print('Response statusCode: ' + response.statusCode.toString());
+    debugPrint('Response statusCode: ' + response.statusCode.toString());
   } catch (e) {
     rethrow;
   }

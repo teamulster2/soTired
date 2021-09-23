@@ -75,7 +75,6 @@ class Utils {
               .databaseManager
               .getSettings();
       if (_settings.serverUrl!.isNotEmpty) {
-        // TODO: test this method
         await sendData(_settings.serverUrl!);
       }
     } catch (e) {

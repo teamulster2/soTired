@@ -413,8 +413,7 @@ void main() {
       return value;
     });
 
-    when(_databaseManager.exportDatabaseForTransfer())
-        .thenAnswer((_) => exportDatabaseForTransfer());
+    when(_databaseManager.exportDatabase()).thenAnswer((_) => exportDatabase());
 
     test('boxes should be empty after initialization', () {
       expect(() => _databaseManager.getAllPersonalHighScores(),
@@ -508,13 +507,12 @@ void main() {
       await _databaseManager.writeUserStates([_userState, _userState2]);
       await _databaseManager.writeQuestionnaireResults([_questionnaireResult]);
 
-      final Map<String, dynamic> exportJson = exportDatabaseForTransfer();
+      final Map<String, dynamic> exportJson = exportDatabase();
       expect(exportJson, assertJson);
     });
 
     test('empty database should throw Exception when asked for export', () {
-      expect(() => exportDatabaseForTransfer(),
-          throwsA(isA<EmptyHiveBoxException>()));
+      expect(() => exportDatabase(), throwsA(isA<EmptyHiveBoxException>()));
     });
 
     test('should return map in server syntax', () async {
@@ -524,20 +522,18 @@ void main() {
       await _databaseManager.writeQuestionnaireResults([_questionnaireResult]);
       await _databaseManager.writeSettings(_settings);
 
-      final Map<String, dynamic> exportJson = exportDatabaseForTransfer();
-
-      when(_databaseManager.adaptDatabaseExportToServerSyntax(exportJson))
-          .thenAnswer((_) => adaptDatabaseExportToServerSyntax(exportJson));
+      when(_databaseManager.exportDatabaseAdaptedToServerSyntax())
+          .thenAnswer((_) => exportDatabaseAdaptedToServerSyntax());
 
       final Map<String, dynamic> serverSyntaxJson =
-          adaptDatabaseExportToServerSyntax(exportJson);
+          exportDatabaseAdaptedToServerSyntax();
 
       expect(serverSyntaxJson, adaptAssertMap);
     });
   });
 }
 
-Map<String, dynamic> exportDatabaseForTransfer() {
+Map<String, dynamic> exportDatabase() {
   final Map<String, dynamic> returnMap = <String, dynamic>{};
   final List<Map<String, dynamic>> userLogs = <Map<String, dynamic>>[];
   final List<Map<String, dynamic>> userStates = <Map<String, dynamic>>[];
@@ -596,8 +592,8 @@ Map<String, dynamic> exportDatabaseForTransfer() {
   return returnMap;
 }
 
-Map<String, dynamic> adaptDatabaseExportToServerSyntax(
-    Map<String, dynamic> exportMap) {
+Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
+  final Map<String, dynamic> exportMap = exportDatabase();
   final Map<String, dynamic> returnMap = <String, dynamic>{};
   final SettingsObject settings = _databaseManager.getSettings();
 

@@ -305,7 +305,7 @@ class DatabaseManager {
 
   /// This method exports all relevant information for the server and bundles
   /// them into one JSON object ([Map]).
-  Map<String, dynamic> exportDatabaseForTransfer() {
+  Map<String, dynamic> exportDatabase() {
     final Map<String, dynamic> returnMap = <String, dynamic>{};
     final List<Map<String, dynamic>> userLogs = <Map<String, dynamic>>[];
     final List<Map<String, dynamic>> userStates = <Map<String, dynamic>>[];
@@ -376,8 +376,8 @@ class DatabaseManager {
 
   /// This method adapts the client database export to be able to satisfy
   /// the server's expectations regarding the json format.
-  Map<String, dynamic> adaptDatabaseExportToServerSyntax(
-      Map<String, dynamic> exportMap) {
+  Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
+    final Map<String, dynamic> exportMap = exportDatabase();
     final Map<String, dynamic> returnMap = <String, dynamic>{};
     final SettingsObject settings = getSettings();
 
