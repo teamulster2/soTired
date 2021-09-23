@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
+import 'package:so_tired/notifications/notifications.dart';
 
 /// Sends a request to the server and checks the availability.
 Future<void> validateServerConnection(Function onServerReachable,
@@ -59,6 +61,10 @@ Future<void> sendData(String url) async {
       final int statusCode = response.statusCode;
       throw HttpErrorCodeException('Failed to send data.\n'
           'Response status code: $statusCode');
+    } else {
+      Notifications().showSimpleNotification(
+          ConfigManager().clientConfig!.studyName,
+          "Your result upload was successful.");
     }
     debugPrint('Response statusCode: ' + response.statusCode.toString());
   } catch (e) {

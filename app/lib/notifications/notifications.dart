@@ -2,6 +2,20 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart';
 
 class Notifications {
+  static final Notifications _notificationsInstance =
+      Notifications._notifications();
+
+  /// The private constructor enables the class to create only one instance of
+  /// itself.
+  Notifications._notifications() {
+    initializeSetting();
+  }
+
+  /// [Notifications] has been implemented using the *Singleton* design
+  /// pattern which ensures that only one config is available throughout the
+  /// app.
+  factory Notifications() => _notificationsInstance;
+
   FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -61,7 +75,7 @@ class Notifications {
         0,
         headLine,
         body,
-        TZDateTime.now(local).add(Duration(minutes: minutesTimer)),
+        TZDateTime.now(local).add(Duration(seconds: minutesTimer)),
         const NotificationDetails(
           android: AndroidNotificationDetails(
               'channel id', 'channel name', 'channel description'),
@@ -75,14 +89,13 @@ class Notifications {
   /// The *[headLine]* will be showed on top in the push notification.
   /// The *[body]* is the main msg. do you will send.
   showSimpleNotification(String headLine, String body) async {
-    const AndroidNotificationDetails androidDetails =
-        AndroidNotificationDetails('id', 'channel ', 'description',
-            priority: Priority.high, importance: Importance.max);
-    const IOSNotificationDetails iOSDetails = IOSNotificationDetails();
-    const NotificationDetails platformDetails =
-        NotificationDetails(android: androidDetails, iOS: iOSDetails);
-    await notificationsPlugin.show(0, headLine, body, platformDetails,
-        payload: 'Destination Screen (Simple Notification)');
+    await notificationsPlugin.show(
+        0,
+        headLine,
+        body,
+        const NotificationDetails(
+            android: AndroidNotificationDetails('id', 'channel ', 'description',
+                priority: Priority.high, importance: Importance.high)));
   }
 
   /// Periodically show a notification using the specified interval.
