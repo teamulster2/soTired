@@ -69,16 +69,16 @@ class _SelfTestState extends State<SelfTest> {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => WillPopScope(
-          onWillPop: () async => false,
-          child: Dialog(
+              onWillPop: () async => false,
+              child: Dialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 child: Container(
-                  padding:
-                      const EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+                  padding: const EdgeInsets.only(
+                      left: 5, top: 5, right: 5, bottom: 5),
                   margin: const EdgeInsets.only(top: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -112,7 +112,8 @@ class _SelfTestState extends State<SelfTest> {
                       ),
                       Text(
                         pdo.content,
-                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -156,6 +157,6 @@ class _SelfTestState extends State<SelfTest> {
                   ),
                 ),
               ),
-        ));
+            ));
   }
 }

@@ -88,8 +88,8 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => WillPopScope(
-          onWillPop: () async => false,
-          child: AlertDialog(
+              onWillPop: () async => false,
+              child: AlertDialog(
                   title: Text(ido.title),
                   content: Text(ido.content),
                   actions: <Widget>[
@@ -109,7 +109,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                       },
                     )
                   ]),
-        ));
+            ));
   }
 
   /// This method shows the game over dialog corresponding to the [InfoDialogObject] with the information given.
@@ -119,8 +119,8 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
         barrierDismissible: false,
         context: context,
         builder: (BuildContext context) => WillPopScope(
-          onWillPop: () async => false,
-          child: AlertDialog(
+              onWillPop: () async => false,
+              child: AlertDialog(
                   backgroundColor: Theme.of(context).primaryColorLight,
                   title: Text(ido.title),
                   content: Text(ido.content),
@@ -134,10 +134,10 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                         } else if (ido.onOkPush) {
                           widget.setLevel(gameEngine.level.value - 1);
 
-                          final Map<ModuleType, Map<String, dynamic>> gameValue =
-                              <ModuleType, Map<String, dynamic>>{
+                          final Map<ModuleType, Map<String, dynamic>>
+                              gameValue = <ModuleType, Map<String, dynamic>>{
                             ModuleType.spatialSpanTask: <String, dynamic>{
-                              '': gameEngine.level.value - 1
+                              'levels': gameEngine.level.value - 1
                             }
                           };
                           Provider.of<ServiceProvider>(context, listen: false)
@@ -164,6 +164,6 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                       },
                     )
                   ]),
-        ));
+            ));
   }
 }

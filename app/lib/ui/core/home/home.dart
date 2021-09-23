@@ -18,15 +18,13 @@ class Home extends StatefulWidget {
 /// This class holds the home screen of the application. It contains a [Scaffold] that has its appBar, drawer and body.
 /// The body contains the [HomeImage] and [HomeButton]s.
 class _HomeState extends State<Home> {
-
   bool serverUrlTested = false;
 
   @override
   Widget build(BuildContext context) {
-    if (!serverUrlTested){
+    if (!serverUrlTested) {
       testServerUrl();
     }
-
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -146,7 +144,7 @@ class _HomeState extends State<Home> {
                 ]));
   }
 
-  testServerUrl(){
+  testServerUrl() {
     serverUrlTested = true;
     try {
       final String? serverUrl =

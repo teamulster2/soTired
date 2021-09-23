@@ -260,13 +260,17 @@ class MockDatabaseManager extends _i1.Mock implements _i9.DatabaseManager {
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  Map<String, dynamic> exportDatabaseForTransfer() =>
-      (super.noSuchMethod(Invocation.method(#exportDatabaseForTransfer, []),
+  Map<String, dynamic> exportDatabase() =>
+      (super.noSuchMethod(Invocation.method(#exportDatabase, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
   void closeDatabase() =>
       super.noSuchMethod(Invocation.method(#closeDatabase, []),
           returnValueForMissingStub: null);
+  @override
+  Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() => (super
+      .noSuchMethod(Invocation.method(#exportDatabaseAdaptedToServerSyntax, []),
+          returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
   String toString() => super.toString();
 }

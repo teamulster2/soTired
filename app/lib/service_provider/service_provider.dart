@@ -24,6 +24,10 @@ class ServiceProvider extends ChangeNotifier {
   /// This method initializes [ConfigManager], [DatabaseManager] and
   /// [Notifications] synchronously.
   Future<void> init(Function onDoneInitializing, String basePath) async {
+    // initialize database
+    await _databaseManager
+        .initDatabase('$basePath/${_databaseManager.databasePath}');
+
     // initialize config
     try {
       if (!Utils.doesFileExist(
@@ -41,10 +45,6 @@ class ServiceProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
-
-    // initialize database
-    await _databaseManager
-        .initDatabase('$basePath/${_databaseManager.databasePath}');
 
     // initialize notifications
     notification.initializeSetting();

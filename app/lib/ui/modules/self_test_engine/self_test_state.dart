@@ -39,7 +39,8 @@ class SelfAssessmentState extends SelfTestState {
     engine.showDialog(ProgressDialogObject(
         title:
             'Thank you for answering the questions. Now you will be forwarded to a psychomotor vigilance task.',
-        content: 'When you want to leave the self test press Cancel (previous data is not lost)',
+        content:
+            'When you want to leave the self test press Cancel (previous data is not lost)',
         progress: 'Step 2 of 3',
         onOk: () {
           engine.transitionTo(PVTState());
@@ -74,9 +75,9 @@ class SpatialSpanTaskState extends SelfTestState {
                 content:
                     'Do you want to send your results to the study server?',
                 progress: 'Synchronization',
-                onOk: () {
+                onOk: () async {
                   try {
-                    Utils.sendDataToDatabase(engine.context);
+                    await Utils.sendDataToDatabase(engine.context);
                   } catch (e) {
                     _showExceptionDialog(
                         'Ups... There was an error sending your results.',
@@ -120,7 +121,8 @@ class PVTState extends SelfTestState {
     engine.showDialog(ProgressDialogObject(
         title:
             'Thank you for doing the psychomotor vigilance task. Now you will be forwarded to a spatial span task.',
-        content: 'When you want to leave the self test press Cancel (previous data is not lost)',
+        content:
+            'When you want to leave the self test press Cancel (previous data is not lost)',
         progress: 'Step 3 of 3',
         onOk: () {
           engine.transitionTo(SpatialSpanTaskState());
