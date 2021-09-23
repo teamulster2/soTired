@@ -69,15 +69,14 @@ type User struct {
 
 // UserLog binds the data from an execution flow to an user and a timestamp.
 type UserLog struct {
-	gorm.Model               `json:"-"`
-	UserID                   int
-	MoodID                   int
-	ActivityID               int
-	AccessMethodID           int
-	SSTResultID              int
-	PVTResultID              int
-	MentalArithmeticResultID int
-	TimeStamp                time.Time
+	gorm.Model   `json:"-"`
+	UserID       int
+	Mood         Mood
+	Activity     Activity
+	AccessMethod AccessMethod
+	SSTResultID  int
+	PVTResultID  int
+	TimeStamp    time.Time
 }
 
 // Mood holds the provided mood of an user.
