@@ -11,8 +11,8 @@ class Notifications {
     initializeSetting();
   }
 
-  /// [Notifications] has been implemented using the *Singleton* design
-  /// pattern which ensures that only one config is available throughout the
+  /// [Notifications] have been implemented using the *Singleton* design
+  /// pattern which ensures that only one notification instance is available throughout the
   /// app.
   factory Notifications() => _notificationsInstance;
 
