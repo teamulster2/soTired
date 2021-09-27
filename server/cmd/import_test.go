@@ -33,7 +33,7 @@ func TestJSONImport(t *testing.T) {
 		inText := inScanner.Text()
 		outText := outScanner.Text()
 		if inText != outText {
-			fmt.Printf("the following lines should not differ:\r%s\r%s", inText, outText)
+			fmt.Printf("the following lines should not differ:\n%s\n%s\n", inText, outText)
 			t.Fail()
 		}
 	}

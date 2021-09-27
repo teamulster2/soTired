@@ -86,8 +86,16 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 		if db.Where("client_log_uuid = ?", pair.RunUUID).First(&UserLog{}).RowsAffected != 0 {
 			continue
 		}
+		if len(pair.UserLog.PsychomotorVigilanceTask) != 3 {
+			errors.New("PsychomotorVigilanceTask should have three values but has different amount")
+		}
+
 		newSSTResult := SSTResult{SSTResultValue: pair.UserLog.SpatialSpanTask}
-		newPVTResult := PVTResult{PVTResultValue: pair.UserLog.PsychomotorVigilanceTask}
+		newPVTResult := PVTResult{
+			Value1: pair.UserLog.PsychomotorVigilanceTask[0],
+			Value2: pair.UserLog.PsychomotorVigilanceTask[1],
+			Value3: pair.UserLog.PsychomotorVigilanceTask[2],
+		}
 
 		if err := db.Create(&newSSTResult).Error; err != nil {
 			return errors.Wrap(err, "failed to create database entry")

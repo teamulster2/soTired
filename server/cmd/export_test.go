@@ -82,16 +82,14 @@ func fillDatabase() (*gorm.DB, error) {
 
 	userLogList := []UserLog{
 		{
-			UserID:                   userList[0].ID,
-			SSTResultID:              sstResultList[0].ID,
-			PVTResultID:              pvtResultList[0].ID,
-			MentalArithmeticResultID: mentalArithmeticResultList[0].ID,
+			UserID:      userList[0].ID,
+			SSTResultID: sstResultList[0].ID,
+			PVTResultID: pvtResultList[0].ID,
 		},
 		{
-			UserID:                   userList[1].ID,
-			SSTResultID:              sstResultList[1].ID,
-			PVTResultID:              pvtResultList[1].ID,
-			MentalArithmeticResultID: mentalArithmeticResultList[1].ID,
+			UserID:      userList[1].ID,
+			SSTResultID: sstResultList[1].ID,
+			PVTResultID: pvtResultList[1].ID,
 		},
 	}
 	db.Create(&userLogList)

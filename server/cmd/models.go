@@ -142,9 +142,11 @@ type SSTResult struct {
 
 // PVTResult holds the pvtResult value.
 type PVTResult struct {
-	gorm.Model     `json:"-"`
-	ID             int
-	PVTResultValue []int
+	gorm.Model `json:"-"`
+	ID         int
+	Value1     int
+	Value2     int
+	Value3     int
 }
 
 // MentalArithmeticResult holds the result of Mental Arithmetic assessment
