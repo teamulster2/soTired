@@ -1,27 +1,34 @@
 {
-    "studyName": "test",
-    "clientVersion": "test",
-    "userLogs": [
+    "studyName": "string",
+    "clientVersion": "string",
+    "clientUuid": "string",
+    "runList": [
         {
-            "uuid": "test",
-            "accessMethod": "test",
-            "spatialSpanTask": 1,
-            "psychomotorVigilanceTask": 1,
-            "timestamp": "test"
-        }
-    ],
-    "userStates": [
-        {
-            "uuid": "test",
-            "currentActivity": "test",
-            "currentMood": "test"
+            "userLog": {
+                "uuid": "string",
+                "accessMethod": "string",
+                "UserGameType.spatialSpanTask": 1,
+                "UserGameType.psychomotorVigilanceTask": [
+                    1
+                ],
+                "timestamp": "string"
+            },
+            "userState": {
+                "uuid": "string",
+                "currentActivity": "string",
+                "currentMood": "string",
+                "timestamp": "string"
+            },
+            "selfTestUuid": "string"
         }
     ],
     "questionnaireResults": [
         {
-            "uuid": "test",
-            "question": 1,
-            "answer": 1
+            "uuid": "string",
+            "question": "string",
+            "answer": "string",
+            "timestamp": "string"
         }
     ]
 }
+
