@@ -173,7 +173,6 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
               buttonText: 'Send',
               onPressed: () async {
                 try {
-                  // TODO: Add transmission progress bar
                   await Utils.sendDataToDatabase(context);
                 } on EmptyHiveBoxException catch (e) {
                   _showInfoDialog('Ups... Something went wrong!', e.msg);
