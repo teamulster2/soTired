@@ -65,6 +65,7 @@ type User struct {
 	gorm.Model `json:"-"`
 	ID         int
 	StudyID    int
+	ClientUUID string `json:"clientUUID"`
 }
 
 // UserLog binds the data from an execution flow to an user and a timestamp.
@@ -134,7 +135,7 @@ type SSTResult struct {
 type PVTResult struct {
 	gorm.Model     `json:"-"`
 	ID             int
-	PVTResultValue int
+	PVTResultValue []int
 }
 
 // MentalArithmeticResult holds the result of Mental Arithmetic assessment
@@ -149,7 +150,7 @@ type QuestionnaireLog struct {
 	gorm.Model `json:"-"`
 	ID         int
 	UserID     int
-	timestamp  time.Time
+	Timestamp  time.Time
 }
 
 // QuestionnaireResult holds the results from a questionnaire execution.

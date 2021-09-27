@@ -12,73 +12,52 @@ import (
 type clientJSON struct {
 	StudyName               string                      `json:"studyName"`
 	ClientVersion           string                      `json:"clientVersion"`
-	UserLogList             []clientUserLog             `json:"userLogs"`
-	UserStateList           []clientUserStates          `json:"userStates"`
+	ClientUUID              string                      `json:"clientUUID"`
+	ClientRunList           []clientRun                 `json:"runList"`
 	QuestionnaireResultList []clientQuestionnaireResult `json:"questionnaireResults"`
+}
+
+type clientRun struct {
+	UserLog   clientUserLog   `json:"userLog"`
+	UserState clientUserState `json:"userState"`
 }
 
 type clientUserLog struct {
 	UUID                     string `json:"uuid"`
 	AccessMethod             string `json:"accessMethod"`
-	SpatialSpanTask          int    `json:"spatialSpanTask"`
-	PsychomotorVigilanceTask int    `json:"psychomotorVigilanceTask"`
+	SpatialSpanTask          int    `json:"UserGameType.spatialSpanTask"`
+	PsychomotorVigilanceTask []int  `json:"UserGameType.psychomotorVigilanceTask"`
 	TimeStamp                string `json:"timestamp"`
 }
 
-func (ul clientUserLog) toAccessMethod() AccessMethod {
-	// FIXME implement me
-	return 0
-}
+func (ul clientUserLog) toAccessMethod() AccessMethod { return 0 }           // FIXME implement me
+func (ul clientUserLog) getTime() time.Time           { return time.Time{} } // FIXME implement me
 
-func (ul clientUserLog) getTime() time.Time {
-	// FIXME implement
-	return time.Time{}
-
-}
-
-type clientUserStates struct {
+type clientUserState struct {
 	UUID            string `json:"uuid"`
 	CurrentActivity string `json:"currentActivity"`
 	CurrentMood     string `json:"currentMood"`
 	TimeStamp       string `json:"timestamp"`
 }
 
-func (us clientUserStates) toMood() Mood {
-	// FIXME implement me
-	return 0
-}
-
-func (us clientUserStates) toActivity() Activity {
-	// FIXME implement me
-	return 0
-}
-
-func (us clientUserStates) getTime() time.Time {
-	// FIXME implement
-	return time.Time{}
-
-}
+func (us clientUserState) toMood() Mood         { return 0 }           // FIXME implement me
+func (us clientUserState) toActivity() Activity { return 0 }           // FIXME implement me
+func (us clientUserState) getTime() time.Time   { return time.Time{} } // FIXME implement me
 
 type clientQuestionnaireResult struct {
-	UUID     string `json:"uuid"`
-	Question int    `json:"question"`
-	Answer   int    `json:"answer"`
+	UUID      string `json:"uuid"`
+	Question  string `json:"question"`
+	Answer    string `json:"answer"`
+	TimeStamp string `json:"timestamp"`
 }
+
+func (qr clientQuestionnaireResult) getTime() time.Time { return time.Time{} } // FIXME implement me
 
 func fromClientJSON(in []byte) (clientJSON, error) {
 	var parsedJSON clientJSON
 	err := json.Unmarshal(in, &parsedJSON)
 
 	return parsedJSON, err
-}
-
-type logStatPair struct {
-	userLog   clientUserLog
-	userState clientUserStates
-}
-
-func createPairs(logList []clientUserLog, stateList []clientUserStates) []logStatPair {
-	return []logStatPair{}
 }
 
 func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
@@ -91,32 +70,34 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 	if err := studyDB.Find(&study).Error; err != nil {
 		return errors.Wrap(err, fmt.Sprintf("failed to find a study with this name: %s:", c.StudyName))
 	}
-	// create new user for each send database since we dont want to track them
-	newUser := User{StudyID: study.ID}
-	db.Create(&newUser)
 
-	for _, pair := range createPairs(c.UserLogList, c.UserStateList) {
-		newSSTResult := SSTResult{SSTResultValue: pair.userLog.SpatialSpanTask}
-		newPVTResult := PVTResult{PVTResultValue: pair.userLog.PsychomotorVigilanceTask}
+	newUser := User{StudyID: study.ID}
+	if db.Model(&newUser).Where("client_uuid = ?", c.ClientUUID).Updates(&newUser).RowsAffected == 0 {
+		db.Create(&newUser)
+	}
+
+	for _, pair := range c.ClientRunList {
+		newSSTResult := SSTResult{SSTResultValue: pair.UserLog.SpatialSpanTask}
+		newPVTResult := PVTResult{PVTResultValue: pair.UserLog.PsychomotorVigilanceTask}
 
 		if err := db.Create(&newSSTResult).Error; err != nil {
-			return errors.Wrap(err, "failed to crete database entry")
+			return errors.Wrap(err, "failed to create database entry")
 		}
 		if err := db.Create(&newPVTResult).Error; err != nil {
-			return errors.Wrap(err, "failed to crete database entry")
+			return errors.Wrap(err, "failed to create database entry")
 		}
 
 		// NOTE use the earlier timestamp
-		timestamp := pair.userLog.getTime()
-		if pair.userState.getTime().Before(timestamp) {
-			timestamp = pair.userState.getTime()
+		timestamp := pair.UserLog.getTime()
+		if pair.UserState.getTime().Before(timestamp) {
+			timestamp = pair.UserState.getTime()
 		}
 
 		ul := UserLog{
 			UserID:       newUser.ID,
-			Mood:         pair.userState.toMood(),
-			Activity:     pair.userState.toActivity(),
-			AccessMethod: pair.userLog.toAccessMethod(),
+			Mood:         pair.UserState.toMood(),
+			Activity:     pair.UserState.toActivity(),
+			AccessMethod: pair.UserLog.toAccessMethod(),
 			SSTResultID:  newSSTResult.ID,
 			PVTResultID:  newPVTResult.ID,
 			TimeStamp:    timestamp,
@@ -125,21 +106,36 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 			return err
 		}
 	}
-	// return early because of Notes below
-	return nil
 
-	// FIXME wait for the client to fix the question and answer fields to string for the later block to be usefull
 	for _, jQR := range c.QuestionnaireResultList {
-		ql := QuestionnaireLog{UserID: newUser.ID}
+		// search or create answer and question matching the text
+		ql := QuestionnaireLog{UserID: newUser.ID, Timestamp: jQR.getTime()}
 		db.Create(&ql)
-		// NOTE question and anserIDs are left out hear since the client send yet the wrong type: int
-		// which is a internal representation/reference of the client database from which we can not infer the correct corresponing questions and answers.
-		_ = jQR
-		// FIXME after the json field has the correct type of a string
-		// search for the correct question and answer and add them here
-		qr := QuestionnaireResult{QuestionnaireLogID: ql.ID}
-		db.Create(&qr)
 
+		q := Question{
+			StudyID:      study.ID,
+			QuestionText: jQR.Question,
+		}
+		// Update or create
+		if db.Model(&q).Where("question_text = ?", q.QuestionText).Updates(&q).RowsAffected == 0 {
+			db.Create(&q)
+		}
+
+		a := Answer{
+			QuestionID: q.ID,
+			AnswerText: jQR.Answer,
+		}
+		// Update or create
+		if db.Model(&a).Where("answer_text = ?", a.AnswerText).Updates(&a).RowsAffected == 0 {
+			db.Create(&a)
+		}
+
+		qr := QuestionnaireResult{
+			QuestionnaireLogID: ql.ID,
+			QuestionID:         q.ID,
+			AnswerID:           a.ID,
+		}
+		db.Create(&qr)
 	}
-	panic("should not be yet reachable")
+	return nil
 }
