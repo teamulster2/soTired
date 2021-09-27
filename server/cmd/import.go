@@ -10,16 +10,21 @@ import (
 )
 
 type clientJSON struct {
-	StudyName               string                      `json:"studyName"`
-	ClientVersion           string                      `json:"clientVersion"`
-	ClientUUID              string                      `json:"clientUUID"`
+	StudyName string `json:"studyName"`
+	// ClientVersion is yet a dummy field, for later compatibility tests.
+	ClientVersion string `json:"clientVersion"`
+	// Detect the same user overmultiple imports
+	ClientUUID              string                      `json:"clientUuid"`
 	ClientRunList           []clientRun                 `json:"runList"`
 	QuestionnaireResultList []clientQuestionnaireResult `json:"questionnaireResults"`
 }
 
 type clientRun struct {
+	// on the client side both UserLog and UserState are handeled seperatly but on the server side the have to be maped to one database entry
 	UserLog   clientUserLog   `json:"userLog"`
 	UserState clientUserState `json:"userState"`
+	// RunUUID is used to detect duplicated data send from the client
+	RunUUID string `json:"selfTestUuid"`
 }
 
 type clientUserLog struct {
@@ -77,6 +82,10 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 	}
 
 	for _, pair := range c.ClientRunList {
+		// check if this userLog was all ready send before and ignore if so.
+		if db.Where("client_log_uuid = ?", pair.RunUUID).First(&UserLog{}).RowsAffected != 0 {
+			continue
+		}
 		newSSTResult := SSTResult{SSTResultValue: pair.UserLog.SpatialSpanTask}
 		newPVTResult := PVTResult{PVTResultValue: pair.UserLog.PsychomotorVigilanceTask}
 
@@ -94,13 +103,14 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 		}
 
 		ul := UserLog{
-			UserID:       newUser.ID,
-			Mood:         pair.UserState.toMood(),
-			Activity:     pair.UserState.toActivity(),
-			AccessMethod: pair.UserLog.toAccessMethod(),
-			SSTResultID:  newSSTResult.ID,
-			PVTResultID:  newPVTResult.ID,
-			TimeStamp:    timestamp,
+			UserID:        newUser.ID,
+			Mood:          pair.UserState.toMood(),
+			Activity:      pair.UserState.toActivity(),
+			AccessMethod:  pair.UserLog.toAccessMethod(),
+			SSTResultID:   newSSTResult.ID,
+			PVTResultID:   newPVTResult.ID,
+			TimeStamp:     timestamp,
+			ClientLogUUID: pair.RunUUID,
 		}
 		if err := db.Create(&ul).Error; err != nil {
 			return err
@@ -108,6 +118,10 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 	}
 
 	for _, jQR := range c.QuestionnaireResultList {
+		// check if this QuestionnaireResult was all ready send before and ignore if so.
+		if db.Where("client_result_uuid = ?", jQR.UUID).First(&QuestionnaireResult{}).RowsAffected != 0 {
+			continue
+		}
 		// search or create answer and question matching the text
 		ql := QuestionnaireLog{UserID: newUser.ID, Timestamp: jQR.getTime()}
 		db.Create(&ql)

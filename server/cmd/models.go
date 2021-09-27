@@ -63,21 +63,30 @@ func (n *UTCNotificationTime) isValid() bool {
 // User binds the data from one user
 type User struct {
 	gorm.Model `json:"-"`
-	ID         int
-	StudyID    int
+
+	ID      int
+	StudyID int
+
+	// ClientUUID is used to detect the same user over multiple imports.
 	ClientUUID string `json:"clientUUID"`
 }
 
 // UserLog binds the data from an execution flow to an user and a timestamp.
 type UserLog struct {
-	gorm.Model   `json:"-"`
-	UserID       int
+	gorm.Model `json:"-"`
+
+	UserID int
+	// ClientLogUUID is for detecting and preventing accepting the same data if it has been send allready
+	ClientLogUUID string
+
+	// research data
 	Mood         Mood
 	Activity     Activity
 	AccessMethod AccessMethod
 	SSTResultID  int
 	PVTResultID  int
-	TimeStamp    time.Time
+
+	TimeStamp time.Time
 }
 
 // Mood holds the provided mood of an user.
@@ -155,11 +164,15 @@ type QuestionnaireLog struct {
 
 // QuestionnaireResult holds the results from a questionnaire execution.
 type QuestionnaireResult struct {
-	gorm.Model         `json:"-"`
+	gorm.Model `json:"-"`
+
 	ID                 int
 	AnswerID           int
 	QuestionID         int
 	QuestionnaireLogID int
+
+	// ClientResultUUID is for preventing adding the same entry multiple times to the database
+	ClientResultUUID int
 }
 
 // Question holds the question text and a reference to the corresponding tudy.
