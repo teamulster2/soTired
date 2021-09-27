@@ -56,20 +56,25 @@ func serveRun(cmd *cobra.Command, args []string) {
 	// Get cobra arguments
 	dbPath, err := cmd.Flags().GetString(dbPathFlag)
 	if err != nil {
-		fmt.Println(errors.Wrap(err, "missing db path argument"))
+		fmt.Println(errors.Wrap(err, "missing db path argument")) // TODO add logger
 	}
 	configPath, err := cmd.Flags().GetString(configPathFlag)
 	if err != nil {
-		fmt.Println(errors.Wrap(err, "missing config path argument"))
+		fmt.Println(errors.Wrap(err, "missing config path argument")) // TODO add logger
+	}
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	if err != nil {
+		panic("Failed to connect database")
 	}
 
 	// Set routing rules
 	http.HandleFunc("/", root)
 	http.HandleFunc("/config", config(configPath, dbPath))
 	http.HandleFunc("/identity", identity)
+	data := dataGenerator(db)
 	http.HandleFunc("/data", data)
 	addr := fmt.Sprintf(":%s", cmd.Flag("port").Value.String())
-	fmt.Println("Start to listen on:", addr)
+	fmt.Println("Start to listen on:", addr) // TODO add logger
 
 	// Use default DefaultServeMux
 	if err := http.ListenAndServe(addr, nil); err != nil {
@@ -151,16 +156,33 @@ func config(configPath string, dbPath string) func(w http.ResponseWriter, r *htt
 			return
 		}
 		io.WriteString(w, string(studyDataAsBytes))
-		fmt.Println("Replied config")
+		// fmt.Println("Replied config") // TODO add logger
 	}
 }
 
 func identity(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "sotiserver")
-	fmt.Println("Replied identity")
+	// fmt.Println("Replied identity") // TODO add logger
 }
 
-func data(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "thanks for the data")
-	fmt.Println("Recieved data")
+func dataGenerator(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		all, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			// fmt.Println("failed to read body") // TODO add logger
+			w.WriteHeader(http.StatusBadRequest)
+		}
+		var cJSON clientJSON
+		if err := json.Unmarshal(all, &cJSON); err != nil {
+			// fmt.Println(errors.Wrap(err, "failed to parse client data")) // TODO add logger
+			w.WriteHeader(http.StatusBadRequest)
+		}
+
+		if err := cJSON.clientJSONToDB(db); err != nil {
+			// fmt.Println(errors.Wrap(err, "failed to write client data to database")) // TODO add logger
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		io.WriteString(w, "thanks for the data :)")
+		// fmt.Println("Recieved data") // TODO add logger
+	}
 }

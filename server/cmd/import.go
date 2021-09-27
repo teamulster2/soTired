@@ -76,9 +76,11 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 		return errors.Wrap(err, fmt.Sprintf("failed to find a study with this name: %s:", c.StudyName))
 	}
 
-	newUser := User{StudyID: study.ID}
-	if db.Model(&newUser).Where("client_uuid = ?", c.ClientUUID).Updates(&newUser).RowsAffected == 0 {
-		db.Create(&newUser)
+	user := User{StudyID: study.ID}
+	// update user
+	if db.Model(&user).Where("client_uuid = ?", c.ClientUUID).Updates(&user).RowsAffected == 0 {
+		// create new user
+		db.Create(&user)
 	}
 
 	for _, pair := range c.ClientRunList {
@@ -111,7 +113,7 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 		}
 
 		ul := UserLog{
-			UserID:        newUser.ID,
+			UserID:        user.ID,
 			Mood:          pair.UserState.toMood(),
 			Activity:      pair.UserState.toActivity(),
 			AccessMethod:  pair.UserLog.toAccessMethod(),
@@ -131,7 +133,7 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 			continue
 		}
 		// search or create answer and question matching the text
-		ql := QuestionnaireLog{UserID: newUser.ID, Timestamp: jQR.getTime()}
+		ql := QuestionnaireLog{UserID: user.ID, Timestamp: jQR.getTime()}
 		db.Create(&ql)
 
 		q := Question{
