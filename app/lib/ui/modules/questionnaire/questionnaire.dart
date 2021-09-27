@@ -122,6 +122,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                 answer = questions[currentQuestion.value].answers[2];
               } else if (i == 4) {
                 answer = questions[currentQuestion.value].answers[3];
+              } else {
+                answer = '';
               }
               questionnaireResult.addAll(<String, String>{
                 questions[currentQuestion.value].question: answer
@@ -142,7 +144,8 @@ class _QuestionnaireState extends State<Questionnaire> {
         builder: (BuildContext context) => AlertDialog(
                 title: const Text('Questionnaire saved successfully.'),
                 content: const Text(
-                    'Thank you for filling in. You can now continue with the other components'),
+                    'Thank you for filling in. You can now continue with the '
+                    'other components'),
                 actions: <Widget>[
                   TextButton(
                       child: const Text('Ok'),
@@ -150,10 +153,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                         Provider.of<ServiceProvider>(context, listen: false)
                             .databaseManager
                             .writeQuestionnaireResults(<QuestionnaireResult>[
-                          QuestionnaireResult(
-                              Utils.generateUuid(),
-                              questionnaireResult,
-                              DateTime.now().toIso8601String())
+                          QuestionnaireResult(Utils.generateUuid(),
+                              questionnaireResult, DateTime.now())
                         ]);
                         Navigator.push(
                             context,

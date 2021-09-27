@@ -19,20 +19,25 @@ class SettingsObject extends HiveObject {
   @HiveField(3)
   String? clientUuid;
 
-  SettingsObject(
-      this.serverUrl, this.studyName, this.appVersion, this.clientUuid);
+  @HiveField(4)
+  Map<String, dynamic>? latestDatabaseExport;
+
+  SettingsObject(this.serverUrl, this.studyName, this.appVersion,
+      this.clientUuid, this.latestDatabaseExport);
 
   SettingsObject.fromJson(Map<String, dynamic> json)
       : serverUrl = json['serverUrl'],
         studyName = json['studyName'],
         appVersion = json['appVersion'],
-        clientUuid = json['clientUuid'];
+        clientUuid = json['clientUuid'],
+        latestDatabaseExport = json['latestDatabaseExport'];
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'serverUrl': serverUrl,
         'studyName': studyName,
         'appVersion': appVersion,
-        'clientUuid': clientUuid
+        'clientUuid': clientUuid,
+        'latestDatabaseExport': latestDatabaseExport
       };
 
   @override

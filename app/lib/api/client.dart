@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:so_tired/config/config_manager.dart';
 import 'package:so_tired/database/database_manager.dart';
+import 'package:so_tired/database/models/settings/settings_object.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
 import 'package:so_tired/notifications/notifications.dart';
 
@@ -64,6 +65,13 @@ Future<void> sendData(String url) async {
         body: jsonDatabase,
       );
       databaseManager.latestDatabaseExport = databaseExport;
+      final SettingsObject settings = databaseManager.getSettings();
+      databaseManager.writeSettings(SettingsObject(
+          settings.serverUrl,
+          settings.studyName,
+          settings.appVersion,
+          settings.clientUuid,
+          databaseExport));
 
       if (response.statusCode != 200) {
         final int statusCode = response.statusCode;

@@ -18,11 +18,16 @@ import 'package:so_tired/utils/utils.dart';
 /// [GameEngine] with business logic to set variables
 class SpatialSpanTest extends StatefulWidget {
   const SpatialSpanTest(
-      {required this.onFinished, required this.setLevel, Key? key})
+      {required this.onFinished,
+      required this.setLevel,
+      required this.selfTestUuid,
+      Key? key})
       : super(key: key);
 
   final VoidCallback onFinished;
   final Function(int) setLevel;
+
+  final String selfTestUuid;
 
   @override
   _SpatialSpanTestState createState() => _SpatialSpanTestState();
@@ -147,7 +152,8 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                                 Utils.generateUuid(),
                                 UserAccessMethod.regularAppStart,
                                 gameValue,
-                                DateTime.now().toString())
+                                DateTime.now(),
+                                widget.selfTestUuid)
                           ]);
 
                           Provider.of<ServiceProvider>(context, listen: false)

@@ -21,13 +21,14 @@ class SettingsObjectAdapter extends TypeAdapter<SettingsObject> {
       fields[1] as String?,
       fields[2] as String?,
       fields[3] as String?,
+      (fields[4] as Map?)?.cast<String, dynamic>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, SettingsObject obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.serverUrl)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class SettingsObjectAdapter extends TypeAdapter<SettingsObject> {
       ..writeByte(2)
       ..write(obj.appVersion)
       ..writeByte(3)
-      ..write(obj.clientUuid);
+      ..write(obj.clientUuid)
+      ..writeByte(4)
+      ..write(obj.latestDatabaseExport);
   }
 
   @override

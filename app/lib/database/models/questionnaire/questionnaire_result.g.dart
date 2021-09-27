@@ -19,7 +19,7 @@ class QuestionnaireResultAdapter extends TypeAdapter<QuestionnaireResult> {
     return QuestionnaireResult(
       fields[0] as String?,
       (fields[1] as Map).cast<String, String>(),
-      fields[2] as String?,
+      fields[2] as DateTime?,
     );
   }
 

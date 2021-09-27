@@ -37,6 +37,8 @@ void main() {
   final String _uuidUserState2 = Utils.generateUuid();
   final String _uuidQuestionnaireResult = Utils.generateUuid();
   final String _uuidClient = Utils.generateUuid();
+  final String _uuidSelfTest = Utils.generateUuid();
+  final String _uuidSelfTest2 = Utils.generateUuid();
 
   final PersonalHighScore _personalHighScore = PersonalHighScore(
       _uuidPersonalHighScore, 33, UserGameType.psychomotorVigilanceTask);
@@ -44,37 +46,48 @@ void main() {
       _uuidUserLog,
       UserAccessMethod.notification,
       {
-        UserGameType.psychomotorVigilanceTask: {'diffs': 500},
+        UserGameType.psychomotorVigilanceTask: {
+          'diffs': [234, 567, 890]
+        },
         UserGameType.spatialSpanTask: {'levels': 5}
       },
-      '2021-09-15T16:04:26.870744');
+      DateTime.parse('2021-09-15T16:04:26.870744'),
+      _uuidSelfTest);
   final UserState _userState = UserState(
       _uuidUserState,
       Utils.stringToCodeUnits('☕️'),
       Utils.stringToCodeUnits('😐'),
-      '2021-09-15T16:04:26.870744');
+      DateTime.parse('2021-09-15T16:04:26.870744'),
+      _uuidSelfTest);
   final UserState _userState2 = UserState(
       _uuidUserState2,
       Utils.stringToCodeUnits('🏡'),
       Utils.stringToCodeUnits('🤩'),
-      '2021-09-15T16:04:26.870744');
+      DateTime.parse('2021-09-15T16:04:26.870744'),
+      _uuidSelfTest2);
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
       _uuidQuestionnaireResult,
       {'How are you?': 'Good'},
-      '2021-09-15T16:04:26.870744');
+      DateTime.parse('2021-09-15T16:04:26.870744'));
   final SettingsObject _settings = SettingsObject(
-      'http://www.example.com:50000', 'Default Study', '0.0.1+1', _uuidClient);
+      'http://www.example.com:50000',
+      'Default Study',
+      '0.0.1+1',
+      _uuidClient, <String, dynamic>{});
 
-  final Map<String, dynamic> assertJson = {
+  final Map<String, dynamic> exportAssertMap = {
     'userLogs': [
       {
         'uuid': _uuidUserLog,
         'accessMethod': UserAccessMethod.notification,
         'gamesExecuted': {
-          UserGameType.psychomotorVigilanceTask: {'diffs': 500},
+          UserGameType.psychomotorVigilanceTask: {
+            'diffs': [234, 567, 890]
+          },
           UserGameType.spatialSpanTask: {'levels': 5}
         },
-        'timestamp': '2021-09-15T16:04:26.870744'
+        'timestamp': DateTime.parse('2021-09-15T16:04:26.870744'),
+        'selfTestUuid': _uuidSelfTest
       }
     ],
     'userStates': [
@@ -82,50 +95,73 @@ void main() {
         'uuid': _uuidUserState,
         'currentActivity': [226, 152, 149, 239, 184, 143],
         'currentMood': [240, 159, 152, 144],
-        'timestamp': '2021-09-15T16:04:26.870744'
+        'timestamp': DateTime.parse('2021-09-15T16:04:26.870744'),
+        'selfTestUuid': _uuidSelfTest
       },
       {
         'uuid': _uuidUserState2,
         'currentActivity': [240, 159, 143, 161],
         'currentMood': [240, 159, 164, 169],
-        'timestamp': '2021-09-15T16:04:26.870744'
+        'timestamp': DateTime.parse('2021-09-15T16:04:26.870744'),
+        'selfTestUuid': _uuidSelfTest2
       }
     ],
     'questionnaireResults': [
       {
         'uuid': _uuidQuestionnaireResult,
         'questions': {'How are you?': 'Good'},
-        'timestamp': '2021-09-15T16:04:26.870744'
+        'timestamp': DateTime.parse('2021-09-15T16:04:26.870744')
+      }
+    ],
+    'personalHighScores': [
+      {
+        'uuid': _uuidPersonalHighScore,
+        'gameScore': 33,
+        'gameType': UserGameType.psychomotorVigilanceTask
+      }
+    ],
+    'settings': [
+      {
+        'serverUrl': 'http://www.example.com:50000',
+        'studyName': 'Default Study',
+        'appVersion': '0.0.1+1',
+        'clientUuid': _uuidClient,
+        'latestDatabaseExport': {}
       }
     ]
   };
 
-  final Map<String, dynamic> adaptAssertMap = <String, dynamic>{
+  final Map<String, dynamic> adaptExportAssertMap = <String, dynamic>{
     'studyName': 'Default Study',
     'clientVersion': '0.0.1+1',
     'clientUuid': _uuidClient,
-    'userLogs': [
+    'runList': [
       {
-        'uuid': _uuidUserLog,
-        'accessMethod': 'UserAccessMethod.notification',
-        'UserGameType.spatialSpanTask': 5,
-        'UserGameType.psychomotorVigilanceTask': 500,
-        'timestamp': '2021-09-15T16:04:26.870744'
-      }
-    ],
-    'userStates': [
-      {
-        'uuid': _uuidUserState,
-        'currentActivity':
-            Utils.codeUnitsToString([226, 152, 149, 239, 184, 143]),
-        'currentMood': Utils.codeUnitsToString([240, 159, 152, 144]),
-        'timestamp': '2021-09-15T16:04:26.870744'
+        'selfTestUuid': _uuidSelfTest,
+        'userLog': {
+          'uuid': _uuidUserLog,
+          'accessMethod': 'UserAccessMethod.notification',
+          'UserGameType.spatialSpanTask': 5,
+          'UserGameType.psychomotorVigilanceTask': [234, 567, 890],
+          'timestamp': '2021-09-15T16:04:26.870744'
+        },
+        'userState': {
+          'uuid': _uuidUserState,
+          'currentActivity':
+              Utils.codeUnitsToString([226, 152, 149, 239, 184, 143]),
+          'currentMood': Utils.codeUnitsToString([240, 159, 152, 144]),
+          'timestamp': '2021-09-15T16:04:26.870744'
+        },
       },
       {
-        'uuid': _uuidUserState2,
-        'currentActivity': Utils.codeUnitsToString([240, 159, 143, 161]),
-        'currentMood': Utils.codeUnitsToString([240, 159, 164, 169]),
-        'timestamp': '2021-09-15T16:04:26.870744'
+        'selfTestUuid': _uuidSelfTest2,
+        'userLog': {},
+        'userState': {
+          'uuid': _uuidUserState2,
+          'currentActivity': Utils.codeUnitsToString([240, 159, 143, 161]),
+          'currentMood': Utils.codeUnitsToString([240, 159, 164, 169]),
+          'timestamp': '2021-09-15T16:04:26.870744'
+        }
       }
     ],
     'questionnaireResults': [
@@ -462,7 +498,8 @@ void main() {
     });
 
     test('settings should only contain one object', () async {
-      _settingsObjectList.add(SettingsObject('', '', '', ''));
+      _settingsObjectList
+          .add(SettingsObject('', '', '', '', <String, dynamic>{}));
       // ignore: cascade_invocations
       await _databaseManager.writeSettings(_settings);
 
@@ -521,9 +558,10 @@ void main() {
       await _databaseManager.writeUserLogs([_userLog]);
       await _databaseManager.writeUserStates([_userState, _userState2]);
       await _databaseManager.writeQuestionnaireResults([_questionnaireResult]);
+      await _databaseManager.writeSettings(_settings);
 
-      final Map<String, dynamic> exportJson = exportDatabase();
-      expect(exportJson, assertJson);
+      final Map<String, dynamic> exportMap = exportDatabase();
+      expect(exportMap, exportAssertMap);
     });
 
     test('empty database should throw Exception when asked for export', () {
@@ -543,7 +581,7 @@ void main() {
       final Map<String, dynamic> serverSyntaxJson =
           exportDatabaseAdaptedToServerSyntax();
 
-      expect(serverSyntaxJson, adaptAssertMap);
+      expect(serverSyntaxJson, adaptExportAssertMap);
     });
   });
 }
@@ -554,6 +592,9 @@ Map<String, dynamic> exportDatabase() {
   final List<Map<String, dynamic>> userStates = <Map<String, dynamic>>[];
   final List<Map<String, dynamic>> questionnaireResults =
       <Map<String, dynamic>>[];
+  final List<Map<String, dynamic>> personalHighScores =
+      <Map<String, dynamic>>[];
+  final List<Map<String, dynamic>> settings = <Map<String, dynamic>>[];
 
   try {
     for (final UserLog? userLog in _databaseManager.getAllUserLogs()) {
@@ -595,10 +636,39 @@ Map<String, dynamic> exportDatabase() {
     rethrow;
   }
 
+  try {
+    for (final PersonalHighScore? personalHighScore
+        in _databaseManager.getAllPersonalHighScores()) {
+      final Map<String, dynamic>? scoreJson = personalHighScore?.toJson();
+      personalHighScores.add(scoreJson!);
+    }
+    returnMap
+        .addAll(<String, dynamic>{'personalHighScores': personalHighScores});
+  } on EmptyHiveBoxException {
+    returnMap.addAll(
+        <String, dynamic>{'personalHighScores': <Map<String, dynamic>>[]});
+  } catch (e) {
+    rethrow;
+  }
+
+  try {
+    final Map<String, dynamic> settingsJson =
+        _databaseManager.getSettings().toJson();
+    settings.add(settingsJson);
+    returnMap.addAll(<String, dynamic>{'settings': settings});
+  } on EmptyHiveBoxException {
+    returnMap.addAll(<String, dynamic>{'settings': <Map<String, dynamic>>[]});
+  } catch (e) {
+    rethrow;
+  }
+
   if (List<Map<String, dynamic>>.from(returnMap['userLogs']).isEmpty &&
       List<Map<String, dynamic>>.from(returnMap['userStates']).isEmpty &&
       List<Map<String, dynamic>>.from(returnMap['questionnaireResults'])
-          .isEmpty) {
+          .isEmpty &&
+      List<Map<String, dynamic>>.from(returnMap['personalHighScores'])
+          .isEmpty &&
+      List<Map<String, dynamic>>.from(returnMap['settings']).isEmpty) {
     throw EmptyHiveBoxException('Currently you have not created any results. '
         'Please participate in the self-test or answer the questionnaire '
         'first!');
@@ -619,12 +689,15 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
     'clientUuid': settings.clientUuid
   });
 
-  // Adapt userLogs
+  // Introduce runList
+  final List<Map<String, dynamic>> runList = <Map<String, dynamic>>[];
   final List<Map<String, dynamic>> userLogs = exportMap['userLogs'];
-  if (userLogs.isEmpty) {
-    returnMap['userLogs'] = <Map<String, dynamic>>[];
-  } else {
-    final List<Map<String, dynamic>> userLogList = <Map<String, dynamic>>[];
+  final List<Map<String, dynamic>> userStates = exportMap['userStates'];
+
+  // Preprocess userLogs
+  final List<Map<String, dynamic>> preprocessedUserLogs =
+      <Map<String, dynamic>>[];
+  if (userLogs.isNotEmpty) {
     for (final Map<String, dynamic> userLog in userLogs) {
       final Map<UserGameType, Map<String, dynamic>> gamesExecuted =
           userLog['gamesExecuted'];
@@ -635,7 +708,7 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
       if (gamesExecuted.containsKey(UserGameType.psychomotorVigilanceTask)) {
         final Map<String, dynamic>? diffs =
             gamesExecuted[UserGameType.psychomotorVigilanceTask];
-        addition.addAll(<String, int>{
+        addition.addAll(<String, List<int>>{
           '${UserGameType.psychomotorVigilanceTask}': diffs!['diffs']
         });
       }
@@ -646,31 +719,82 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
           '${UserGameType.spatialSpanTask}': levels!['levels']
         });
       }
-      addition.addAll(<String, String>{'timestamp': userLog['timestamp']});
+      addition.addAll(<String, dynamic>{
+        'timestamp': (userLog['timestamp'] as DateTime).toIso8601String(),
+        'selfTestUuid': userLog['selfTestUuid']
+      });
 
-      userLogList.add(addition);
+      preprocessedUserLogs.add(addition);
     }
-    returnMap['userLogs'] = userLogList;
   }
 
-  // Adapt userStates
-  final List<Map<String, dynamic>> userStates = exportMap['userStates'];
-  if (userStates.isEmpty) {
-    returnMap['userStates'] = <Map<String, dynamic>>[];
-  } else {
-    final List<Map<String, dynamic>> userStateList = <Map<String, dynamic>>[];
+  // Preprocess userStates
+  final List<Map<String, dynamic>> preprocessedUserStates =
+      <Map<String, dynamic>>[];
+  if (userStates.isNotEmpty) {
     for (final Map<String, dynamic>? userState in userStates) {
       final Map<String, dynamic> addition = <String, dynamic>{
         'uuid': userState!['uuid'],
         'currentActivity':
             Utils.codeUnitsToString(userState['currentActivity']),
         'currentMood': Utils.codeUnitsToString(userState['currentMood']),
-        'timestamp': userState['timestamp']
+        'timestamp': (userState['timestamp'] as DateTime).toIso8601String(),
+        'selfTestUuid': userState['selfTestUuid']
       };
-      userStateList.add(addition);
+
+      preprocessedUserStates.add(addition);
     }
-    returnMap['userStates'] = userStateList;
   }
+
+  // Assemble runList
+  for (int i = 0; i < preprocessedUserLogs.length; i++) {
+    final Map<String, dynamic> userLog = preprocessedUserLogs[i];
+    for (int j = 0; j < preprocessedUserStates.length; j++) {
+      final Map<String, dynamic> userState = preprocessedUserStates[j];
+      if (userLog['selfTestUuid'] == userState['selfTestUuid']) {
+        final Map<String, dynamic> addition = <String, dynamic>{
+          'selfTestUuid': userLog['selfTestUuid']
+        };
+        userLog.removeWhere((String key, value) => key == 'selfTestUuid');
+        userState.removeWhere((String key, value) => key == 'selfTestUuid');
+        addition.addAll(
+            <String, dynamic>{'userLog': userLog, 'userState': userState});
+        preprocessedUserLogs.removeAt(i);
+        // NOTE: Avoid race condition while removing element from Iterable of current loop
+        i--;
+        preprocessedUserStates.removeAt(j);
+        // NOTE: Avoid race condition while removing element from Iterable of current loop
+        j--;
+
+        runList.add(addition);
+      }
+    }
+  }
+
+  for (final Map<String, dynamic> userLog in preprocessedUserLogs) {
+    final Map<String, dynamic> addition = <String, dynamic>{
+      'selfTestUuid': userLog['selfTestUuid']
+    };
+    userLog.removeWhere((String key, value) => key == 'selfTestUuid');
+    addition.addAll(<String, dynamic>{
+      'userLog': userLog,
+      'userState': <String, dynamic>{}
+    });
+    runList.add(addition);
+  }
+
+  for (final Map<String, dynamic> userState in preprocessedUserStates) {
+    final Map<String, dynamic> addition = <String, dynamic>{
+      'selfTestUuid': userState['selfTestUuid']
+    };
+    userState.removeWhere((String key, value) => key == 'selfTestUuid');
+    addition.addAll(<String, dynamic>{
+      'userLog': <String, dynamic>{},
+      'userState': userState
+    });
+    runList.add(addition);
+  }
+  returnMap['runList'] = runList;
 
   // Adapt questionnaireResults
   final List<Map<String, dynamic>> questionnaireResults =
@@ -689,7 +813,8 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
           'uuid': questionnaireResult['uuid'],
           'question': questionKey,
           'answer': '${questions[questionKey]}',
-          'timestamp': questionnaireResult['timestamp']
+          'timestamp':
+              (questionnaireResult['timestamp'] as DateTime).toIso8601String()
         });
         questionnaireResultList.add(addition);
         addition = <String, dynamic>{};

@@ -13,12 +13,15 @@ class SelfAssessment extends StatefulWidget {
       {required this.onFinished,
       required this.setMood,
       required this.setActivity,
+      required this.selfTestUuid,
       Key? key})
       : super(key: key);
 
   final VoidCallback onFinished;
   final Function(String) setMood;
   final Function(String) setActivity;
+
+  final String selfTestUuid;
 
   @override
   _SelfAssessmentState createState() => _SelfAssessmentState();
@@ -56,7 +59,7 @@ class _SelfAssessmentState extends State<SelfAssessment> {
             .databaseManager
             .writeUserStates(<UserState>[
           UserState(uuid, Utils.stringToCodeUnits(currentActivity),
-              emotionalState.value, DateTime.now().toIso8601String())
+              emotionalState.value, DateTime.now(), widget.selfTestUuid)
         ]);
         widget.setMood(Utils.codeUnitsToString(emotionalState.value));
         widget.setActivity(currentActivity);

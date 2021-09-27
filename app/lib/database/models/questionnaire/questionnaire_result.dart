@@ -16,7 +16,7 @@ class QuestionnaireResult extends HiveObject {
   Map<String, String> questions;
 
   @HiveField(2)
-  String? timestamp;
+  DateTime? timestamp;
 
   QuestionnaireResult(this.uuid, this.questions, this.timestamp);
 

@@ -21,25 +21,32 @@ class UserLog extends HiveObject {
   Map<UserGameType, Map<String, dynamic>>? gamesExecuted;
 
   @HiveField(3)
-  String? timestamp;
+  DateTime? timestamp;
 
-  UserLog(this.uuid, this.accessMethod, this.gamesExecuted, this.timestamp);
+  @HiveField(4)
+  String? selfTestUuid;
+
+  UserLog(this.uuid, this.accessMethod, this.gamesExecuted, this.timestamp,
+      this.selfTestUuid);
 
   UserLog.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
         accessMethod = json['accessMethod'],
         gamesExecuted = json['gamesExecuted'],
-        timestamp = json['timestamp'];
+        timestamp = json['timestamp'],
+        selfTestUuid = json['selfTestUuid'];
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'uuid': uuid,
         'accessMethod': accessMethod,
         'gamesExecuted': gamesExecuted,
-        'timestamp': timestamp
+        'timestamp': timestamp,
+        'selfTestUuid': selfTestUuid
       };
 
   @override
   String toString() => 'UUID: $uuid,\nAccessMethod: $accessMethod,\n'
       'Which games have been executed?: $gamesExecuted,\n'
-      'Timestamp: $timestamp';
+      'Timestamp: $timestamp,\n'
+      'SelfTestUuid: $selfTestUuid';
 }

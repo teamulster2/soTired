@@ -20,14 +20,15 @@ class UserStateAdapter extends TypeAdapter<UserState> {
       fields[0] as String?,
       (fields[1] as List?)?.cast<int>(),
       (fields[2] as List?)?.cast<int>(),
-      fields[3] as String?,
+      fields[3] as DateTime?,
+      fields[4] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserState obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class UserStateAdapter extends TypeAdapter<UserState> {
       ..writeByte(2)
       ..write(obj.currentMood)
       ..writeByte(3)
-      ..write(obj.timestamp);
+      ..write(obj.timestamp)
+      ..writeByte(4)
+      ..write(obj.selfTestUuid);
   }
 
   @override

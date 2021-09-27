@@ -14,11 +14,17 @@ import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_square.dart';
 import 'package:so_tired/utils/utils.dart';
 
 class PVTTest extends StatefulWidget {
-  const PVTTest({required this.onFinished, required this.setDiff, Key? key})
+  const PVTTest(
+      {required this.onFinished,
+      required this.setDiff,
+      required this.selfTestUuid,
+      Key? key})
       : super(key: key);
 
   final VoidCallback onFinished;
   final Function(int) setDiff;
+
+  final String selfTestUuid;
 
   @override
   _PVTTestState createState() => _PVTTestState();
@@ -136,7 +142,7 @@ class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
             .databaseManager
             .writeUserLogs(<UserLog>[
           UserLog(Utils.generateUuid(), UserAccessMethod.regularAppStart,
-              gameValue, DateTime.now().toIso8601String())
+              gameValue, DateTime.now(), widget.selfTestUuid)
         ]);
 
         Provider.of<ServiceProvider>(context, listen: false)

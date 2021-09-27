@@ -115,8 +115,12 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               .getSettings();
                       Provider.of<ServiceProvider>(context, listen: false)
                           .databaseManager
-                          .writeSettings(SettingsObject(url, settings.studyName,
-                              settings.appVersion, settings.clientUuid));
+                          .writeSettings(SettingsObject(
+                              url,
+                              settings.studyName,
+                              settings.appVersion,
+                              settings.clientUuid,
+                              settings.latestDatabaseExport));
                       _showSuccessMessage();
                     } on EmptyHiveBoxException {
                       final String appVersion = await Utils.getAppVersion();
@@ -125,10 +129,18 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                               .configManager
                               .clientConfig!
                               .studyName;
+                      final Map<String, dynamic> latestDatabaseExport =
+                          Provider.of<ServiceProvider>(context, listen: false)
+                              .databaseManager
+                              .latestDatabaseExport;
                       Provider.of<ServiceProvider>(context, listen: false)
                           .databaseManager
-                          .writeSettings(SettingsObject(url, studyName,
-                              appVersion, Utils.generateUuid()));
+                          .writeSettings(SettingsObject(
+                              url,
+                              studyName,
+                              appVersion,
+                              Utils.generateUuid(),
+                              latestDatabaseExport));
                       _showSuccessMessage();
                     } on BaseException catch (e) {
                       Navigator.pop(context);
