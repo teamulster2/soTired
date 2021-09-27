@@ -18,18 +18,21 @@ class QuestionnaireResultAdapter extends TypeAdapter<QuestionnaireResult> {
     };
     return QuestionnaireResult(
       fields[0] as String?,
-      (fields[1] as Map).cast<String, QuestionnaireAnswers?>(),
+      (fields[1] as Map).cast<String, String>(),
+      fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QuestionnaireResult obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
-      ..write(obj.questions);
+      ..write(obj.questions)
+      ..writeByte(2)
+      ..write(obj.timestamp);
   }
 
   @override

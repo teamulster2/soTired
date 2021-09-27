@@ -74,7 +74,7 @@ Future<void> sendData(String url) async {
             ConfigManager().clientConfig!.studyName,
             "Your result upload was successful.");
       }
-      debugPrint('Response statusCode: ' + response.statusCode.toString());
+      debugPrint('Response statusCode: ${response.statusCode.toString()}');
     } else {
       throw DatabaseNotChangedException(
           'No result changes could be found! Please run a self-test or take '

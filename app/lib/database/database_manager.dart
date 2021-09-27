@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:so_tired/database/models/user/user_game_type.dart';
-import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/settings/settings_object.dart';
@@ -50,8 +49,6 @@ class DatabaseManager {
     Hive.registerAdapter(UserStateAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(QuestionnaireResultAdapter());
-    // ignore: cascade_invocations
-    Hive.registerAdapter(QuestionnaireAnswersAdapter());
     // ignore: cascade_invocations
     Hive.registerAdapter(UserGameTypeAdapter());
     // ignore: cascade_invocations
@@ -463,7 +460,8 @@ class DatabaseManager {
           addition.addAll(<String, dynamic>{
             'uuid': questionnaireResult['uuid'],
             'question': questionKey,
-            'answer': '${questions[questionKey]}'
+            'answer': '${questions[questionKey]}',
+            'timestamp': questionnaireResult['timestamp']
           });
           questionnaireResultList.add(addition);
           addition = <String, dynamic>{};

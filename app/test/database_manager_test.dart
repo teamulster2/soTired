@@ -7,7 +7,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:so_tired/database/database_manager.dart';
 import 'package:so_tired/database/models/user/user_game_type.dart';
-import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/settings/settings_object.dart';
@@ -60,7 +59,9 @@ void main() {
       Utils.stringToCodeUnits('🤩'),
       '2021-09-15T16:04:26.870744');
   final QuestionnaireResult _questionnaireResult = QuestionnaireResult(
-      _uuidQuestionnaireResult, {'How are you?': QuestionnaireAnswers.second});
+      _uuidQuestionnaireResult,
+      {'How are you?': 'Good'},
+      '2021-09-15T16:04:26.870744');
   final SettingsObject _settings = SettingsObject(
       'http://www.example.com:50000', 'Default Study', '0.0.1+1', _uuidClient);
 
@@ -93,7 +94,8 @@ void main() {
     'questionnaireResults': [
       {
         'uuid': _uuidQuestionnaireResult,
-        'questions': {'How are you?': QuestionnaireAnswers.second}
+        'questions': {'How are you?': 'Good'},
+        'timestamp': '2021-09-15T16:04:26.870744'
       }
     ]
   };
@@ -130,7 +132,8 @@ void main() {
       {
         'uuid': _uuidQuestionnaireResult,
         'question': 'How are you?',
-        'answer': 'QuestionnaireAnswers.second'
+        'answer': 'Good',
+        'timestamp': '2021-09-15T16:04:26.870744'
       }
     ]
   };
@@ -680,16 +683,17 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
     for (final Map<String, dynamic>? questionnaireResult
         in questionnaireResults) {
       final Map<String, dynamic> questions = questionnaireResult!['questions'];
-      final Map<String, dynamic> addition = <String, dynamic>{
-        'uuid': questionnaireResult['uuid']
-      };
+      Map<String, dynamic> addition = <String, dynamic>{};
       for (final String questionKey in questions.keys) {
         addition.addAll(<String, dynamic>{
+          'uuid': questionnaireResult['uuid'],
           'question': questionKey,
-          'answer': '${questions[questionKey]}'
+          'answer': '${questions[questionKey]}',
+          'timestamp': questionnaireResult['timestamp']
         });
+        questionnaireResultList.add(addition);
+        addition = <String, dynamic>{};
       }
-      questionnaireResultList.add(addition);
     }
     returnMap['questionnaireResults'] = questionnaireResultList;
   }

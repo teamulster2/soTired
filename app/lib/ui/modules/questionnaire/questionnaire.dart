@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/database/models/questionnaire/questionnaire_result.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
@@ -29,8 +28,7 @@ class _QuestionnaireState extends State<Questionnaire> {
   int score = 0;
   int answeredQuestion = 0;
 
-  Map<String, QuestionnaireAnswers?> questionnaireResult =
-      <String, QuestionnaireAnswers?>{};
+  Map<String, String> questionnaireResult = <String, String>{};
 
   @override
   Widget build(BuildContext context) {
@@ -115,17 +113,17 @@ class _QuestionnaireState extends State<Questionnaire> {
               answeredQuestion += 1;
               score += i;
 
-              QuestionnaireAnswers answer;
+              late final String answer;
               if (i == 1) {
-                answer = QuestionnaireAnswers.first;
+                answer = questions[currentQuestion.value].answers[0];
               } else if (i == 2) {
-                answer = QuestionnaireAnswers.second;
+                answer = questions[currentQuestion.value].answers[1];
               } else if (i == 3) {
-                answer = QuestionnaireAnswers.third;
-              } else {
-                answer = QuestionnaireAnswers.fourth;
+                answer = questions[currentQuestion.value].answers[2];
+              } else if (i == 4) {
+                answer = questions[currentQuestion.value].answers[3];
               }
-              questionnaireResult.addAll(<String, QuestionnaireAnswers?>{
+              questionnaireResult.addAll(<String, String>{
                 questions[currentQuestion.value].question: answer
               });
             } else {
@@ -153,7 +151,9 @@ class _QuestionnaireState extends State<Questionnaire> {
                             .databaseManager
                             .writeQuestionnaireResults(<QuestionnaireResult>[
                           QuestionnaireResult(
-                              Utils.generateUuid(), questionnaireResult)
+                              Utils.generateUuid(),
+                              questionnaireResult,
+                              DateTime.now().toIso8601String())
                         ]);
                         Navigator.push(
                             context,

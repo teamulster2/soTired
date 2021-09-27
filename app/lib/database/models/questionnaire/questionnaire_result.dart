@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:so_tired/database/models/questionnaire/questionnaire_answers.dart';
 import 'package:so_tired/utils/utils.dart';
 
 part 'questionnaire_result.g.dart';
@@ -14,17 +13,25 @@ class QuestionnaireResult extends HiveObject {
   String? uuid;
 
   @HiveField(1)
-  Map<String, QuestionnaireAnswers?> questions;
+  Map<String, String> questions;
 
-  QuestionnaireResult(this.uuid, this.questions);
+  @HiveField(2)
+  String? timestamp;
+
+  QuestionnaireResult(this.uuid, this.questions, this.timestamp);
 
   QuestionnaireResult.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
-        questions = json['questions'];
+        questions = json['questions'],
+        timestamp = json['timestamp'];
 
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{'uuid': uuid, 'questions': questions};
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'uuid': uuid,
+        'questions': questions,
+        'timestamp': timestamp
+      };
 
   @override
-  String toString() => 'UUID: $uuid,\nQuestions: $questions';
+  String toString() =>
+      'UUID: $uuid,\nQuestions: $questions,\nTimestamp: $timestamp';
 }
