@@ -147,9 +147,8 @@ void main() {
         },
         'userState': {
           'uuid': _uuidUserState,
-          'currentActivity':
-              Utils.codeUnitsToString([226, 152, 149, 239, 184, 143]),
-          'currentMood': Utils.codeUnitsToString([240, 159, 152, 144]),
+          'currentActivity': 'work',
+          'currentMood': 'bored',
           'timestamp': '2021-09-15T16:04:26.870744'
         },
       },
@@ -158,8 +157,8 @@ void main() {
         'userLog': {},
         'userState': {
           'uuid': _uuidUserState2,
-          'currentActivity': Utils.codeUnitsToString([240, 159, 143, 161]),
-          'currentMood': Utils.codeUnitsToString([240, 159, 164, 169]),
+          'currentActivity': 'home',
+          'currentMood': 'excited',
           'timestamp': '2021-09-15T16:04:26.870744'
         }
       }
@@ -733,11 +732,53 @@ Map<String, dynamic> exportDatabaseAdaptedToServerSyntax() {
       <Map<String, dynamic>>[];
   if (userStates.isNotEmpty) {
     for (final Map<String, dynamic>? userState in userStates) {
+      late final String currentMood;
+      switch (Utils.codeUnitsToString(userState!['currentMood'])) {
+        case '😊':
+          currentMood = 'happy';
+          break;
+        case '🤩':
+          currentMood = 'excited';
+          break;
+        case '😐':
+          currentMood = 'bored';
+          break;
+        case '😭':
+          currentMood = 'sad';
+          break;
+        default:
+          currentMood = '';
+          break;
+      }
+
+      late final String currentActivity;
+      switch (Utils.codeUnitsToString(userState['currentActivity'])) {
+        case '🏡':
+          currentActivity = 'home';
+          break;
+        case '☕️':
+          currentActivity = 'work';
+          break;
+        case '🏫':
+          currentActivity = 'university';
+          break;
+        case '🛍':
+          currentActivity = 'shops';
+          break;
+        case '👨‍👩‍👧‍👦':
+          currentActivity = 'friends / family';
+          break;
+        case '⛳️':
+          currentActivity = 'other';
+          break;
+        default:
+          currentActivity = '';
+          break;
+      }
       final Map<String, dynamic> addition = <String, dynamic>{
-        'uuid': userState!['uuid'],
-        'currentActivity':
-            Utils.codeUnitsToString(userState['currentActivity']),
-        'currentMood': Utils.codeUnitsToString(userState['currentMood']),
+        'uuid': userState['uuid'],
+        'currentActivity': currentActivity,
+        'currentMood': currentMood,
         'timestamp': (userState['timestamp'] as DateTime).toIso8601String(),
         'selfTestUuid': userState['selfTestUuid']
       };

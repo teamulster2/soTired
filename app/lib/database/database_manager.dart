@@ -467,11 +467,53 @@ class DatabaseManager {
         <Map<String, dynamic>>[];
     if (userStates.isNotEmpty) {
       for (final Map<String, dynamic>? userState in userStates) {
+        late final String currentMood;
+        switch (Utils.codeUnitsToString(userState!['currentMood'])) {
+          case '😊':
+            currentMood = 'happy';
+            break;
+          case '🤩':
+            currentMood = 'excited';
+            break;
+          case '😐':
+            currentMood = 'bored';
+            break;
+          case '😭':
+            currentMood = 'sad';
+            break;
+          default:
+            currentMood = '';
+            break;
+        }
+
+        late final String currentActivity;
+        switch (Utils.codeUnitsToString(userState['currentActivity'])) {
+          case '🏡':
+            currentActivity = 'home';
+            break;
+          case '☕️':
+            currentActivity = 'work';
+            break;
+          case '🏫':
+            currentActivity = 'university';
+            break;
+          case '🛍':
+            currentActivity = 'shops';
+            break;
+          case '👨‍👩‍👧‍👦':
+            currentActivity = 'friends / family';
+            break;
+          case '⛳️':
+            currentActivity = 'other';
+            break;
+          default:
+            currentActivity = '';
+            break;
+        }
         final Map<String, dynamic> addition = <String, dynamic>{
-          'uuid': userState!['uuid'],
-          'currentActivity':
-              Utils.codeUnitsToString(userState['currentActivity']),
-          'currentMood': Utils.codeUnitsToString(userState['currentMood']),
+          'uuid': userState['uuid'],
+          'currentActivity': currentActivity,
+          'currentMood': currentMood,
           'timestamp': (userState['timestamp'] as DateTime).toIso8601String(),
           'selfTestUuid': userState['selfTestUuid']
         };
