@@ -90,47 +90,47 @@ type UserLog struct {
 }
 
 // Mood holds the provided mood of an user.
-type Mood int
+type Mood string
 
 const (
 	// Happy is the highest mood
-	Happy Mood = iota
+	Happy Mood = "Happy"
 	// Exited is the second highest mood
-	Exited
+	Exited Mood = "Exited"
 	// Bored is the second lowest mood
-	Bored
+	Bored Mood = "Bored"
 	// Sad is the lowest Mood
-	Sad
+	Sad Mood = "Sad"
 )
 
 // Activity holds the provided activity of an user.
-type Activity int
+type Activity string
 
 const (
 	// Home location
-	Home Activity = iota
+	Home Activity = "Home"
 	// Work location
-	Work
+	Work Activity = "Work"
 	// University location
-	University
+	University Activity = "University"
 	// Shops location
-	Shops
+	Shops Activity = "Shops"
 	// FriendsOrFamily location
-	FriendsOrFamily
+	FriendsOrFamily Activity = "friendsOrFamiliy"
 	// Other location
-	Other
+	Other Activity = "Other"
 )
 
 // AccessMethod holds the provided accessMethod an user.
-type AccessMethod int
+type AccessMethod string
 
 const (
 	// Notification over the app
-	Notification AccessMethod = iota
+	Notification AccessMethod = "Notification"
 	// RegulareAppStart by user
-	RegulareAppStart
+	RegulareAppStart AccessMethod = "RegulareAppStart"
 	// InviteLink lead to start of app
-	InviteLink
+	InviteLink AccessMethod = "InviteLink"
 )
 
 // SSTResult holds the sstResult value.

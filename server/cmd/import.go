@@ -38,12 +38,14 @@ type clientUserLog struct {
 func (ul clientUserLog) toAccessMethod() (AccessMethod, error) {
 	switch ul.AccessMethod {
 	case "UserAccessMethod.notification":
+		return Notification, nil
 	case "UserAccessMethod.regularAppStart":
+		return RegulareAppStart, nil
 	case "UserAccessMethod.inviteUrl":
-	default:
+		return InviteLink, nil
 	}
-	return 0, nil
-} // FIXME implement me
+	return "", errors.New("unknown AccesMethode") // TODO Change to own error type
+}
 func (ul clientUserLog) getTime() (time.Time, error) {
 	timestamp, err := time.Parse(ul.TimeStamp, ul.TimeStamp)
 	if err != nil {
@@ -60,15 +62,39 @@ type clientUserState struct {
 }
 
 func (us clientUserState) toMood() (Mood, error) {
-	return 0, nil
-} // FIXME implement me
+	switch us.CurrentMood {
+	case "happy":
+		return Happy, nil
+	case "excited":
+		return Exited, nil
+	case "bored":
+		return Bored, nil
+	case "sad":
+		return Sad, nil
+	}
+	return "", errors.New("unknown AccesMethode") // TODO Change to own error type
+}
 func (us clientUserState) toActivity() (Activity, error) {
-	return 0, nil
-} // FIXME implement me
+	switch us.CurrentActivity {
+	case "home":
+		return Home, nil
+	case "work":
+		return Work, nil
+	case "university":
+		return University, nil
+	case "shops":
+		return Shops, nil
+	case "friends / family":
+		return FriendsOrFamily, nil
+	case "other":
+		return Other, nil
+	}
+	return "", errors.New("unknown AccesMethode") // TODO Change to own error type
+}
 func (us clientUserState) getTime() (time.Time, error) {
 	timestamp, err := time.Parse(us.TimeStamp, us.TimeStamp)
 	if err != nil {
-		return time.Time{}, errors.Wrap(err, "can't parse timeformate")
+		return time.Time{}, errors.Wrap(err, "can't parse timeformate") // TODO Change to own error type
 	}
 	return timestamp, nil
 }
@@ -81,8 +107,12 @@ type clientQuestionnaireResult struct {
 }
 
 func (qr clientQuestionnaireResult) getTime() (time.Time, error) {
-	return time.Time{}, nil
-} // FIXME implement me
+	timestamp, err := time.Parse(qr.TimeStamp, qr.TimeStamp)
+	if err != nil {
+		return time.Time{}, errors.Wrap(err, "can't parse timeformate") // TODO Change to own error type
+	}
+	return timestamp, nil
+}
 
 func fromClientJSON(in []byte) (clientJSON, error) {
 	var parsedJSON clientJSON
@@ -133,16 +163,35 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 		}
 
 		// NOTE use the earlier timestamp
-		timestamp := pair.UserLog.getTime()
-		if pair.UserState.getTime().Before(timestamp) {
-			timestamp = pair.UserState.getTime()
+		timestamp, err := pair.UserLog.getTime()
+		if err != nil {
+			return err
+		}
+		stateTime, err := pair.UserState.getTime()
+		if err != nil {
+			return err
+		}
+		if stateTime.Before(timestamp) {
+			timestamp = stateTime
+		}
+		mood, err := pair.UserState.toMood()
+		if err != nil {
+			return err
+		}
+		activity, err := pair.UserState.toActivity()
+		if err != nil {
+			return err
+		}
+		access, err := pair.UserLog.toAccessMethod()
+		if err != nil {
+			return err
 		}
 
 		ul := UserLog{
 			UserID:        user.ID,
-			Mood:          pair.UserState.toMood(),
-			Activity:      pair.UserState.toActivity(),
-			AccessMethod:  pair.UserLog.toAccessMethod(),
+			Mood:          mood,
+			Activity:      activity,
+			AccessMethod:  access,
 			SSTResultID:   newSSTResult.ID,
 			PVTResultID:   newPVTResult.ID,
 			TimeStamp:     timestamp,
@@ -159,7 +208,11 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 			continue
 		}
 		// search or create answer and question matching the text
-		ql := QuestionnaireLog{UserID: user.ID, Timestamp: jQR.getTime()}
+		timestamp, err := jQR.getTime()
+		if err != nil {
+			return err
+		}
+		ql := QuestionnaireLog{UserID: user.ID, Timestamp: timestamp}
 		db.Create(&ql)
 
 		q := Question{
