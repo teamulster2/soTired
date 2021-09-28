@@ -8,9 +8,9 @@ import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
-import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_diff.dart';
-import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_progress.dart';
-import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_square.dart';
+import 'package:so_tired/ui/modules/psychomotor_vigilance_task/widgets/psychomotor_vigilance_task_diff.dart';
+import 'package:so_tired/ui/modules/psychomotor_vigilance_task/widgets/psychomotor_vigilance_task_progress.dart';
+import 'package:so_tired/ui/modules/psychomotor_vigilance_task/widgets/psychomotor_vigilance_task_square.dart';
 import 'package:so_tired/utils/utils.dart';
 
 class PsychomotorVigilanceTask extends StatefulWidget {
@@ -27,13 +27,15 @@ class PsychomotorVigilanceTask extends StatefulWidget {
   final String selfTestUuid;
 
   @override
-  _PsychomotorVigilanceTaskState createState() => _PsychomotorVigilanceTaskState();
+  _PsychomotorVigilanceTaskState createState() =>
+      _PsychomotorVigilanceTaskState();
 }
 
 /// This widget holds the whole pvt test.
 /// The game engine is included.
-/// Widgets used: [PVTTestProgress], [PVTTestSquare] and [PVTTestDiff].
-class _PsychomotorVigilanceTaskState extends State<PsychomotorVigilanceTask> with WidgetsBindingObserver {
+/// Widgets used: [PsychomotorVigilanceTaskProgress], [PsychomotorVigilanceTaskSquare] and [PsychomotorVigilanceTaskDiff].
+class _PsychomotorVigilanceTaskState extends State<PsychomotorVigilanceTask>
+    with WidgetsBindingObserver {
   ValueNotifier<bool> boxAppears = ValueNotifier<bool>(false);
 
   final int max = 3;
@@ -90,7 +92,7 @@ class _PsychomotorVigilanceTaskState extends State<PsychomotorVigilanceTask> wit
                           valueListenable: counter,
                           builder: (BuildContext context, Object? value,
                                   Widget? widget) =>
-                              PVTTestProgress(
+                              PsychomotorVigilanceTaskProgress(
                                   counter: counter.value, max: max)),
                       Container(
                           height: MediaQuery.of(context).size.height - 300,
@@ -100,15 +102,16 @@ class _PsychomotorVigilanceTaskState extends State<PsychomotorVigilanceTask> wit
                             children: <Widget>[
                               Visibility(
                                   visible: boxAppears.value,
-                                  child: const PVTTestSquare()),
+                                  child:
+                                      const PsychomotorVigilanceTaskSquare()),
                               ValueListenableBuilder<bool>(
                                 valueListenable: showDiff,
                                 builder: (BuildContext context, Object? value,
                                         Widget? widget) =>
                                     Visibility(
                                         visible: showDiff.value,
-                                        child:
-                                            PVTTestDiff(diff: diff.toString())),
+                                        child: PsychomotorVigilanceTaskDiff(
+                                            diff: diff.toString())),
                               ),
                             ],
                           )),

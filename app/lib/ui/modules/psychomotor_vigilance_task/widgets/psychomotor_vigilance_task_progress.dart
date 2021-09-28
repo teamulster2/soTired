@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
 /// This widget shows the current pvt progress. So the user knows how many boxes he has to click and how many boxes he already clicked.
-class PVTTestProgress extends StatefulWidget {
-  const PVTTestProgress({required this.max, required this.counter, Key? key})
+class PsychomotorVigilanceTaskProgress extends StatefulWidget {
+  const PsychomotorVigilanceTaskProgress(
+      {required this.max, required this.counter, Key? key})
       : super(key: key);
 
   final int max;
   final int counter;
 
   @override
-  _PVTTestProgressState createState() => _PVTTestProgressState();
+  _PsychomotorVigilanceTaskProgressState createState() =>
+      _PsychomotorVigilanceTaskProgressState();
 }
 
-class _PVTTestProgressState extends State<PVTTestProgress> {
+class _PsychomotorVigilanceTaskProgressState
+    extends State<PsychomotorVigilanceTaskProgress> {
   @override
   Widget build(BuildContext context) => Container(
         color: Theme.of(context).primaryColorDark.withOpacity(0.2),
