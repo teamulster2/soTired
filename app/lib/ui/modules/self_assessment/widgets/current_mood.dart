@@ -17,7 +17,7 @@ class CurrentEmotionalState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Select your current emotional state: ',
+            'Select your current mood: ',
             style: Theme.of(context).textTheme.headline3,
             textAlign: TextAlign.center,
           ),

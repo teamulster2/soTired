@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/modules/self_assessment/widgets/current_activity.dart';
-import 'package:so_tired/ui/modules/self_assessment/widgets/current_emotional_state.dart';
+import 'package:so_tired/ui/modules/self_assessment/widgets/current_mood.dart';
 import 'package:so_tired/utils/utils.dart';
 
 /// This widget shows the whole self assessment part of the app.
