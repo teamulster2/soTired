@@ -25,25 +25,21 @@ class CurrentEmotionalState extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x8A]),
-                image: const AssetImage('assets/images/happy.png'),
                 text: 'happy',
                 emoji: const <int>[0xF0, 0x9F, 0x98, 0x8A]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0xA4, 0xA9]),
-                image: const AssetImage('assets/images/exiting.png'),
                 text: 'excited',
                 emoji: const <int>[0xF0, 0x9F, 0xA4, 0xA9]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x90]),
-                image: const AssetImage('assets/images/boring.png'),
                 text: 'bored',
                 emoji: const <int>[0xF0, 0x9F, 0x98, 0x90]),
             const SizedBox(width: 30),
             EmotionalState(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0xAD]),
-                image: const AssetImage('assets/images/angry.png'),
                 text: 'sad',
                 emoji: const <int>[0xF0, 0x9F, 0x98, 0xAD]),
           ]),
@@ -54,13 +50,8 @@ class CurrentEmotionalState extends StatelessWidget {
 /// This widget shows the emotional states with its text.
 class EmotionalState extends StatelessWidget {
   const EmotionalState(
-      {required this.image,
-      required this.text,
-      required this.onTap,
-      required this.emoji,
-      Key? key})
+      {required this.text, required this.onTap, required this.emoji, Key? key})
       : super(key: key);
-  final AssetImage image;
   final String text;
   final VoidCallback onTap;
   final List<int> emoji;

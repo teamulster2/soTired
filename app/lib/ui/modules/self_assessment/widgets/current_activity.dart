@@ -24,19 +24,16 @@ class CurrentActivity extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x8F, 0xA1]),
-                icon: Icons.home_rounded,
                 text: 'home',
                 emoji: const <int>[0xF0, 0x9F, 0x8F, 0xA1]),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap(<int>[0xE2, 0x98, 0x95]),
-                icon: Icons.work_rounded,
                 text: 'work',
                 emoji: const <int>[0xE2, 0x98, 0x95]),
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x8F, 0xAB]),
-                icon: Icons.maps_home_work_rounded,
                 text: 'university',
                 emoji: const <int>[0xF0, 0x9F, 0x8F, 0xAB]),
           ]),
@@ -44,7 +41,6 @@ class CurrentActivity extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
                 onTap: () => onTap(<int>[0xF0, 0x9F, 0x9B, 0x8D]),
-                icon: Icons.shopping_bag_rounded,
                 text: 'shops',
                 emoji: const <int>[0xF0, 0x9F, 0x9B, 0x8D]),
             const SizedBox(width: 40),
@@ -76,7 +72,6 @@ class CurrentActivity extends StatelessWidget {
                       0x91,
                       0xA6
                     ]),
-                icon: Icons.people_rounded,
                 text: 'friends / family',
                 emoji: const <int>[
                   0xF0,
@@ -108,7 +103,6 @@ class CurrentActivity extends StatelessWidget {
             const SizedBox(width: 40),
             Activity(
                 onTap: () => onTap(<int>[0xE2, 0x9B, 0xB3, 0xEF, 0xB8, 0x8F]),
-                icon: Icons.my_location_rounded,
                 text: 'other',
                 emoji: const <int>[0xE2, 0x9B, 0xB3, 0xEF, 0xB8, 0x8F]),
           ]),
@@ -119,13 +113,8 @@ class CurrentActivity extends StatelessWidget {
 /// This class contains the current activity ui part.
 class Activity extends StatelessWidget {
   const Activity(
-      {required this.icon,
-      required this.emoji,
-      required this.text,
-      required this.onTap,
-      Key? key})
+      {required this.emoji, required this.text, required this.onTap, Key? key})
       : super(key: key);
-  final IconData icon;
   final String text;
   final VoidCallback onTap;
   final List<int> emoji;
