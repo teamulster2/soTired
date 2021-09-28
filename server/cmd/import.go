@@ -35,8 +35,22 @@ type clientUserLog struct {
 	TimeStamp                string `json:"timestamp"`
 }
 
-func (ul clientUserLog) toAccessMethod() AccessMethod { return 0 }           // FIXME implement me
-func (ul clientUserLog) getTime() time.Time           { return time.Time{} } // FIXME implement me
+func (ul clientUserLog) toAccessMethod() (AccessMethod, error) {
+	switch ul.AccessMethod {
+	case "UserAccessMethod.notification":
+	case "UserAccessMethod.regularAppStart":
+	case "UserAccessMethod.inviteUrl":
+	default:
+	}
+	return 0, nil
+} // FIXME implement me
+func (ul clientUserLog) getTime() (time.Time, error) {
+	timestamp, err := time.Parse(ul.TimeStamp, ul.TimeStamp)
+	if err != nil {
+		return time.Time{}, errors.Wrap(err, "can't parse timeformate")
+	}
+	return timestamp, nil
+}
 
 type clientUserState struct {
 	UUID            string `json:"uuid"`
@@ -45,9 +59,19 @@ type clientUserState struct {
 	TimeStamp       string `json:"timestamp"`
 }
 
-func (us clientUserState) toMood() Mood         { return 0 }           // FIXME implement me
-func (us clientUserState) toActivity() Activity { return 0 }           // FIXME implement me
-func (us clientUserState) getTime() time.Time   { return time.Time{} } // FIXME implement me
+func (us clientUserState) toMood() (Mood, error) {
+	return 0, nil
+} // FIXME implement me
+func (us clientUserState) toActivity() (Activity, error) {
+	return 0, nil
+} // FIXME implement me
+func (us clientUserState) getTime() (time.Time, error) {
+	timestamp, err := time.Parse(us.TimeStamp, us.TimeStamp)
+	if err != nil {
+		return time.Time{}, errors.Wrap(err, "can't parse timeformate")
+	}
+	return timestamp, nil
+}
 
 type clientQuestionnaireResult struct {
 	UUID      string `json:"uuid"`
@@ -56,7 +80,9 @@ type clientQuestionnaireResult struct {
 	TimeStamp string `json:"timestamp"`
 }
 
-func (qr clientQuestionnaireResult) getTime() time.Time { return time.Time{} } // FIXME implement me
+func (qr clientQuestionnaireResult) getTime() (time.Time, error) {
+	return time.Time{}, nil
+} // FIXME implement me
 
 func fromClientJSON(in []byte) (clientJSON, error) {
 	var parsedJSON clientJSON
