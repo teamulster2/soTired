@@ -487,7 +487,9 @@ class DatabaseManager {
         }
 
         late final String currentActivity;
-        switch (Utils.codeUnitsToString(userState['currentActivity'])) {
+        final String currentActivityInput =
+            Utils.codeUnitsToString(userState['currentActivity']);
+        switch (currentActivityInput) {
           case '🏡':
             currentActivity = 'home';
             break;

@@ -64,23 +64,24 @@ Future<void> sendData(String url) async {
         },
         body: jsonDatabase,
       );
-      databaseManager.latestDatabaseExport = databaseExport;
-      final SettingsObject settings = databaseManager.getSettings();
-      databaseManager.writeSettings(SettingsObject(
-          settings.serverUrl,
-          settings.studyName,
-          settings.appVersion,
-          settings.clientUuid,
-          databaseExport));
 
-      if (response.statusCode != 200) {
-        final int statusCode = response.statusCode;
-        throw HttpErrorCodeException('Failed to send data.\n'
-            'Response status code: $statusCode');
-      } else {
+      if (response.statusCode == 200) {
+        databaseManager.latestDatabaseExport = databaseExport;
+        final SettingsObject settings = databaseManager.getSettings();
+        databaseManager.writeSettings(SettingsObject(
+            settings.serverUrl,
+            settings.studyName,
+            settings.appVersion,
+            settings.clientUuid,
+            databaseExport));
+
         Notifications().showSimpleNotification(
             ConfigManager().clientConfig!.studyName,
             "Your result upload was successful.");
+      } else {
+        final int statusCode = response.statusCode;
+        throw HttpErrorCodeException('Failed to send data.\n'
+            'Response status code: $statusCode');
       }
       debugPrint('Response statusCode: ${response.statusCode.toString()}');
     } else {

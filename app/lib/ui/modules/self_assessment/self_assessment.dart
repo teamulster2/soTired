@@ -30,7 +30,7 @@ class SelfAssessment extends StatefulWidget {
 class _SelfAssessmentState extends State<SelfAssessment> {
   late ValueNotifier<List<int>> emotionalState =
       ValueNotifier<List<int>>(<int>[]);
-  late String currentActivity;
+  late List<int> currentActivity;
 
   @override
   Widget build(BuildContext context) {
@@ -52,17 +52,17 @@ class _SelfAssessmentState extends State<SelfAssessment> {
         emotionalState.value = value;
       });
     } else {
-      return CurrentActivity(onTap: (String value) {
+      return CurrentActivity(onTap: (List<int> value) {
         currentActivity = value;
         final String uuid = Utils.generateUuid();
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writeUserStates(<UserState>[
-          UserState(uuid, Utils.stringToCodeUnits(currentActivity),
-              emotionalState.value, DateTime.now(), widget.selfTestUuid)
+          UserState(uuid, currentActivity, emotionalState.value, DateTime.now(),
+              widget.selfTestUuid)
         ]);
         widget.setMood(Utils.codeUnitsToString(emotionalState.value));
-        widget.setActivity(currentActivity);
+        widget.setActivity(Utils.codeUnitsToString(currentActivity));
         widget.onFinished();
       });
     }

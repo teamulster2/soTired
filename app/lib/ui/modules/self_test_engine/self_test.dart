@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
-import 'package:so_tired/ui/modules/pvt_test/pvt_test.dart';
+import 'package:so_tired/ui/modules/psychomotor_vigilance_task/psychomotor_vigilance_task.dart';
 import 'package:so_tired/ui/modules/self_assessment/self_assessment.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_state.dart';
@@ -60,7 +60,7 @@ class _SelfTestState extends State<SelfTest> {
           setLevel: (int value) => engine.levelSpatialSpanTask = value,
           selfTestUuid: selfTestUuid);
     } else if (engine.currentState.value.toString() == PVTState().toString()) {
-      return PVTTest(
+      return PsychomotorVigilanceTask(
           onFinished: () => engine.handleState(),
           setDiff: (int value) => engine.averageDiffPVT = value,
           selfTestUuid: selfTestUuid);
