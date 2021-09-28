@@ -13,8 +13,8 @@ import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_progress.dart';
 import 'package:so_tired/ui/modules/pvt_test/widgets/pvt_test_square.dart';
 import 'package:so_tired/utils/utils.dart';
 
-class PVTTest extends StatefulWidget {
-  const PVTTest(
+class PsychomotorVigilanceTask extends StatefulWidget {
+  const PsychomotorVigilanceTask(
       {required this.onFinished,
       required this.setDiff,
       required this.selfTestUuid,
@@ -27,13 +27,13 @@ class PVTTest extends StatefulWidget {
   final String selfTestUuid;
 
   @override
-  _PVTTestState createState() => _PVTTestState();
+  _PsychomotorVigilanceTaskState createState() => _PsychomotorVigilanceTaskState();
 }
 
 /// This widget holds the whole pvt test.
 /// The game engine is included.
 /// Widgets used: [PVTTestProgress], [PVTTestSquare] and [PVTTestDiff].
-class _PVTTestState extends State<PVTTest> with WidgetsBindingObserver {
+class _PsychomotorVigilanceTaskState extends State<PsychomotorVigilanceTask> with WidgetsBindingObserver {
   ValueNotifier<bool> boxAppears = ValueNotifier<bool>(false);
 
   final int max = 3;
