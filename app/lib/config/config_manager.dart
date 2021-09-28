@@ -44,7 +44,6 @@ class ConfigManager {
       ]
       ..notificationText = "Are you 'soTired'? Let's find out!"
       ..isSpatialSpanTaskEnabled = true
-      ..isMentalArithmeticEnabled = true
       ..isPsychomotorVigilanceTaskEnabled = true
       ..isQuestionnaireEnabled = true
       ..isCurrentActivityEnabled = true
@@ -132,7 +131,6 @@ class ConfigManager {
           List<String>.from(inputJson['utcNotificationTimes']),
       'notificationText': studyJson['notificationText'],
       'isSpatialSpanTaskEnabled': studyJson['isSpatialSpanTaskEnabled'],
-      'isMentalArithmeticEnabled': studyJson['isMentalArithmeticEnabled'],
       'isPsychomotorVigilanceTaskEnabled':
           studyJson['isPsychomotorVigilanceTaskEnabled'],
       'isQuestionnaireEnabled': studyJson['isQuestionnaireEnabled'],
@@ -160,7 +158,6 @@ class ConfigManager {
           json.contains('notificationText') &&
           json.contains('isSpatialSpanTaskEnabled') &&
           json.contains('isPsychomotorVigilanceTaskEnabled') &&
-          json.contains('isMentalArithmeticEnabled') &&
           json.contains('isQuestionnaireEnabled') &&
           json.contains('isCurrentActivityEnabled') &&
           json.contains('isStudy') &&

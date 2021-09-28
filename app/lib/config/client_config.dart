@@ -9,7 +9,6 @@ class ClientConfig {
   late final String _notificationText;
 
   late final bool _isSpatialSpanTaskEnabled;
-  late final bool _isMentalArithmeticEnabled;
   late final bool _isPsychomotorVigilanceTaskEnabled;
   late final bool _isQuestionnaireEnabled;
   late final bool _isCurrentActivityEnabled;
@@ -24,7 +23,6 @@ class ClientConfig {
     _notificationText = clientConfigBuilder._notificationText;
 
     _isSpatialSpanTaskEnabled = clientConfigBuilder._isSpatialSpanTaskEnabled;
-    _isMentalArithmeticEnabled = clientConfigBuilder._isMentalArithmeticEnabled;
     _isPsychomotorVigilanceTaskEnabled =
         clientConfigBuilder._isPsychomotorVigilanceTaskEnabled;
     _isQuestionnaireEnabled = clientConfigBuilder._isQuestionnaireEnabled;
@@ -41,8 +39,6 @@ class ClientConfig {
   get notificationText => _notificationText;
 
   get isSpatialSpanTaskEnabled => _isSpatialSpanTaskEnabled;
-
-  get isMentalArithmeticEnabled => _isMentalArithmeticEnabled;
 
   get isPsychomotorVigilanceTaskEnabled => _isPsychomotorVigilanceTaskEnabled;
 
@@ -62,7 +58,6 @@ class ClientConfig {
       : _utcNotificationTimes = json['utcNotificationTimes'],
         _notificationText = json['notificationText'],
         _isSpatialSpanTaskEnabled = json['isSpatialSpanTaskEnabled'],
-        _isMentalArithmeticEnabled = json['isMentalArithmeticEnabled'],
         _isPsychomotorVigilanceTaskEnabled =
             json['isPsychomotorVigilanceTaskEnabled'],
         _isQuestionnaireEnabled = json['isQuestionnaireEnabled'],
@@ -78,7 +73,6 @@ class ClientConfig {
       'utcNotificationTimes': _utcNotificationTimes,
       'notificationText': _notificationText,
       'isSpatialSpanTaskEnabled': _isSpatialSpanTaskEnabled,
-      'isMentalArithmeticEnabled': _isMentalArithmeticEnabled,
       'isPsychomotorVigilanceTaskEnabled': _isPsychomotorVigilanceTaskEnabled,
       'isQuestionnaireEnabled': _isQuestionnaireEnabled,
       'isCurrentActivityEnabled': _isCurrentActivityEnabled,
@@ -99,7 +93,6 @@ class ClientConfigBuilder {
   late final String _notificationText;
 
   late final bool _isSpatialSpanTaskEnabled;
-  late final bool _isMentalArithmeticEnabled;
   late final bool _isPsychomotorVigilanceTaskEnabled;
   late final bool _isQuestionnaireEnabled;
   late final bool _isCurrentActivityEnabled;
@@ -122,9 +115,6 @@ class ClientConfigBuilder {
   set isPsychomotorVigilanceTaskEnabled(
           bool isPsychomotorVigilanceTaskEnabled) =>
       _isPsychomotorVigilanceTaskEnabled = isPsychomotorVigilanceTaskEnabled;
-
-  set isMentalArithmeticEnabled(bool isMentalArithmeticEnabled) =>
-      _isMentalArithmeticEnabled = isMentalArithmeticEnabled;
 
   set isQuestionnaireEnabled(bool isQuestionnaireEnabled) =>
       _isQuestionnaireEnabled = isQuestionnaireEnabled;
@@ -187,7 +177,6 @@ class ClientConfigBuilder {
       jsonResponse.containsKey('utcNotificationTimes') &&
           jsonResponse.containsKey('notificationText') &&
           jsonResponse.containsKey('isSpatialSpanTaskEnabled') &&
-          jsonResponse.containsKey('isMentalArithmeticEnabled') &&
           jsonResponse.containsKey('isPsychomotorVigilanceTaskEnabled') &&
           jsonResponse.containsKey('isQuestionnaireEnabled') &&
           jsonResponse.containsKey('isCurrentActivityEnabled') &&
