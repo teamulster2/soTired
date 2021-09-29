@@ -9,7 +9,6 @@ import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/exceptions/exceptions.dart';
-import 'package:so_tired/utils/utils.dart';
 
 /// This class is responsible for all matters regarding database interactions.
 /// It holds all boxes (comparable to tables in SQLite) and provides a CRUD API
@@ -467,55 +466,10 @@ class DatabaseManager {
         <Map<String, dynamic>>[];
     if (userStates.isNotEmpty) {
       for (final Map<String, dynamic>? userState in userStates) {
-        late final String currentMood;
-        switch (Utils.codeUnitsToString(userState!['currentMood'])) {
-          case '😊':
-            currentMood = 'happy';
-            break;
-          case '🤩':
-            currentMood = 'excited';
-            break;
-          case '😐':
-            currentMood = 'bored';
-            break;
-          case '😭':
-            currentMood = 'sad';
-            break;
-          default:
-            currentMood = '';
-            break;
-        }
-
-        late final String currentActivity;
-        final String currentActivityInput =
-            Utils.codeUnitsToString(userState['currentActivity']);
-        switch (currentActivityInput) {
-          case '🏡':
-            currentActivity = 'home';
-            break;
-          case '☕️':
-            currentActivity = 'work';
-            break;
-          case '🏫':
-            currentActivity = 'university';
-            break;
-          case '🛍':
-            currentActivity = 'shops';
-            break;
-          case '👨‍👩‍👧‍👦':
-            currentActivity = 'friends / family';
-            break;
-          case '⛳️':
-            currentActivity = 'other';
-            break;
-          default:
-            currentActivity = '';
-            break;
-        }
         final Map<String, dynamic> addition = <String, dynamic>{
-          'uuid': userState['uuid'],
-          'currentActivity': currentActivity,
-          'currentMood': currentMood,
+          'uuid': userState!['uuid'],
+          'currentActivity': userState['currentActivity'],
+          'currentMood': userState['currentMood'],
           'timestamp': (userState['timestamp'] as DateTime).toIso8601String(),
           'selfTestUuid': userState['selfTestUuid']
         };

@@ -28,41 +28,41 @@ class SelfAssessment extends StatefulWidget {
 }
 
 class _SelfAssessmentState extends State<SelfAssessment> {
-  late ValueNotifier<List<int>> emotionalState =
-      ValueNotifier<List<int>>(<int>[]);
-  late List<int> currentActivity;
+  late ValueNotifier<List<String>> currentMood =
+      ValueNotifier<List<String>>(<String>[]);
+  late String currentActivity;
 
   @override
   Widget build(BuildContext context) {
-    emotionalState.value = <int>[];
+    currentMood.value = <String>[];
     return Container(
       color: Theme.of(context).backgroundColor,
       height: MediaQuery.of(context).size.height,
-      child: ValueListenableBuilder<List<int>>(
-          valueListenable: emotionalState,
-          builder: (BuildContext context, List<int> value, Widget? child) =>
+      child: ValueListenableBuilder<List<String>>(
+          valueListenable: currentMood,
+          builder: (BuildContext context, List<String> value, Widget? child) =>
               getWidget()),
     );
   }
 
   /// This method returns the widget with the mood or activity question.
   Widget getWidget() {
-    if (emotionalState.value.isEmpty) {
-      return CurrentEmotionalState(onTap: (List<int> value) {
-        emotionalState.value = value;
+    if (currentMood.value.isEmpty) {
+      return CurrentMood(onTap: (List<String> value) {
+        currentMood.value = value;
       });
     } else {
-      return CurrentActivity(onTap: (List<int> value) {
+      return CurrentActivity(onTap: (String value) {
         currentActivity = value;
         final String uuid = Utils.generateUuid();
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writeUserStates(<UserState>[
-          UserState(uuid, currentActivity, emotionalState.value, DateTime.now(),
+          UserState(uuid, currentActivity, currentMood.value.first, DateTime.now(),
               widget.selfTestUuid)
         ]);
-        widget.setMood(Utils.codeUnitsToString(emotionalState.value));
-        widget.setActivity(Utils.codeUnitsToString(currentActivity));
+        widget.setMood(currentMood.value.first);
+        widget.setActivity(currentActivity);
         widget.onFinished();
       });
     }

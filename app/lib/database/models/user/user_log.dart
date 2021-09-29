@@ -7,7 +7,7 @@ part 'user_log.g.dart';
 
 /// This class defines the [UserLog] model by extending a [HiveObject].
 /// It holds an [uuid], a [accessMethod], a [Map] defining which game the
-/// user has executed and a [timestamp].
+/// user has executed, a [timestamp] and a [selfTestUuid].
 /// The UUID can be generated using the [Utils] class.
 @HiveType(typeId: 1)
 class UserLog extends HiveObject {
