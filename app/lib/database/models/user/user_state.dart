@@ -19,20 +19,34 @@ class UserState extends HiveObject {
   @HiveField(2)
   List<int>? currentMood;
 
-  UserState(this.uuid, this.currentActivity, this.currentMood);
+  @HiveField(3)
+  DateTime? timestamp;
+
+  @HiveField(4)
+  String? selfTestUuid;
+
+  UserState(this.uuid, this.currentActivity, this.currentMood, this.timestamp,
+      this.selfTestUuid);
 
   UserState.fromJson(Map<String, dynamic> json)
       : uuid = json['uuid'],
         currentActivity = json['currentActivity'],
-        currentMood = json['currentMood'];
+        currentMood = json['currentMood'],
+        timestamp = json['timestamp'],
+        selfTestUuid = json['selfTestUuid'];
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'uuid': uuid,
         'currentActivity': currentActivity,
-        'currentMood': currentMood
+        'currentMood': currentMood,
+        'timestamp': timestamp,
+        'selfTestUuid': selfTestUuid
       };
 
   @override
-  String toString() => 'UUID: $uuid,\nCurrentActivity: $currentActivity,\n'
-      'CurrentMood: $currentMood';
+  String toString() => 'UUID: $uuid,\n'
+      'CurrentActivity: $currentActivity,\n'
+      'CurrentMood: $currentMood,\n'
+      'Timestamp: $timestamp,\n'
+      'SelfTestUuid: $selfTestUuid';
 }

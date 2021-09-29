@@ -165,6 +165,15 @@ class MockDatabaseManager extends _i1.Mock implements _i9.DatabaseManager {
   }
 
   @override
+  Map<String, dynamic> get latestDatabaseExport =>
+      (super.noSuchMethod(Invocation.getter(#latestDatabaseExport),
+          returnValue: <String, dynamic>{}) as Map<String, dynamic>);
+  @override
+  set latestDatabaseExport(Map<String, dynamic>? _latestDatabaseExport) =>
+      super.noSuchMethod(
+          Invocation.setter(#latestDatabaseExport, _latestDatabaseExport),
+          returnValueForMissingStub: null);
+  @override
   String get databasePath =>
       (super.noSuchMethod(Invocation.getter(#databasePath), returnValue: '')
           as String);

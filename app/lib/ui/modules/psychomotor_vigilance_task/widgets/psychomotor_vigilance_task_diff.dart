@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 /// This widget shows the difference between a pvt square shown and tapping the screen.
 /// Time difference in milliseconds.
-class PVTTestDiff extends StatelessWidget {
-  const PVTTestDiff({required this.diff, Key? key}) : super(key: key);
+class PsychomotorVigilanceTaskDiff extends StatelessWidget {
+  const PsychomotorVigilanceTaskDiff({required this.diff, Key? key})
+      : super(key: key);
 
   final String diff;
 

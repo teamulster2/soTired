@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/utils/utils.dart';
 
 part 'personal_high_score.g.dart';
@@ -16,7 +16,7 @@ class PersonalHighScore extends HiveObject {
   int? gameScore;
 
   @HiveField(2)
-  ModuleType? gameType;
+  UserGameType? gameType;
 
   PersonalHighScore(this.uuid, this.gameScore, this.gameType);
 

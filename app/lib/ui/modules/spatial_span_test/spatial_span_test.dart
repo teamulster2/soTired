@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:so_tired/database/models/module_type.dart';
+import 'package:so_tired/database/models/user/user_game_type.dart';
 import 'package:so_tired/database/models/score/personal_high_score.dart';
 import 'package:so_tired/database/models/user/user_access_method.dart';
 import 'package:so_tired/database/models/user/user_log.dart';
@@ -18,11 +18,16 @@ import 'package:so_tired/utils/utils.dart';
 /// [GameEngine] with business logic to set variables
 class SpatialSpanTest extends StatefulWidget {
   const SpatialSpanTest(
-      {required this.onFinished, required this.setLevel, Key? key})
+      {required this.onFinished,
+      required this.setLevel,
+      required this.selfTestUuid,
+      Key? key})
       : super(key: key);
 
   final VoidCallback onFinished;
   final Function(int) setLevel;
+
+  final String selfTestUuid;
 
   @override
   _SpatialSpanTestState createState() => _SpatialSpanTestState();
@@ -134,9 +139,9 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                         } else if (ido.onOkPush) {
                           widget.setLevel(gameEngine.level.value - 1);
 
-                          final Map<ModuleType, Map<String, dynamic>>
-                              gameValue = <ModuleType, Map<String, dynamic>>{
-                            ModuleType.spatialSpanTask: <String, dynamic>{
+                          final Map<UserGameType, Map<String, dynamic>>
+                              gameValue = <UserGameType, Map<String, dynamic>>{
+                            UserGameType.spatialSpanTask: <String, dynamic>{
                               'levels': gameEngine.level.value - 1
                             }
                           };
@@ -147,7 +152,8 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                                 Utils.generateUuid(),
                                 UserAccessMethod.regularAppStart,
                                 gameValue,
-                                DateTime.now().toString())
+                                DateTime.now(),
+                                widget.selfTestUuid)
                           ]);
 
                           Provider.of<ServiceProvider>(context, listen: false)
@@ -156,7 +162,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                             PersonalHighScore(
                                 Utils.generateUuid(),
                                 gameEngine.level.value - 1,
-                                ModuleType.spatialSpanTask)
+                                UserGameType.spatialSpanTask)
                           ]);
 
                           widget.onFinished();

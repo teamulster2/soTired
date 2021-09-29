@@ -109,19 +109,39 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                       await Provider.of<ServiceProvider>(context, listen: false)
                           .configManager
                           .fetchConfigFromServer(url);
+                      final SettingsObject settings =
+                          Provider.of<ServiceProvider>(context, listen: false)
+                              .databaseManager
+                              .getSettings();
+                      Provider.of<ServiceProvider>(context, listen: false)
+                          .databaseManager
+                          .writeSettings(SettingsObject(
+                              url,
+                              settings.studyName,
+                              settings.appVersion,
+                              settings.clientUuid,
+                              settings.latestDatabaseExport));
+                      _showSuccessMessage();
+                    } on EmptyHiveBoxException {
                       final String appVersion = await Utils.getAppVersion();
                       final String studyName =
                           Provider.of<ServiceProvider>(context, listen: false)
                               .configManager
                               .clientConfig!
                               .studyName;
+                      final Map<String, dynamic> latestDatabaseExport =
+                          Provider.of<ServiceProvider>(context, listen: false)
+                              .databaseManager
+                              .latestDatabaseExport;
                       Provider.of<ServiceProvider>(context, listen: false)
                           .databaseManager
-                          .writeSettings(
-                              SettingsObject(url, studyName, appVersion));
-                      Navigator.pop(context);
-                      _showInfoDialog('Successfully connected to server',
-                          'This URL will be stored and is active now.');
+                          .writeSettings(SettingsObject(
+                              url,
+                              studyName,
+                              appVersion,
+                              Utils.generateUuid(),
+                              latestDatabaseExport));
+                      _showSuccessMessage();
                     } on BaseException catch (e) {
                       Navigator.pop(context);
                       _showExceptionDialog('Something went wrong!', e.msg);
@@ -175,9 +195,16 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                 try {
                   await Utils.sendDataToDatabase(context);
                 } on EmptyHiveBoxException catch (e) {
-                  _showInfoDialog('Ups... Something went wrong!', e.msg);
+                  if (e.msg.contains('SettingsBox')) {
+                    _showExceptionDialog('Ups... Something went wrong!', e.msg);
+                  } else {
+                    _showInfoDialog('Ups... We could not find results!', e.msg);
+                  }
                 } on HttpErrorCodeException catch (e) {
                   _showExceptionDialog('Results could not be sent!', e.msg);
+                } on DatabaseNotChangedException catch (e) {
+                  _showExceptionDialog(
+                      'Ups... No result changes could be found!', e.msg);
                 } catch (e) {
                   _showExceptionDialog(
                       'Ups... There was an error sending your results.',
@@ -250,5 +277,11 @@ class _SettingsState extends State<Settings> with WidgetsBindingObserver {
                         Navigator.pop(context);
                       })
                 ]));
+  }
+
+  void _showSuccessMessage() {
+    Navigator.pop(context);
+    _showInfoDialog('Successfully connected to server',
+        'This URL will be stored and is active now.');
   }
 }

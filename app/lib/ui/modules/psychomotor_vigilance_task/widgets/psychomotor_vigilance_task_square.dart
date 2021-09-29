@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// This widget shows the pvt square itself. The square is shown in the primary color of the app and is aligned in the center of the screen.
-class PVTTestSquare extends StatelessWidget {
-  const PVTTestSquare({Key? key}) : super(key: key);
+class PsychomotorVigilanceTaskSquare extends StatelessWidget {
+  const PsychomotorVigilanceTaskSquare({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Container(

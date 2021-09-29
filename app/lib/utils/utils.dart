@@ -74,6 +74,7 @@ class Utils {
           Provider.of<ServiceProvider>(context, listen: false)
               .databaseManager
               .getSettings();
+
       if (_settings.serverUrl!.isNotEmpty) {
         await sendData(_settings.serverUrl!);
       }

@@ -20,15 +20,16 @@ class UserLogAdapter extends TypeAdapter<UserLog> {
       fields[0] as String?,
       fields[1] as UserAccessMethod?,
       (fields[2] as Map?)?.map((dynamic k, dynamic v) =>
-          MapEntry(k as ModuleType, (v as Map).cast<String, dynamic>())),
-      fields[3] as String?,
+          MapEntry(k as UserGameType, (v as Map).cast<String, dynamic>())),
+      fields[3] as DateTime?,
+      fields[4] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserLog obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.uuid)
       ..writeByte(1)
@@ -36,7 +37,9 @@ class UserLogAdapter extends TypeAdapter<UserLog> {
       ..writeByte(2)
       ..write(obj.gamesExecuted)
       ..writeByte(3)
-      ..write(obj.timestamp);
+      ..write(obj.timestamp)
+      ..writeByte(4)
+      ..write(obj.selfTestUuid);
   }
 
   @override

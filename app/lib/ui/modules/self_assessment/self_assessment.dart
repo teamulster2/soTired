@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:so_tired/database/models/user/user_state.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/modules/self_assessment/widgets/current_activity.dart';
-import 'package:so_tired/ui/modules/self_assessment/widgets/current_emotional_state.dart';
+import 'package:so_tired/ui/modules/self_assessment/widgets/current_mood.dart';
 import 'package:so_tired/utils/utils.dart';
 
 /// This widget shows the whole self assessment part of the app.
@@ -13,12 +13,15 @@ class SelfAssessment extends StatefulWidget {
       {required this.onFinished,
       required this.setMood,
       required this.setActivity,
+      required this.selfTestUuid,
       Key? key})
       : super(key: key);
 
   final VoidCallback onFinished;
   final Function(String) setMood;
   final Function(String) setActivity;
+
+  final String selfTestUuid;
 
   @override
   _SelfAssessmentState createState() => _SelfAssessmentState();
@@ -27,7 +30,7 @@ class SelfAssessment extends StatefulWidget {
 class _SelfAssessmentState extends State<SelfAssessment> {
   late ValueNotifier<List<int>> emotionalState =
       ValueNotifier<List<int>>(<int>[]);
-  late String currentActivity;
+  late List<int> currentActivity;
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +52,17 @@ class _SelfAssessmentState extends State<SelfAssessment> {
         emotionalState.value = value;
       });
     } else {
-      return CurrentActivity(onTap: (String value) {
+      return CurrentActivity(onTap: (List<int> value) {
         currentActivity = value;
         final String uuid = Utils.generateUuid();
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writeUserStates(<UserState>[
-          UserState(uuid, Utils.stringToCodeUnits(currentActivity),
-              emotionalState.value)
+          UserState(uuid, currentActivity, emotionalState.value, DateTime.now(),
+              widget.selfTestUuid)
         ]);
         widget.setMood(Utils.codeUnitsToString(emotionalState.value));
-        widget.setActivity(currentActivity);
+        widget.setActivity(Utils.codeUnitsToString(currentActivity));
         widget.onFinished();
       });
     }

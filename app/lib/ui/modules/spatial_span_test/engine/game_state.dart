@@ -75,7 +75,7 @@ class UserInteractionState extends GameState {
   @override
   void handleState() {
     engine.showDialog(InfoDialogObject(
-        'Now its your turn',
+        "Now it's your turn!",
         'Tap the boxes in the order shown earlier.',
         () {},
         //NOTE: Empty callback, functionality not used in this case.
