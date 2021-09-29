@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -66,6 +67,8 @@ func serveRun(cmd *cobra.Command, args []string) {
 	if err != nil {
 		panic("Failed to connect database")
 	}
+	// migrate all databse relevant structs
+	migrate(db)
 
 	// Set routing rules
 	http.HandleFunc("/", root)
@@ -110,7 +113,6 @@ func config(configPath string, dbPath string) func(w http.ResponseWriter, r *htt
 			NotificationText:                  jsonConfig.NotificationText,
 			IsSpatialSpanTaskEnabled:          jsonConfig.IsSpatialSpanTaskEnabled,
 			IsPsychomotorVigilanceTaskEnabled: jsonConfig.IsPsychomotorVigilanceTaskEnabled,
-			IsMentalArithmeticEnabled:         jsonConfig.IsMentalArithmeticEnabled,
 			IsQuestionnaireEnabled:            jsonConfig.IsQuestionnaireEnabled,
 			IsCurrentActivityEnabled:          jsonConfig.IsCurrentActivityEnabled,
 		}
@@ -168,21 +170,37 @@ func identity(w http.ResponseWriter, r *http.Request) {
 func dataGenerator(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		all, err := ioutil.ReadAll(r.Body)
+		fmt.Println(string(all))
+		idented := &bytes.Buffer{}
+		json.Indent(idented, all, "", "    ")
+		fmt.Println(idented.String())
 		if err != nil {
-			// fmt.Println("failed to read body") // TODO add logger
+			fmt.Println("failed to read body") // TODO add logger
 			w.WriteHeader(http.StatusBadRequest)
 		}
 		var cJSON clientJSON
 		if err := json.Unmarshal(all, &cJSON); err != nil {
-			// fmt.Println(errors.Wrap(err, "failed to parse client data")) // TODO add logger
+			fmt.Println(errors.Wrap(err, "failed to parse client data")) // TODO add logger
 			w.WriteHeader(http.StatusBadRequest)
 		}
 
+		parsed, _ := json.MarshalIndent(cJSON, "", "    ")
+		fmt.Printf("parsed json:\n%s", parsed)
+
 		if err := cJSON.clientJSONToDB(db); err != nil {
-			// fmt.Println(errors.Wrap(err, "failed to write client data to database")) // TODO add logger
+			fmt.Println(errors.Wrap(err, "failed to write client data to database")) // TODO add logger
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 		io.WriteString(w, "thanks for the data :)")
 		// fmt.Println("Recieved data") // TODO add logger
+		allStudys, err := toJSONStudyList(db)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		jsonBytes, err := json.MarshalIndent(fullDB{AllStudies: allStudys}, "", "    ")
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		fmt.Println(string(jsonBytes))
 	}
 }

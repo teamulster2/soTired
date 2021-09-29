@@ -18,8 +18,8 @@ func TestJSONImport(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	jsonClientData, err := fromClientJSON(in)
+	var jsonClientData clientJSON
+	err = json.Unmarshal(in, &jsonClientData)
 	if err != nil {
 		t.Fatal(err)
 	}

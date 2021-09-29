@@ -257,10 +257,9 @@ func (j *jsonQuestionnaireLog) fill(db *gorm.DB) error {
 }
 
 type jsonUserLog struct {
-	UserLog                UserLog
-	SstResult              SSTResult
-	PvtResult              PVTResult
-	MentalArithmeticResult MentalArithmeticResult
+	UserLog   UserLog
+	SstResult SSTResult
+	PvtResult PVTResult
 }
 
 func (j *jsonUserLog) fill(db *gorm.DB) error {

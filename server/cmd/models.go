@@ -8,6 +8,22 @@ import (
 	"time"
 )
 
+// returns database with relevant models migrated
+func migrate(db *gorm.DB) *gorm.DB {
+	// Migrate all structs relevant in the database
+	db.AutoMigrate(&Study{})
+	db.AutoMigrate(&UTCNotificationTime{})
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&UserLog{})
+	db.AutoMigrate(&SSTResult{})
+	db.AutoMigrate(&PVTResult{})
+	db.AutoMigrate(&QuestionnaireLog{})
+	db.AutoMigrate(&QuestionnaireResult{})
+	db.AutoMigrate(&Question{})
+	db.AutoMigrate(&Answer{})
+	return db
+}
+
 // Study holds the configuration data and is refered by multiple users.
 type Study struct {
 	gorm.Model                        `json:"-"`
@@ -16,7 +32,6 @@ type Study struct {
 	NotificationText                  string `json:"notificationText"`
 	IsSpatialSpanTaskEnabled          bool   `json:"isSpatialSpanTaskEnabled"`
 	IsPsychomotorVigilanceTaskEnabled bool   `json:"isPsychomotorVigilanceTaskEnabled"`
-	IsMentalArithmeticEnabled         bool   `json:"isMentalArithmeticEnabled"`
 	IsQuestionnaireEnabled            bool   `json:"isQuestionnaireEnabled"`
 	IsCurrentActivityEnabled          bool   `json:"isCurrentActivityEnabled"`
 }
@@ -147,13 +162,6 @@ type PVTResult struct {
 	Value1     int
 	Value2     int
 	Value3     int
-}
-
-// MentalArithmeticResult holds the result of Mental Arithmetic assessment
-type MentalArithmeticResult struct {
-	gorm.Model                  `json:"-"`
-	ID                          int
-	MentalArithmeticResultValue int
 }
 
 // QuestionnaireLog binds the questionnaire results to an user and a timestamp.

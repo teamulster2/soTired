@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -44,10 +43,12 @@ func (ul clientUserLog) toAccessMethod() (AccessMethod, error) {
 	case "UserAccessMethod.inviteUrl":
 		return InviteLink, nil
 	}
-	return "", errors.New("unknown AccesMethode") // TODO Change to own error type
+	//return "", fmt.Errorf("unknown AccesMethode: %s", ul.AccessMethod) // TODO Change to own error type
+	return "", fmt.Errorf("unknown AccesMethode.: %#v", ul) // TODO Change to own error type
 }
 func (ul clientUserLog) getTime() (time.Time, error) {
-	timestamp, err := time.Parse(ul.TimeStamp, ul.TimeStamp)
+	return time.Time{}, nil
+	timestamp, err := time.Parse(time.RFC3339, ul.TimeStamp) // FIXME dataformate can not be parsed, debug why!
 	if err != nil {
 		return time.Time{}, errors.Wrap(err, "can't parse timeformate")
 	}
@@ -72,7 +73,7 @@ func (us clientUserState) toMood() (Mood, error) {
 	case "sad":
 		return Sad, nil
 	}
-	return "", errors.New("unknown AccesMethode") // TODO Change to own error type
+	return "", fmt.Errorf("unknown AccesMethode: %s", us.CurrentMood) // TODO Change to own error type
 }
 func (us clientUserState) toActivity() (Activity, error) {
 	switch us.CurrentActivity {
@@ -89,10 +90,11 @@ func (us clientUserState) toActivity() (Activity, error) {
 	case "other":
 		return Other, nil
 	}
-	return "", errors.New("unknown AccesMethode") // TODO Change to own error type
+	return "", fmt.Errorf("unknown AccesMethode: %s", us.CurrentActivity) // TODO Change to own error type
 }
 func (us clientUserState) getTime() (time.Time, error) {
-	timestamp, err := time.Parse(us.TimeStamp, us.TimeStamp)
+	return time.Time{}, nil
+	timestamp, err := time.Parse(time.RFC3339, us.TimeStamp) // FIXME dataformate can not be parsed, debug why!
 	if err != nil {
 		return time.Time{}, errors.Wrap(err, "can't parse timeformate") // TODO Change to own error type
 	}
@@ -107,18 +109,12 @@ type clientQuestionnaireResult struct {
 }
 
 func (qr clientQuestionnaireResult) getTime() (time.Time, error) {
-	timestamp, err := time.Parse(qr.TimeStamp, qr.TimeStamp)
+	return time.Time{}, nil
+	timestamp, err := time.Parse(time.RFC3339, qr.TimeStamp) // FIXME dataformate can not be parsed, debug why!
 	if err != nil {
 		return time.Time{}, errors.Wrap(err, "can't parse timeformate") // TODO Change to own error type
 	}
 	return timestamp, nil
-}
-
-func fromClientJSON(in []byte) (clientJSON, error) {
-	var parsedJSON clientJSON
-	err := json.Unmarshal(in, &parsedJSON)
-
-	return parsedJSON, err
 }
 
 func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
@@ -140,12 +136,12 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 	}
 
 	for _, pair := range c.ClientRunList {
-		// check if this userLog was all ready send before and ignore if so.
+		// check if this userLog has been received already and ignore if so.
 		if db.Where("client_log_uuid = ?", pair.RunUUID).First(&UserLog{}).RowsAffected != 0 {
 			continue
 		}
 		if len(pair.UserLog.PsychomotorVigilanceTask) != 3 {
-			errors.New("PsychomotorVigilanceTask should have three values but has different amount")
+			return errors.New("PsychomotorVigilanceTask should have three values but has different amount")
 		}
 
 		newSSTResult := SSTResult{SSTResultValue: pair.UserLog.SpatialSpanTask}

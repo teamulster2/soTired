@@ -77,9 +77,6 @@ func fillDatabase() (*gorm.DB, error) {
 	pvtResultList := []PVTResult{{}, {}}
 	db.Create(&pvtResultList)
 
-	mentalArithmeticResultList := []MentalArithmeticResult{{}, {}}
-	db.Create(&mentalArithmeticResultList)
-
 	userLogList := []UserLog{
 		{
 			UserID:      userList[0].ID,
@@ -95,20 +92,4 @@ func fillDatabase() (*gorm.DB, error) {
 	db.Create(&userLogList)
 
 	return db, nil
-}
-
-// returns database with relevant models migrated
-func migrate(db *gorm.DB) *gorm.DB {
-	// Migrate all structs relevant in the database
-	db.AutoMigrate(&Study{})
-	db.AutoMigrate(&UserLog{})
-	db.AutoMigrate(&PVTResult{})
-	db.AutoMigrate(&SSTResult{})
-	db.AutoMigrate(&QuestionnaireResult{})
-	db.AutoMigrate(&QuestionnaireLog{})
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Answer{})
-	db.AutoMigrate(&Question{})
-	db.AutoMigrate(&MentalArithmeticResult{})
-	return db
 }
