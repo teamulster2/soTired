@@ -8,16 +8,16 @@ import 'package:so_tired/database/models/user/user_log.dart';
 import 'package:so_tired/service_provider/service_provider.dart';
 import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/engine/game_state.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_box.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/widgets/spatial_span_test_progress.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/engine/game_engine.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/engine/game_state.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/widgets/spatial_span_task_box.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/widgets/spatial_span_task_progress.dart';
 import 'package:so_tired/utils/utils.dart';
 
 /// This class contains the spatial span test widget.
 /// [GameEngine] with business logic to set variables
-class SpatialSpanTest extends StatefulWidget {
-  const SpatialSpanTest(
+class SpatialSpanTask extends StatefulWidget {
+  const SpatialSpanTask(
       {required this.onFinished,
       required this.setLevel,
       required this.selfTestUuid,
@@ -30,10 +30,10 @@ class SpatialSpanTest extends StatefulWidget {
   final String selfTestUuid;
 
   @override
-  _SpatialSpanTestState createState() => _SpatialSpanTestState();
+  _SpatialSpanTaskState createState() => _SpatialSpanTaskState();
 }
 
-class _SpatialSpanTestState extends State<SpatialSpanTest> {
+class _SpatialSpanTaskState extends State<SpatialSpanTask> {
   late GameEngine gameEngine;
 
   @override
@@ -54,7 +54,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SpatialSpanTestProgress(
+              SpatialSpanTaskProgress(
                   level: gameEngine.level,
                   currentValue: gameEngine.currentValue),
               SizedBox(
@@ -74,7 +74,7 @@ class _SpatialSpanTestState extends State<SpatialSpanTest> {
                                     valueListenable: gameEngine.currentPrimary,
                                     builder: (BuildContext context,
                                             Object? value, Widget? widget) =>
-                                        SpatialSpanTestBox(
+                                        SpatialSpanTaskBox(
                                           primary: i ==
                                               gameEngine.currentPrimary.value,
                                           onTap: () => gameEngine

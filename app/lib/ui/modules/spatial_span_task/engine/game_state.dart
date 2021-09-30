@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:so_tired/ui/models/dialog_objects.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/engine/game_engine.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/engine/game_engine.dart';
 
 /// This abstract class is the super class of all available game states.
 /// It holds the game engine to set specific variables and values.

@@ -5,7 +5,7 @@ import 'package:so_tired/ui/modules/psychomotor_vigilance_task/psychomotor_vigil
 import 'package:so_tired/ui/modules/self_assessment/self_assessment.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_state.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/spatial_span_test.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/spatial_span_task.dart';
 import 'package:so_tired/utils/utils.dart';
 
 /// This class contains the whole self test ui with the self test engine that
@@ -54,7 +54,7 @@ class _SelfTestState extends State<SelfTest> {
           selfTestUuid: selfTestUuid);
     } else if (engine.currentState.value.toString() ==
         SpatialSpanTaskState().toString()) {
-      return SpatialSpanTest(
+      return SpatialSpanTask(
           onFinished: () => engine.handleState(),
           setLevel: (int value) => engine.levelSpatialSpanTask = value,
           selfTestUuid: selfTestUuid);

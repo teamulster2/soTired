@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// This widget holds the spatial span test progress with the current level and amount of boxes that have to be tapped on.
-class SpatialSpanTestProgress extends StatelessWidget {
-  const SpatialSpanTestProgress(
+class SpatialSpanTaskProgress extends StatelessWidget {
+  const SpatialSpanTaskProgress(
       {required this.level, required this.currentValue, Key? key})
       : super(key: key);
 
