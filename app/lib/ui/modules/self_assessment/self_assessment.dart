@@ -58,8 +58,8 @@ class _SelfAssessmentState extends State<SelfAssessment> {
         Provider.of<ServiceProvider>(context, listen: false)
             .databaseManager
             .writeUserStates(<UserState>[
-          UserState(uuid, currentActivity, currentMood.value.first, DateTime.now(),
-              widget.selfTestUuid)
+          UserState(uuid, currentActivity, currentMood.value.first,
+              DateTime.now(), widget.selfTestUuid)
         ]);
         widget.setMood(currentMood.value.first);
         widget.setActivity(currentActivity);
