@@ -5,7 +5,7 @@ import 'package:so_tired/utils/utils.dart';
 /// It returns a [String] with the onTap Function().
 class CurrentActivity extends StatelessWidget {
   const CurrentActivity({required this.onTap, Key? key}) : super(key: key);
-  final Function(List<int>) onTap;
+  final Function(String) onTap;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -23,55 +23,29 @@ class CurrentActivity extends StatelessWidget {
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0x8F, 0xA1]),
+                onTap: () => onTap('home'),
                 text: 'home',
                 emoji: const <int>[0xF0, 0x9F, 0x8F, 0xA1]),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(<int>[0xE2, 0x98, 0x95]),
+                onTap: () => onTap('work'),
                 text: 'work',
                 emoji: const <int>[0xE2, 0x98, 0x95]),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0x8F, 0xAB]),
+                onTap: () => onTap('university'),
                 text: 'university',
                 emoji: const <int>[0xF0, 0x9F, 0x8F, 0xAB]),
           ]),
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Activity(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0x9B, 0x8D]),
+                onTap: () => onTap('shops'),
                 text: 'shops',
                 emoji: const <int>[0xF0, 0x9F, 0x9B, 0x8D]),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(<int>[
-                      0xF0,
-                      0x9F,
-                      0x91,
-                      0xA8,
-                      0xE2,
-                      0x80,
-                      0x8D,
-                      0xF0,
-                      0x9F,
-                      0x91,
-                      0xA9,
-                      0xE2,
-                      0x80,
-                      0x8D,
-                      0xF0,
-                      0x9F,
-                      0x91,
-                      0xA7,
-                      0xE2,
-                      0x80,
-                      0x8D,
-                      0xF0,
-                      0x9F,
-                      0x91,
-                      0xA6
-                    ]),
+                onTap: () => onTap('friends / family'),
                 text: 'friends / family',
                 emoji: const <int>[
                   0xF0,
@@ -102,7 +76,7 @@ class CurrentActivity extends StatelessWidget {
                 ]),
             const SizedBox(width: 40),
             Activity(
-                onTap: () => onTap(<int>[0xE2, 0x9B, 0xB3, 0xEF, 0xB8, 0x8F]),
+                onTap: () => onTap('other'),
                 text: 'other',
                 emoji: const <int>[0xE2, 0x9B, 0xB3, 0xEF, 0xB8, 0x8F]),
           ]),

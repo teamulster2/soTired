@@ -4,9 +4,8 @@ import 'package:so_tired/utils/utils.dart';
 part 'user_state.g.dart';
 
 /// This class defines the [UserState] model by extending a [HiveObject].
-/// It holds an [uuid], a [currentActivity] and a [currentMood] containing
-/// a [List] of type [int] which represents necessary codeUnits to be converted
-/// into a [String].
+/// It holds an [uuid], a [currentActivity], a [currentMood] and a
+/// [selfTestUuid].
 /// The UUID can be generated using the [Utils] class.
 @HiveType(typeId: 2)
 class UserState extends HiveObject {
@@ -14,10 +13,10 @@ class UserState extends HiveObject {
   String? uuid;
 
   @HiveField(1)
-  List<int>? currentActivity;
+  String? currentActivity;
 
   @HiveField(2)
-  List<int>? currentMood;
+  String? currentMood;
 
   @HiveField(3)
   DateTime? timestamp;

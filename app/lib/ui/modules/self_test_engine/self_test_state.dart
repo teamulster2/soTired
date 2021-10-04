@@ -4,7 +4,8 @@ import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 import 'package:so_tired/utils/utils.dart';
 
-/// This abstract class sets the current engine and provides the handleState method that contains different functionality in all sub-states.
+/// This abstract class sets the current engine and provides the handleState
+/// method that contains different functionality in all sub-states.
 abstract class SelfTestState {
   late SelfTestEngine engine;
 
@@ -15,7 +16,8 @@ abstract class SelfTestState {
   void handleState();
 }
 
-/// This class contains the self test state functionality directly after starting the self test.
+/// This class contains the self test state functionality directly after
+/// starting the self test.
 class StartSelfTestState extends SelfTestState {
   @override
   void handleState() {
@@ -32,16 +34,19 @@ class StartSelfTestState extends SelfTestState {
   }
 }
 
-/// This class contains the self test state functionality when the user is doing the self assessment.
+/// This class contains the self test state functionality when the user is
+/// doing the self assessment.
 /// Afterwards it forwards to the pvt test.
 class SelfAssessmentState extends SelfTestState {
   @override
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you for answering the questions. Now you will be forwarded to a psychomotor vigilance task.',
+            'Thank you for answering the questions. Now you will be forwarded '
+            'to a psychomotor vigilance task.',
         content:
-            'When you want to leave the self test press Cancel (previous data is not lost)',
+            'When you want to leave the self test press Cancel (previous data '
+            'is not lost)',
         progress: 'Step 2 of 3',
         onOk: () {
           engine.transitionTo(PVTState());
@@ -52,14 +57,15 @@ class SelfAssessmentState extends SelfTestState {
   }
 }
 
-/// This class contains the self test state functionality when the user is doing the spatial span task.
+/// This class contains the self test state functionality when the user is
+/// doing the spatial span task.
 /// Afterwards it shows all results and returns to the home page.
 class SpatialSpanTaskState extends SelfTestState {
   @override
   void handleState() {
     engine.showDialog(ProgressDialogObject(
-        title:
-            'Thank you for doing the self test. You will now return to the home page.',
+        title: 'Thank you for doing the self test. You will now return to the '
+            'home page.',
         content: 'Your results:\n\nActivity: ' +
             engine.currentActivity +
             '\nEmotional state: ' +
@@ -79,6 +85,8 @@ class SpatialSpanTaskState extends SelfTestState {
                 onOk: () async {
                   try {
                     await Utils.sendDataToDatabase(engine.context);
+                    Navigator.popUntil(engine.context,
+                        ModalRoute.withName(Navigator.defaultRouteName));
                   } on EmptyHiveBoxException {
                     // NOTE: Do nothing and refer to setting a valid URL
                   } catch (e) {
@@ -88,7 +96,10 @@ class SpatialSpanTaskState extends SelfTestState {
                             'again via the Settings menu.');
                   }
                 },
-                onCancel: () {},
+                onCancel: () {
+                  Navigator.popUntil(engine.context,
+                      ModalRoute.withName(Navigator.defaultRouteName));
+                },
                 onOkPush: true,
                 showCancel: true));
           });
@@ -116,16 +127,19 @@ class SpatialSpanTaskState extends SelfTestState {
   }
 }
 
-/// This class contains the self test state functionality when the user is doing the pvt test.
+/// This class contains the self test state functionality when the user is
+/// doing the pvt test.
 /// Afterwards it forwards to the spatial span task test.
 class PVTState extends SelfTestState {
   @override
   void handleState() {
     engine.showDialog(ProgressDialogObject(
         title:
-            'Thank you for doing the psychomotor vigilance task. Now you will be forwarded to a spatial span task.',
+            'Thank you for doing the psychomotor vigilance task. Now you will '
+            'be forwarded to a spatial span task.',
         content:
-            'When you want to leave the self test press Cancel (previous data is not lost)',
+            'When you want to leave the self test press Cancel (previous data '
+            'is not lost)',
         progress: 'Step 3 of 3',
         onOk: () {
           engine.transitionTo(SpatialSpanTaskState());

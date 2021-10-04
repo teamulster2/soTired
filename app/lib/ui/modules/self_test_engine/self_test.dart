@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:so_tired/ui/core/home/home.dart';
 import 'package:so_tired/ui/core/navigation/navigation.dart';
 import 'package:so_tired/ui/models/dialog_objects.dart';
 import 'package:so_tired/ui/modules/psychomotor_vigilance_task/psychomotor_vigilance_task.dart';
 import 'package:so_tired/ui/modules/self_assessment/self_assessment.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_engine.dart';
 import 'package:so_tired/ui/modules/self_test_engine/self_test_state.dart';
-import 'package:so_tired/ui/modules/spatial_span_test/spatial_span_test.dart';
+import 'package:so_tired/ui/modules/spatial_span_task/spatial_span_task.dart';
 import 'package:so_tired/utils/utils.dart';
 
 /// This class contains the whole self test ui with the self test engine that
@@ -55,7 +54,7 @@ class _SelfTestState extends State<SelfTest> {
           selfTestUuid: selfTestUuid);
     } else if (engine.currentState.value.toString() ==
         SpatialSpanTaskState().toString()) {
-      return SpatialSpanTest(
+      return SpatialSpanTask(
           onFinished: () => engine.handleState(),
           setLevel: (int value) => engine.levelSpatialSpanTask = value,
           selfTestUuid: selfTestUuid);
@@ -132,11 +131,10 @@ class _SelfTestState extends State<SelfTest> {
                               child: const Text('Cancel'),
                               onPressed: () {
                                 pdo.onCancel();
-                                Navigator.push(
+                                Navigator.popUntil(
                                     context,
-                                    MaterialPageRoute<BuildContext>(
-                                        builder: (BuildContext context) =>
-                                            const Home()));
+                                    ModalRoute.withName(
+                                        Navigator.defaultRouteName));
                               },
                             ),
                           ),
@@ -145,11 +143,10 @@ class _SelfTestState extends State<SelfTest> {
                             onPressed: () {
                               pdo.onOk();
                               if (pdo.onOkPush) {
-                                Navigator.push(
+                                Navigator.popUntil(
                                     context,
-                                    MaterialPageRoute<BuildContext>(
-                                        builder: (BuildContext context) =>
-                                            const Home()));
+                                    ModalRoute.withName(
+                                        Navigator.defaultRouteName));
                               } else {
                                 Navigator.pop(context);
                               }

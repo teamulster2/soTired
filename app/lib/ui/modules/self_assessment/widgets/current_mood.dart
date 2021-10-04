@@ -3,10 +3,9 @@ import 'package:so_tired/utils/utils.dart';
 
 /// This widget sets the current emotional state of the subject.
 /// It returns a [List] with the onTap Function().
-class CurrentEmotionalState extends StatelessWidget {
-  const CurrentEmotionalState({required this.onTap, Key? key})
-      : super(key: key);
-  final Function(List<int>) onTap;
+class CurrentMood extends StatelessWidget {
+  const CurrentMood({required this.onTap, Key? key}) : super(key: key);
+  final Function(List<String>) onTap;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -23,23 +22,23 @@ class CurrentEmotionalState extends StatelessWidget {
           ),
           const SizedBox(height: 40),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            EmotionalState(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x8A]),
+            CurrentMoodState(
+                onTap: () => onTap(<String>['happy']),
                 text: 'happy',
                 emoji: const <int>[0xF0, 0x9F, 0x98, 0x8A]),
             const SizedBox(width: 30),
-            EmotionalState(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0xA4, 0xA9]),
+            CurrentMoodState(
+                onTap: () => onTap(<String>['excited']),
                 text: 'excited',
                 emoji: const <int>[0xF0, 0x9F, 0xA4, 0xA9]),
             const SizedBox(width: 30),
-            EmotionalState(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0x90]),
+            CurrentMoodState(
+                onTap: () => onTap(<String>['bored']),
                 text: 'bored',
                 emoji: const <int>[0xF0, 0x9F, 0x98, 0x90]),
             const SizedBox(width: 30),
-            EmotionalState(
-                onTap: () => onTap(<int>[0xF0, 0x9F, 0x98, 0xAD]),
+            CurrentMoodState(
+                onTap: () => onTap(<String>['sad']),
                 text: 'sad',
                 emoji: const <int>[0xF0, 0x9F, 0x98, 0xAD]),
           ]),
@@ -48,8 +47,8 @@ class CurrentEmotionalState extends StatelessWidget {
 }
 
 /// This widget shows the emotional states with its text.
-class EmotionalState extends StatelessWidget {
-  const EmotionalState(
+class CurrentMoodState extends StatelessWidget {
+  const CurrentMoodState(
       {required this.text, required this.onTap, required this.emoji, Key? key})
       : super(key: key);
   final String text;

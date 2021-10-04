@@ -15,89 +15,94 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-/// This class holds the home screen of the application. It contains a [Scaffold] that has its appBar, drawer and body.
+/// This class holds the home screen of the application. It contains a
+/// [Scaffold] that has its appBar, drawer and body.
 /// The body contains the [HomeImage] and [HomeButton]s.
 class _HomeState extends State<Home> {
+  static const Duration snackBarDuration = Duration(seconds: 3);
+  DateTime backButtonPressTime = DateTime.now();
   bool serverUrlTested = false;
 
   @override
   Widget build(BuildContext context) {
     if (!serverUrlTested) {
-      testServerUrl();
+      _testServerUrl();
     }
 
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(55),
-          child: NavigationBar(title: 'soTired'),
-        ),
-        // NOTE: drawer not needed now
-        // drawer: const NavigationDrawer(),
-        body: Container(
-            color: Theme.of(context).backgroundColor,
-            child: Column(children: <Widget>[
-              const HomeImage(),
-              const SizedBox(height: 40),
-              Expanded(
-                child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: GridView.count(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1.4,
-                        children: <Widget>[
-                          // NOTE: Icons from: https://api.flutter.dev/flutter/material/Icons-class.html
-                          HomeButton(
-                            icon: Icons.access_time_filled,
-                            text: 'self test',
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute<BuildContext>(
-                                      builder: (BuildContext context) =>
-                                          const SelfTest()));
-                            },
-                          ),
-                          HomeButton(
-                            icon: Icons.question_answer_rounded,
-                            text: 'questionnaire',
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute<BuildContext>(
-                                      builder: (BuildContext context) =>
-                                          const Questionnaire()));
-                            },
-                          ),
-                          HomeButton(
-                            icon: Icons.app_settings_alt,
-                            text: 'settings',
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute<BuildContext>(
-                                      builder: (BuildContext context) {
-                                try {
-                                  return const Settings();
-                                } catch (e) {
-                                  rethrow;
-                                }
-                              }));
-                            },
-                          ),
-                          HomeButton(
-                            icon: Icons.graphic_eq,
-                            text: 'audio recognition',
-                            onTap: () {
-                              showAudioNotImplementedDialog();
-                            },
-                          ),
-                        ])),
-              ),
-            ])));
+    return WillPopScope(
+        onWillPop: _onBackButtonPressed,
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(55),
+              child: NavigationBar(title: 'soTired'),
+            ),
+            // NOTE: drawer not needed now
+            // drawer: const NavigationDrawer(),
+            body: Container(
+                color: Theme.of(context).backgroundColor,
+                child: Column(children: <Widget>[
+                  const HomeImage(),
+                  const SizedBox(height: 40),
+                  Expanded(
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: GridView.count(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1.4,
+                            children: <Widget>[
+                              // NOTE: Icons from: https://api.flutter.dev/flutter/material/Icons-class.html
+                              HomeButton(
+                                icon: Icons.access_time_filled,
+                                text: 'self test',
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute<BuildContext>(
+                                          builder: (BuildContext context) =>
+                                              const SelfTest()));
+                                },
+                              ),
+                              HomeButton(
+                                icon: Icons.question_answer_rounded,
+                                text: 'questionnaire',
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute<BuildContext>(
+                                          builder: (BuildContext context) =>
+                                              const Questionnaire()));
+                                },
+                              ),
+                              HomeButton(
+                                icon: Icons.app_settings_alt,
+                                text: 'settings',
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute<BuildContext>(
+                                          builder: (BuildContext context) {
+                                    try {
+                                      return const Settings();
+                                    } catch (e) {
+                                      rethrow;
+                                    }
+                                  }));
+                                },
+                              ),
+                              HomeButton(
+                                icon: Icons.graphic_eq,
+                                text: 'audio recognition',
+                                onTap: () {
+                                  _showAudioNotImplementedDialog();
+                                },
+                              ),
+                            ])),
+                  ),
+                ]))));
   }
 
-  void showAudioNotImplementedDialog() {
+  void _showAudioNotImplementedDialog() {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -115,7 +120,7 @@ class _HomeState extends State<Home> {
                 ]));
   }
 
-  showInfoDialog() {
+  void _showInfoDialog() {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -144,7 +149,7 @@ class _HomeState extends State<Home> {
                 ]));
   }
 
-  testServerUrl() {
+  void _testServerUrl() {
     serverUrlTested = true;
     try {
       final String? serverUrl =
@@ -155,8 +160,26 @@ class _HomeState extends State<Home> {
       debugPrint(serverUrl);
     } catch (exception) {
       Future<dynamic>.delayed(Duration.zero, () {
-        showInfoDialog();
+        _showInfoDialog();
       });
     }
+  }
+
+  Future<bool> _onBackButtonPressed() {
+    final DateTime now = DateTime.now();
+    final bool backButtonHasBeenPressedOrSnackBarHasNotBeenClosed =
+        now.difference(backButtonPressTime) < snackBarDuration;
+
+    if (backButtonHasBeenPressedOrSnackBarHasNotBeenClosed) {
+      return Future<bool>.value(true);
+    }
+
+    backButtonPressTime = now;
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Tap back again to leave'),
+      duration: snackBarDuration,
+    ));
+
+    return Future<bool>.value(false);
   }
 }
