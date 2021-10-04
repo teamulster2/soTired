@@ -143,11 +143,6 @@ class _SelfTestState extends State<SelfTest> {
                             onPressed: () {
                               pdo.onOk();
                               if (pdo.onOkPush) {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute<BuildContext>(
-                                //         builder: (BuildContext context) =>
-                                //             const Home()));
                                 Navigator.popUntil(
                                     context,
                                     ModalRoute.withName(
