@@ -175,7 +175,7 @@ var (
             },
             "userState": {
                 "uuid": "8f7f509a-8cdc-4f0d-9f6d-848b17b93d42",
-                "currentActivity": "",
+                "currentActivity": "other",
                 "currentMood": "happy",
                 "timestamp": "2021-09-28T17:33:06.313840"
             }
