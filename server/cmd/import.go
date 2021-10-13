@@ -125,7 +125,10 @@ func (c clientJSON) clientJSONToDB(db *gorm.DB) error {
 	}
 	var study Study
 	if err := studyDB.Find(&study).Error; err != nil {
-		return errors.Wrap(err, fmt.Sprintf("failed to find a study with this name: %s:", c.StudyName))
+		return errors.Wrap(err, fmt.Sprintf("failed to find a study with this name: '%s' because of this error:", c.StudyName))
+	}
+	if study.ID == 0 {
+		return errors.New(fmt.Sprintf("failed to find a study with this name: '%s'", c.StudyName))
 	}
 
 	user := User{StudyID: study.ID}

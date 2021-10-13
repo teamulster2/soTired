@@ -170,37 +170,41 @@ func identity(w http.ResponseWriter, r *http.Request) {
 func dataGenerator(db *gorm.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		all, err := ioutil.ReadAll(r.Body)
-		fmt.Println(string(all))
 		idented := &bytes.Buffer{}
 		json.Indent(idented, all, "", "    ")
-		fmt.Println(idented.String())
 		if err != nil {
 			fmt.Println("failed to read body") // TODO add logger
 			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
 		var cJSON clientJSON
 		if err := json.Unmarshal(all, &cJSON); err != nil {
 			fmt.Println(errors.Wrap(err, "failed to parse client data")) // TODO add logger
 			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
 
 		parsed, _ := json.MarshalIndent(cJSON, "", "    ")
-		fmt.Printf("parsed json:\n%s", parsed)
+		fmt.Printf("parsed json:\n%s\n", parsed)
 
 		if err := cJSON.clientJSONToDB(db); err != nil {
 			fmt.Println(errors.Wrap(err, "failed to write client data to database")) // TODO add logger
 			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
 		io.WriteString(w, "thanks for the data :)")
 		// fmt.Println("Recieved data") // TODO add logger
 		allStudys, err := toJSONStudyList(db)
 		if err != nil {
 			fmt.Println(err.Error())
+			return
 		}
 		jsonBytes, err := json.MarshalIndent(fullDB{AllStudies: allStudys}, "", "    ")
 		if err != nil {
 			fmt.Println(err.Error())
+			return
 		}
 		fmt.Println(string(jsonBytes))
+		return
 	}
 }
